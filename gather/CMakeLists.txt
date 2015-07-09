@@ -2,10 +2,6 @@ cmake_minimum_required (VERSION 2.8)
 
 #src
 set(LIB_GATHER_SRC
-
-	${CMAKE_SOURCE_DIR}/protocol/packet/ProtocolFactory.h
-	${CMAKE_SOURCE_DIR}/protocol/packet/ProtocolFactory.cpp
-
 	${CMAKE_SOURCE_DIR}/protocol/message/gpid.pb.h
 	${CMAKE_SOURCE_DIR}/protocol/message/gpid.pb.cc
 	${CMAKE_SOURCE_DIR}/protocol/message/gmsg.pb.h
@@ -37,7 +33,6 @@ foreach(src ${LIB_GATHER_SRC})
 	file(APPEND ${src})
 endforeach(src)
 
-source_group("Base" REGULAR_EXPRESSION ../public/gamebase)
 source_group("Message" REGULAR_EXPRESSION protocol/message)
 source_group("Packet" REGULAR_EXPRESSION protocol/packet)
 source_group("Net" REGULAR_EXPRESSION gather/net)
@@ -46,21 +41,19 @@ source_group("Db" REGULAR_EXPRESSION gather/db)
 source_group("MsgDispatch" REGULAR_EXPRESSION gather/msgdispatch)
 
 
-set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/../3rd/mysql_5_6_20/include)
-set(MYSQLPP_SOURCE_DIR ${CMAKE_SOURCE_DIR}/../3rd/mysql++_3_2_1/include)
+set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/mysql_5_6_20/include)
+set(MYSQLPP_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/mysql++_3_2_1/include)
+set(PROTOBUF_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/protobuf-2.5.0/src)
 
 #include path
 include_directories(
 	${PLATFORM_PATH_DIR}
 	${MYSQL_SOURCE_DIR}
 	${MYSQLPP_SOURCE_DIR}
-
-	${CMAKE_SOURCE_DIR}/../3rd/tinyxml2
-	${CMAKE_SOURCE_DIR}/../public/net
-	${CMAKE_SOURCE_DIR}/../public/src
-	${CMAKE_SOURCE_DIR}/../public/common
+	${PROTOBUF_SOURCE_DIR}
+	${CMAKE_SOURCE_DIR}/3rd/tinyxml2
+	${CMAKE_SOURCE_DIR}/public/include
 	${CMAKE_SOURCE_DIR}/protocol/message
-	${CMAKE_SOURCE_DIR}/protocol/packet
 	${CMAKE_SOURCE_DIR}/gather
 	${CMAKE_SOURCE_DIR}/gather/net
 	${CMAKE_SOURCE_DIR}/gather/public
@@ -71,13 +64,11 @@ include_directories(
 #link path
 if(WIN32)
 	link_directories(
-		${CMAKE_SOURCE_DIR}/../3rd/mysql++_3_2_1/lib/win32/${CMAKE_BUILD_TYPE}/
-		${CMAKE_SOURCE_DIR}/../3rd/mysql_5_6_20/lib/win32/${CMAKE_BUILD_TYPE}/
+		${CMAKE_SOURCE_DIR}/3rd/lib/win32/${CMAKE_BUILD_TYPE}/
 	)
 else()
 	link_directories(
-		${CMAKE_SOURCE_DIR}/../3rd/mysql++_3_2_1/lib/linux/
-		${CMAKE_SOURCE_DIR}/../3rd/mysql_5_6_20/lib/linux/
+		${CMAKE_SOURCE_DIR}/3rd/lib/linux/
 	)
 endif()
 
