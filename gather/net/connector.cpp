@@ -6,6 +6,7 @@
 
 CConnectorTest::CConnectorTest()
 	: m_pNetConnector(nullptr)
+	, m_pNetSocket(nullptr)
 	, m_nTimerId(INVALID_TIMER_ID)
 {
 	m_nTimerId = CApp::getMe().SetTimer(this, 1500);
@@ -31,6 +32,13 @@ void CConnectorTest::Init(INetConnector *pNetConnector)
 
 bool CConnectorTest::OnConnected(INetSocket *pNetSocket)
 {
+	if (nullptr == pNetSocket)
+	{
+		return false;
+	}
+
+	m_pNetSocket = pNetSocket;
+
 	LOGPrint("客户端与服务器连接");
 
 	// 发送测试心跳
@@ -43,6 +51,8 @@ bool CConnectorTest::OnConnected(INetSocket *pNetSocket)
 bool CConnectorTest::OnDisconnect()
 {
 	LOGPrint("客户端与服务器断开");
+
+	m_pNetSocket = nullptr;
 
 	return true;
 }
@@ -59,7 +69,18 @@ bool CConnectorTest::OnRecvPacket(const char *pPacket, unsigned short wLength)
 
 	int nMessageLength = wLength - sizeof(unsigned short);
 
-	return CMsgDispatch::getMe().Dispatch(wProtocolId, pMessage, nMessageLength);
+	switch (wProtocolId)
+	{
+	case gproto::gather::CSID_G2C_HeartBeat:
+		{
+			Disconnect();
+		}
+		break;
+	default:
+		break;
+	}
+
+	return true;
 }
 
 bool CConnectorTest::SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage)
@@ -84,14 +105,14 @@ bool CConnectorTest::SendMessage(unsigned short wProtocolId, google::protobuf::M
 		return false;
 	}
 
-	return m_pNetConnector->DoSend(szSendBuffer, sizeof(unsigned short) + pMessage->ByteSize());
+	return m_pNetSocket->DoSend(szSendBuffer, sizeof(unsigned short) + pMessage->ByteSize());
 }
 
 void CConnectorTest::Disconnect()
 {
-	if (m_pNetConnector)
+	if (m_pNetSocket)
 	{
-		m_pNetConnector->DoClose();
+		m_pNetSocket->DoClose();
 	}
 }
 

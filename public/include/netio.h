@@ -61,7 +61,7 @@ public:
 	virtual unsigned short GetLocalPort() = 0;
 };
 
-class INetConnector : public INetSocket
+class INetConnector
 {
 public:
 	virtual ~INetConnector() {}

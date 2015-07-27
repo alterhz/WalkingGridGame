@@ -3,25 +3,26 @@
 
 NS_IO_Header
 
-CNetSocket::CNetSocket(boost::asio::ip::tcp::socket *pAsioSocket) 
-	: m_pAsioSocket(pAsioSocket)
+CNetSocket::CNetSocket() 
+	: m_pAsioSocket(nullptr)
 	, m_pNetClient(nullptr)
-	, m_pParent(nullptr)
 	, m_nAsyncEventCount(0)
 	, m_nHaveRecvLength(0)
 	, m_nSendLength(0)
 {
-
 }
 
 CNetSocket::~CNetSocket()
 {
-	delete m_pAsioSocket;
-	m_pAsioSocket = nullptr;
 }
 
 bool CNetSocket::DoSend(const char *pBuffer, unsigned short wLength)
 {
+	if (nullptr == m_pAsioSocket)
+	{
+		return false;
+	}
+
 	char szData[MAX_SEND_BUFFER_LENGTH] = {0};
 	unsigned short *pMessageLength = reinterpret_cast<unsigned short *>(szData);
 	*pMessageLength = static_cast<unsigned short>(wLength);
@@ -55,6 +56,11 @@ bool CNetSocket::DoSend(const char *pBuffer, unsigned short wLength)
 
 void CNetSocket::DoClose()
 {
+	if (nullptr == m_pAsioSocket)
+	{
+		return ;
+	}
+
 	LOGPrint("DoClose-- m_pAsioSocket addr:" + reinterpret_cast<intptr_t>(m_pAsioSocket));
 
 	// 断开连接
@@ -74,10 +80,9 @@ void CNetSocket::DoClose()
 		m_pNetClient->OnDisconnect();
 	}
 
-	if (m_pParent)
-	{
-		m_pParent->OnRelease(this);
-	}
+	// 删除网络socket对象
+	delete m_pAsioSocket;
+	m_pAsioSocket = nullptr;
 
 	LOGPrint("下面释放CNetSocket");
 
@@ -105,10 +110,10 @@ unsigned short CNetSocket::GetLocalPort()
 	return m_pAsioSocket->local_endpoint().port();
 }
 
-void CNetSocket::DoInit(INetClient *pNetClient, IParent *pParent)
+void CNetSocket::DoInit(boost::asio::ip::tcp::socket *pAsioSocket, INetClient *pNetClient)
 {
+	m_pAsioSocket = pAsioSocket;
 	m_pNetClient = pNetClient;
-	m_pParent = pParent;
 
 	// 投递异步Recv
 	DoRecv();
@@ -122,6 +127,11 @@ void CNetSocket::DoInit(INetClient *pNetClient, IParent *pParent)
 
 bool CNetSocket::DoRecv()
 {
+	if (nullptr == m_pAsioSocket)
+	{
+		return false;
+	}
+
 	char *pRecvBuffer = m_szRecvBuffer + m_nHaveRecvLength;
 	int nFreeRecvLength = MAX_RECV_BUFFER_LENGTH - m_nHaveRecvLength;
 
@@ -221,6 +231,11 @@ USHORT CNetSocket::ReadPacket(const char *pPacketHead, unsigned short wLength)
 
 void CNetSocket::OnSend(const boost::system::error_code &ec, size_t nByteTransferred)
 {
+	if (nullptr == m_pAsioSocket)
+	{
+		return ;
+	}
+
 	--m_nAsyncEventCount;
 
 	if (ec)

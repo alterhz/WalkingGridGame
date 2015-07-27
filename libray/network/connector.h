@@ -12,7 +12,7 @@
 
 NS_IO_Header
 
-class CNetConnector : public INetConnector, public IParent
+class CNetConnector : public CNetSocket, public INetConnector
 {
 public:
 	CNetConnector(boost::asio::io_service &ios);
@@ -21,15 +21,7 @@ public:
 	virtual bool Connect(INetClient *pNetClient, const char *pIP, unsigned short wPort);
 	virtual bool ReConnect();
 
-	virtual bool DoSend(const char *pBuffer, unsigned short wLength);
 	virtual void DoClose();
-
-	virtual const char * GetRemoteIP();
-	virtual unsigned short GetRemotePort();
-	virtual const char * GetLocalIP();
-	virtual unsigned short GetLocalPort();
-
-	virtual void OnRelease(INetSocket *pNetSocket);
 
 private:
 	void OnConnect(const boost::system::error_code& ec);
@@ -39,8 +31,6 @@ private:
 	INetClient *m_pNetClient;
 	std::string m_strRemoteIP;
 	unsigned short m_wRemotePort;
-	boost::asio::ip::tcp::socket *m_pConnectSocket;
-	CNetSocket *m_pNetSocket;
 };
 
 NS_IO_Footer

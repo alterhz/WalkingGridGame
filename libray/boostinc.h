@@ -39,17 +39,6 @@ NS_IO_Header
 
 typedef unsigned short USHORT;
 
-class INetSocket;
-
-class IParent
-{
-public:
-	virtual ~IParent() {}
-
-public:
-	virtual void OnRelease(INetSocket *pNetSocket) { }
-};
-
 NS_IO_Footer
 
 // end

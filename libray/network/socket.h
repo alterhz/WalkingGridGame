@@ -15,11 +15,11 @@ NS_IO_Header
 class CNetSocket : public INetSocket
 {
 public:
-	CNetSocket(boost::asio::ip::tcp::socket *pAsioSocket);
+	CNetSocket();
 	virtual ~CNetSocket();
 
 public:
-	void DoInit(INetClient *pNetClient, IParent *pParent = nullptr);
+	void DoInit(boost::asio::ip::tcp::socket *pAsioSocket, INetClient *pNetClient);
 
 public:
 	virtual bool DoSend(const char *pBuffer, unsigned short wLength);
@@ -40,12 +40,12 @@ private:
 	// 解析消息包
 	USHORT ReadPacket(const char *pPacketHead, unsigned short wLength);
 
-private:
+protected:
 	boost::asio::ip::tcp::socket *m_pAsioSocket;
-	INetClient *m_pNetClient;
-	IParent *m_pParent;
-
 	int m_nAsyncEventCount;	//异步事件计数
+
+private:
+	INetClient *m_pNetClient;
 
 	char m_szRecvBuffer[MAX_RECV_BUFFER_LENGTH];
 	int m_nHaveRecvLength;

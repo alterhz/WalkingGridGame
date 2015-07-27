@@ -16,7 +16,7 @@ public:
 	CClient();
 	virtual ~CClient() {}
 
-public:
+protected:
 	// 网络连接事件
 	virtual bool OnConnected(INetSocket *pNetSocket);
 	// 网络断开事件

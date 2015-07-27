@@ -72,9 +72,6 @@ bool CNetAcceptor::DoAccept()
 		return false;
 	}
 
-	//intptr_t nNewSocket = reinterpret_cast<intptr_t>(pNewSocket);
-	//m_mapAcceptSocket.insert(std::make_pair(nNewSocket, pNewSocket));
-
 	m_acceptor.async_accept(*pNewSocket,
 		bind(&CNetAcceptor::OnAccept, this, pNewSocket, boost::asio::placeholders::error));
 
@@ -96,18 +93,11 @@ void CNetAcceptor::OnAccept(boost::asio::ip::tcp::socket *pAcceptSocket, const b
 		}
 		else
 		{
-			//intptr_t nNewSocket = reinterpret_cast<intptr_t>(pAcceptSocket);
-			//m_mapAcceptSocket.erase(nNewSocket);
-
 			DoAccept();
 		}
 
 		return ;
 	}
-
-	// 从监听列表删除
-	//intptr_t nNewSocket = reinterpret_cast<intptr_t>(pAcceptSocket);
-	//m_mapAcceptSocket.erase(nNewSocket);
 
 	// 增加一个监听
 	DoAccept();
@@ -129,17 +119,13 @@ void CNetAcceptor::OnAccept(boost::asio::ip::tcp::socket *pAcceptSocket, const b
 		return ;
 	}
 
-	CNetSocket *pNewNetSocket = new CNetSocket(pAcceptSocket);
+	CNetSocket *pNewNetSocket = new CNetSocket();
 	if (nullptr == pNewNetSocket)
 	{
 		return ;
 	}
 
-	pNewNetSocket->DoInit(pNewNetClient);
-
-	// NetSocket添加到NetSocket列表
-	//intptr_t nNewNetSocket = reinterpret_cast<intptr_t>(pNewNetSocket);
-	//m_mapNetSocket.insert(std::make_pair(nNewNetSocket, pNewNetSocket));
+	pNewNetSocket->DoInit(pAcceptSocket, pNewNetClient);
 }
 
 

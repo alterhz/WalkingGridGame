@@ -7,7 +7,7 @@ NS_IO_Header
 CNetConnector::CNetConnector(boost::asio::io_service &ios)
 	: m_ioService(ios)
 	, m_pNetClient(nullptr)
-	, m_pNetSocket(nullptr)
+	, m_wRemotePort(0)
 {
 }
 
@@ -40,11 +40,11 @@ bool CNetConnector::ReConnect()
 		return false;
 	}
 
-	m_pConnectSocket = pNewSocket;
+	m_pAsioSocket = pNewSocket;
 
 	boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address::from_string(m_strRemoteIP.c_str()), m_wRemotePort);
 
-	m_pConnectSocket->async_connect(ep, 
+	m_pAsioSocket->async_connect(ep, 
 		bind(&CNetConnector::OnConnect, this, boost::asio::placeholders::error));
 
 	return true;
@@ -56,8 +56,8 @@ void CNetConnector::OnConnect(const boost::system::error_code& ec)
 	{
 		LOGPrint("OnAccept:errorid:" + ec.value() + ",message:" + ec.message().c_str());
 
-		delete m_pConnectSocket;
-		m_pConnectSocket = nullptr;
+		delete m_pAsioSocket;
+		m_pAsioSocket = nullptr;
 
 		if (ec.value() == boost::asio::error::operation_aborted)
 		{
@@ -71,78 +71,35 @@ void CNetConnector::OnConnect(const boost::system::error_code& ec)
 		return ;
 	}
 
-	CNetSocket *pNewNetSocket = new CNetSocket(m_pConnectSocket);
-	if (nullptr == pNewNetSocket)
-	{
-		return ;
-	}
-
-	m_pNetSocket = pNewNetSocket;
-
-	m_pNetSocket->DoInit(m_pNetClient, this);
-}
-
-bool CNetConnector::DoSend(const char *pBuffer, unsigned short wLength)
-{
-	if (m_pNetSocket)
-	{
-		return m_pNetSocket->DoSend(pBuffer, wLength);
-	}
-	
-	return false;
+	CNetSocket::DoInit(m_pAsioSocket, m_pNetClient);
 }
 
 void CNetConnector::DoClose()
 {
-	if (m_pNetSocket)
-	{
-		m_pNetSocket->DoClose();
-	}
-}
+	LOGPrint("DoClose-- m_pAsioSocket addr:" + reinterpret_cast<intptr_t>(m_pAsioSocket));
 
-const char * CNetConnector::GetRemoteIP()
-{
-	if (m_pNetSocket)
+	// 断开连接
+	if (m_pAsioSocket->is_open())
 	{
-		return m_pNetSocket->GetRemoteIP();
+		m_pAsioSocket->shutdown(boost::asio::socket_base::shutdown_both);
+		m_pAsioSocket->close();
 	}
 
-	return nullptr;
-}
-
-unsigned short CNetConnector::GetRemotePort()
-{
-	if (m_pNetSocket)
+	if (m_nAsyncEventCount > 0)
 	{
-		return m_pNetSocket->GetRemotePort();
+		return ;
 	}
 
-	return 0;
-}
-
-const char * CNetConnector::GetLocalIP()
-{
-	if (m_pNetSocket)
+	if (m_pNetClient)
 	{
-		return m_pNetSocket->GetLocalIP();
+		m_pNetClient->OnDisconnect();
 	}
 
-	return nullptr;
-}
+	LOGPrint("下面释放CNetSocket");
 
-unsigned short CNetConnector::GetLocalPort()
-{
-	if (m_pNetSocket)
-	{
-		return m_pNetSocket->GetLocalPort();
-	}
-
-	return 0;
-}
-
-void CNetConnector::OnRelease(INetSocket *pNetSocket)
-{
-	m_pNetSocket = nullptr;
+	// 删除网络socket对象
+	delete m_pAsioSocket;
+	m_pAsioSocket = nullptr;
 }
 
 NS_IO_Footer

@@ -13,9 +13,6 @@ NS_IO_Header
 
 class CNetAcceptor : public INetAcceptor
 {
-	typedef std::map<intptr_t, boost::asio::ip::tcp::socket *> MapSocket;
-	typedef std::map<intptr_t, INetSocket *> MapNetSocket;
-
 public:
 	CNetAcceptor(boost::asio::io_service &ios);
 	virtual ~CNetAcceptor();
@@ -32,8 +29,6 @@ private:
 	boost::asio::io_service &m_ioService;
 	boost::asio::ip::tcp::acceptor m_acceptor;
 	INetClientManager *m_pNetClientManager;
-	//MapSocket m_mapAcceptSocket;
-	//MapNetSocket m_mapNetSocket;
 };
 
 NS_IO_Footer
