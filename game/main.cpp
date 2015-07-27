@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	CApp::getMe().InitDb();
 	CApp::getMe().InitNet();
 
-	CApp::getMe().DoTick();
+	CApp::getMe().Run();
 
 	return 0;
 }

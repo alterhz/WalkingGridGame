@@ -76,7 +76,7 @@ bool CApp::InitDb()
 	return true;
 }
 
-bool CApp::DoTick()
+bool CApp::Run()
 {
 	if (m_pNetService)
 	{
