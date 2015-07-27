@@ -34,6 +34,7 @@ public:
 
 public:
 	INetService *m_pNetService;
+	ITimerManager *m_pTimerManager;
 	IEventManager *m_pEventManager;
 };
 

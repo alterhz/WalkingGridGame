@@ -12,7 +12,7 @@
 
 NS_IO_Header
 
-class CEventManager : public IEventManager
+class CTimerManager : public ITimerManager
 {
 	class CDeadlineTimer
 	{
@@ -75,18 +75,34 @@ class CEventManager : public IEventManager
 	typedef std::map<int, CDeadlineTimer *> MapDeadlineTimer;
 
 public:
+	CTimerManager(boost::asio::io_service &iosMain);
+	~CTimerManager();
+
+public:
+	// 设置Timer事件,返回TimerId，设置失败，返回INVALID_TIMER_ID
+	virtual int SetTimer(ITimerEvent *pTimerEvent, int nInterval);
+	// 删除Timer事件
+	virtual void KillTimer(int nTimerId);
+
+private:
+	boost::asio::io_service &m_iosMain;
+	MapDeadlineTimer m_mapDeadlineTimer;
+};
+
+class CEventManager : public IEventManager
+{
+public:
 	CEventManager(boost::asio::io_service &iosMain);
 	virtual ~CEventManager();
 
 public:
 	bool Start(int nThreadNumber = 1);
-	void Stop();
+
 	// 投递异步事件
 	virtual bool PostAsyncEvent(IAsyncEvent *pAsyncEvent);
-	// 设置Timer事件,返回TimerId，设置失败，返回INVALID_TIMER_ID
-	virtual int SetTimer(ITimerEvent *pTimerEvent, int nInterval);
-	// 删除Timer事件
-	virtual void KillTimer(int nTimerId);
+
+private:
+	void Stop();
 
 private:
 	void OnEventExcute(IAsyncEvent *pAsyncEvent);
@@ -99,9 +115,8 @@ private:
 	boost::asio::io_service::work *m_pWorkThread;
 	boost::asio::io_service m_iosThread;
 	boost::interprocess::interprocess_semaphore *m_pSemaphore;
-
-	MapDeadlineTimer m_mapDeadlineTimer;
 };
+
 
 NS_IO_Footer
 

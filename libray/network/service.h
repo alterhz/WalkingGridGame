@@ -29,6 +29,8 @@ public:
 	virtual INetAcceptor * CreateListener();
 	// 创建网络连接器
 	virtual INetConnector * CreateConnector();
+	// 创建TimerManager
+	virtual ITimerManager * CreateTimerManager();
 	// 创建EventManager
 	virtual IEventManager * CreateEventManager(int nThreadNumber = 1);
 

@@ -82,6 +82,7 @@ public:
 };
 
 class IEventManager;
+class ITimerManager;
 
 class INetService
 {
@@ -99,6 +100,8 @@ public:
 	virtual INetAcceptor * CreateListener() = 0;
 	// 创建网络连接器
 	virtual INetConnector * CreateConnector() = 0;
+	// 创建TimerManager
+	virtual ITimerManager * CreateTimerManager() = 0;
 	// 创建EventManager
 	virtual IEventManager * CreateEventManager(int nThreadNumber = 1) = 0;
 };

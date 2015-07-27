@@ -3,6 +3,50 @@
 
 NS_IO_Header
 
+CTimerManager::CTimerManager(boost::asio::io_service &iosMain)
+	: m_iosMain(iosMain)
+{
+}
+
+CTimerManager::~CTimerManager()
+{
+
+}
+
+int CTimerManager::SetTimer(ITimerEvent *pTimerEvent, int nInterval)
+{
+	CDeadlineTimer *pInfoDeadlineTimer = new CDeadlineTimer(m_iosMain, nInterval, pTimerEvent);
+	if (nullptr == pInfoDeadlineTimer)
+	{
+		return INVALID_TIMER_ID;
+	}
+
+	int nTimerId = pInfoDeadlineTimer->GetTimerId();
+
+	m_mapDeadlineTimer.insert(std::make_pair(nTimerId, pInfoDeadlineTimer));
+
+	pInfoDeadlineTimer->AsyncWait();
+
+	return nTimerId;
+}
+
+void CTimerManager::KillTimer(int nTimerId)
+{
+	MapDeadlineTimer::iterator it = m_mapDeadlineTimer.find(nTimerId);
+	if (it != m_mapDeadlineTimer.end())
+	{
+		CDeadlineTimer *pDeadlineTimer = it->second;
+		m_mapDeadlineTimer.erase(it);
+
+		if (pDeadlineTimer)
+		{
+			delete pDeadlineTimer;
+			pDeadlineTimer = nullptr;
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
 CEventManager::CEventManager(boost::asio::io_service &iosMain)
 	: m_iosMain(iosMain)
 	, m_pWorkThread(nullptr)
@@ -99,39 +143,6 @@ _run:
 	{
 		LOGPrint("boost.trycatch:" + e.what());
 		goto _run;
-	}
-}
-
-int CEventManager::SetTimer(ITimerEvent *pTimerEvent, int nInterval)
-{
-	CDeadlineTimer *pInfoDeadlineTimer = new CDeadlineTimer(m_iosMain, nInterval, pTimerEvent);
-	if (nullptr == pInfoDeadlineTimer)
-	{
-		return INVALID_TIMER_ID;
-	}
-
-	int nTimerId = pInfoDeadlineTimer->GetTimerId();
-
-	m_mapDeadlineTimer.insert(std::make_pair(nTimerId, pInfoDeadlineTimer));
-
-	pInfoDeadlineTimer->AsyncWait();
-
-	return nTimerId;
-}
-
-void CEventManager::KillTimer(int nTimerId)
-{
-	MapDeadlineTimer::iterator it = m_mapDeadlineTimer.find(nTimerId);
-	if (it != m_mapDeadlineTimer.end())
-	{
-		CDeadlineTimer *pDeadlineTimer = it->second;
-		m_mapDeadlineTimer.erase(it);
-
-		if (pDeadlineTimer)
-		{
-			delete pDeadlineTimer;
-			pDeadlineTimer = nullptr;
-		}
 	}
 }
 

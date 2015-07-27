@@ -12,7 +12,7 @@
 
 using namespace NS_IO;
 
-class CApp : public Singleton<CApp>
+class CApp : public Singleton<CApp>, public ITimerEvent
 {
 public:
 	CApp();
@@ -24,7 +24,7 @@ public:
 
 	void Stop();
 
-	bool DoTick();
+	bool Run();
 
 	bool PostAsyncEvent(IAsyncEvent *pAsyncEvent);
 
@@ -32,8 +32,13 @@ public:
 
 	void KillTimer(int nTimerId);
 
+protected:
+	// ·µ»Øtrue:¼ÌÐø£»·µ»Øfalse:ÖÕÖ¹
+	virtual bool OnTimerEvent(int nTimerId);
+
 public:
 	INetService *m_pNetService;
+	ITimerManager *m_pTimerManager;
 	IEventManager *m_pEventManager;
 };
 

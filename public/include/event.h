@@ -28,6 +28,15 @@ public:
 	virtual bool OnResult() = 0;
 };
 
+class IEventManager
+{
+public:
+	virtual ~IEventManager() {}
+
+	// 投递异步事件
+	virtual bool PostAsyncEvent(IAsyncEvent *pAsyncEvent) = 0;
+};
+
 class ITimerEvent
 {
 public:
@@ -42,13 +51,10 @@ public:
 
 #define INVALID_TIMER_ID	(0)
 
-class IEventManager
+class ITimerManager
 {
 public:
-	virtual ~IEventManager() {}
-
-	// 投递异步事件
-	virtual bool PostAsyncEvent(IAsyncEvent *pAsyncEvent) = 0;
+	virtual ~ITimerManager() {}
 
 	// 设置Timer事件,返回TimerId，设置失败，返回INVALID_TIMER_ID
 	virtual int SetTimer(ITimerEvent *pTimerEvent, int nInterval) = 0;

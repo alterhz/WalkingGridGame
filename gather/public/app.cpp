@@ -7,6 +7,7 @@
 CApp::CApp()
 	: m_pNetService(nullptr)
 	, m_pEventManager(nullptr)
+	, m_pTimerManager(nullptr)
 {
 	m_pNetService = CreateNetService();
 }
@@ -23,6 +24,8 @@ bool CApp::InitNet()
 	{
 		return false;
 	}
+
+	m_pTimerManager = m_pNetService->CreateTimerManager();
 
 	INetAcceptor *pNetAcceptor = m_pNetService->CreateListener();
 	if (nullptr == pNetAcceptor)
@@ -111,9 +114,9 @@ bool CApp::PostAsyncEvent(IAsyncEvent *pAsyncEvent)
 
 int CApp::SetTimer(ITimerEvent *pTimerEvent, int nInterval)
 {
-	if (m_pEventManager)
+	if (m_pTimerManager)
 	{
-		return m_pEventManager->SetTimer(pTimerEvent, nInterval);
+		return m_pTimerManager->SetTimer(pTimerEvent, nInterval);
 	}
 
 	return INVALID_TIMER_ID;
@@ -121,9 +124,9 @@ int CApp::SetTimer(ITimerEvent *pTimerEvent, int nInterval)
 
 void CApp::KillTimer(int nTimerId)
 {
-	if (m_pEventManager)
+	if (m_pTimerManager)
 	{
-		return m_pEventManager->KillTimer(nTimerId);
+		return m_pTimerManager->KillTimer(nTimerId);
 	}
 }
 

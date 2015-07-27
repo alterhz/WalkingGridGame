@@ -83,6 +83,13 @@ INetConnector * CNetService::CreateConnector()
 	return pNetConnector;
 }
 
+ITimerManager * CNetService::CreateTimerManager()
+{
+	CTimerManager *pTimerManager = new CTimerManager(m_ioService);
+
+	return pTimerManager;
+}
+
 IEventManager * CNetService::CreateEventManager(int nThreadNumber /*= 1*/)
 {
 	CEventManager *pEventManager = new CEventManager(m_ioService);
