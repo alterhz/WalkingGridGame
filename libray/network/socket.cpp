@@ -9,6 +9,8 @@ CNetSocket::CNetSocket()
 	, m_nAsyncEventCount(0)
 	, m_nHaveRecvLength(0)
 	, m_nSendLength(0)
+	, m_wRemotePort(0)
+	, m_wLocalPort(0)
 {
 }
 
@@ -16,104 +18,46 @@ CNetSocket::~CNetSocket()
 {
 }
 
-bool CNetSocket::DoSend(const char *pBuffer, unsigned short wLength)
-{
-	if (nullptr == m_pAsioSocket)
-	{
-		return false;
-	}
-
-	char szData[MAX_SEND_BUFFER_LENGTH] = {0};
-	unsigned short *pMessageLength = reinterpret_cast<unsigned short *>(szData);
-	*pMessageLength = static_cast<unsigned short>(wLength);
-	memcpy(szData + sizeof(unsigned short), pBuffer, wLength);
-
-	if (!m_ringBuffer.Write(szData, sizeof(unsigned short) + wLength))
-	{
-		return false;
-	}
-
-	if (0 == m_nSendLength)
-	{
-		int nReadLength = MAX_SEND_BUFFER_LENGTH - m_nSendLength;
-		m_ringBuffer.Read(m_szSendBuffer, nReadLength);
-
-		m_nSendLength = nReadLength;
-
-		unsigned short wLength = *(unsigned short *)m_szSendBuffer;
-
-		// 发送数据
-		if (m_nSendLength > 0)
-		{
-			++m_nAsyncEventCount;
-
-			m_pAsioSocket->async_write_some(boost::asio::buffer(m_szSendBuffer, m_nSendLength), 
-				bind(&CNetSocket::OnSend, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
-		}
-	}
-	return true;
-}
-
-void CNetSocket::DoClose()
-{
-	if (nullptr == m_pAsioSocket)
-	{
-		return ;
-	}
-
-	LOGPrint("DoClose-- m_pAsioSocket addr:" + reinterpret_cast<intptr_t>(m_pAsioSocket));
-
-	// 断开连接
-	if (m_pAsioSocket->is_open())
-	{
-		m_pAsioSocket->shutdown(boost::asio::socket_base::shutdown_both);
-		m_pAsioSocket->close();
-	}
-
-	if (m_nAsyncEventCount > 0)
-	{
-		return ;
-	}
-
-	if (m_pNetClient)
-	{
-		m_pNetClient->OnDisconnect();
-	}
-
-	// 删除网络socket对象
-	delete m_pAsioSocket;
-	m_pAsioSocket = nullptr;
-
-	LOGPrint("下面释放CNetSocket");
-
-	// 删除自身
-	delete this;
-}
-
 const char * CNetSocket::GetRemoteIP()
 {
-	return m_pAsioSocket->remote_endpoint().address().to_string().c_str();
+	return m_strRemoteIP.c_str();
 }
 
 unsigned short CNetSocket::GetRemotePort()
 {
-	return m_pAsioSocket->remote_endpoint().port();
+	return m_wRemotePort;
 }
 
 const char * CNetSocket::GetLocalIP()
 {
-	return m_pAsioSocket->local_endpoint().address().to_string().c_str();
+	return m_strLocalIP.c_str();
 }
 
 unsigned short CNetSocket::GetLocalPort()
 {
-	return m_pAsioSocket->local_endpoint().port();
+	return m_wLocalPort;
 }
 
 void CNetSocket::DoInit(boost::asio::ip::tcp::socket *pAsioSocket, INetClient *pNetClient)
 {
 	m_pAsioSocket = pAsioSocket;
 	m_pNetClient = pNetClient;
+
+	// 记录local和remote的IP和port
+	boost::system::error_code ec;
+	boost::asio::ip::tcp::endpoint epRemote = m_pAsioSocket->remote_endpoint(ec);
+	if (!ec)
+	{
+		m_strRemoteIP = epRemote.address().to_string();
+		m_wRemotePort = epRemote.port();
+	}
+
+	boost::asio::ip::tcp::endpoint epLocal = m_pAsioSocket->local_endpoint(ec);	
+	if (!ec)
+	{
+		m_strLocalIP = epLocal.address().to_string();
+		m_wLocalPort = epLocal.port();
+	}
 
 	// 投递异步Recv
 	DoRecv();
@@ -229,6 +173,44 @@ USHORT CNetSocket::ReadPacket(const char *pPacketHead, unsigned short wLength)
 	return sizeof(USHORT) + wPacketLength;
 }
 
+bool CNetSocket::DoSend(const char *pBuffer, unsigned short wLength)
+{
+	if (nullptr == m_pAsioSocket)
+	{
+		return false;
+	}
+
+	char szData[MAX_SEND_BUFFER_LENGTH] = {0};
+	unsigned short *pMessageLength = reinterpret_cast<unsigned short *>(szData);
+	*pMessageLength = static_cast<unsigned short>(wLength);
+	memcpy(szData + sizeof(unsigned short), pBuffer, wLength);
+
+	if (!m_ringBuffer.Write(szData, sizeof(unsigned short) + wLength))
+	{
+		return false;
+	}
+
+	if (0 == m_nSendLength)
+	{
+		int nReadLength = MAX_SEND_BUFFER_LENGTH - m_nSendLength;
+		m_ringBuffer.Read(m_szSendBuffer, nReadLength);
+
+		m_nSendLength = nReadLength;
+
+		unsigned short wLength = *(unsigned short *)m_szSendBuffer;
+
+		// 发送数据
+		if (m_nSendLength > 0)
+		{
+			++m_nAsyncEventCount;
+
+			m_pAsioSocket->async_write_some(boost::asio::buffer(m_szSendBuffer, m_nSendLength), 
+				bind(&CNetSocket::OnSend, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		}
+	}
+	return true;
+}
+
 void CNetSocket::OnSend(const boost::system::error_code &ec, size_t nByteTransferred)
 {
 	if (nullptr == m_pAsioSocket)
@@ -282,6 +264,42 @@ void CNetSocket::OnSend(const boost::system::error_code &ec, size_t nByteTransfe
 	{
 		LOGPrint("发送数据长度异常：" + m_nSendLength);
 	}
+}
+
+void CNetSocket::DoClose()
+{
+	if (nullptr == m_pAsioSocket)
+	{
+		return ;
+	}
+
+	LOGPrint("DoClose-- m_pAsioSocket addr:" + reinterpret_cast<intptr_t>(m_pAsioSocket));
+
+	// 断开连接
+	if (m_pAsioSocket->is_open())
+	{
+		m_pAsioSocket->shutdown(boost::asio::socket_base::shutdown_both);
+		m_pAsioSocket->close();
+	}
+
+	if (m_nAsyncEventCount > 0)
+	{
+		return ;
+	}
+
+	if (m_pNetClient)
+	{
+		m_pNetClient->OnDisconnect();
+	}
+
+	// 删除网络socket对象
+	delete m_pAsioSocket;
+	m_pAsioSocket = nullptr;
+
+	LOGPrint("下面释放CNetSocket");
+
+	// 删除自身
+	delete this;
 }
 
 NS_IO_Footer

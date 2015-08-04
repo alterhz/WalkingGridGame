@@ -52,6 +52,11 @@ private:
 	char m_szSendBuffer[MAX_SEND_BUFFER_LENGTH];
 	int m_nSendLength;
 
+	std::string m_strRemoteIP;
+	unsigned short m_wRemotePort;
+	std::string m_strLocalIP;
+	unsigned short m_wLocalPort;
+
 	CRingBuffer m_ringBuffer;
 };
 

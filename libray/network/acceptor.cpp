@@ -82,19 +82,18 @@ void CNetAcceptor::OnAccept(boost::asio::ip::tcp::socket *pAcceptSocket, const b
 {
 	if (ec)
 	{
-		LOGPrint("OnAccept:errorid:" + ec.value() + ",message:" + ec.message().c_str());
-
-		delete pAcceptSocket;
-		pAcceptSocket = nullptr;
-
 		if (ec.value() == boost::asio::error::operation_aborted)
 		{
-			
+			// 关闭处理
 		}
 		else
 		{
-			DoAccept();
+			// 异常处理
+			LOGPrint("OnAccept:errorid:" + ec.value() + ",message:" + ec.message().c_str());
 		}
+
+		delete pAcceptSocket;
+		pAcceptSocket = nullptr;
 
 		return ;
 	}
@@ -127,7 +126,5 @@ void CNetAcceptor::OnAccept(boost::asio::ip::tcp::socket *pAcceptSocket, const b
 
 	pNewNetSocket->DoInit(pAcceptSocket, pNewNetClient);
 }
-
-
 
 NS_IO_Footer
