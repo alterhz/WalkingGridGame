@@ -47,6 +47,18 @@ private:
 	boost::mutex *m_pMtx;
 };
 
+// 线程
+class IThread
+{
+public:
+	virtual ~IThread() {}
+
+public:
+	virtual bool OnThreadRun() = 0;
+};
+
+// 启动线程
+bool CreateThread(IThread &thread);
 
 NS_IO_Footer
 

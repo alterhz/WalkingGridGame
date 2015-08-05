@@ -45,26 +45,7 @@ class CTimerManager : public ITimerManager
 		int GetTimerId() const { return m_nTimerId; }
 
 	private:
-		void OnTimerEvent(const boost::system::error_code &ec)
-		{
-			if (ec)
-			{
-				LOGPrint("err[" + ec.value() + "]:" + ec.message().c_str());
-
-				return ;
-			}
-
-			m_deadlineTimer.expires_at(m_deadlineTimer.expires_at() 
-				+ boost::posix_time::millisec(m_nInterval));
-
-			m_deadlineTimer.async_wait(boost::bind(&CDeadlineTimer::OnTimerEvent, this, 
-				boost::asio::placeholders::error) );
-
-			if (m_pTimerEvent)
-			{
-				m_pTimerEvent->OnTimerEvent(m_nTimerId);
-			}
-		}
+		void OnTimerEvent(const boost::system::error_code &ec);
 
 		int m_nTimerId;
 		int m_nInterval;
@@ -100,9 +81,8 @@ public:
 
 	// 投递异步事件
 	virtual bool PostAsyncEvent(IAsyncEvent *pAsyncEvent);
-
-private:
-	void Stop();
+	// 停止
+	virtual void Stop();
 
 private:
 	void OnEventExcute(IAsyncEvent *pAsyncEvent);
@@ -115,6 +95,7 @@ private:
 	boost::asio::io_service::work *m_pWorkThread;
 	boost::asio::io_service m_iosThread;
 	boost::interprocess::interprocess_semaphore *m_pSemaphore;
+	int m_nThreadNumber;
 };
 
 

@@ -48,4 +48,15 @@ void CMutex::unlock()
 	}
 }
 
+bool CreateThread(IThread &thread)
+{
+	// Æô¶¯Ïß³Ì
+	boost::thread t(boost::bind(&IThread::OnThreadRun, &thread));
+	t.detach();
+
+	return true;
+}
+
+
+
 NS_IO_Footer

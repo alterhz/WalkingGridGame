@@ -7,6 +7,8 @@
 NS_IO_Header
 
 CNetService::CNetService()
+	: m_pWork(nullptr)
+	, m_pTimerStop(nullptr)
 {
 }
 
@@ -14,36 +16,64 @@ CNetService::~CNetService()
 {
 }
 
-bool CNetService::DoTick(int nExcuteCount/* = 1*/)
+bool CNetService::Run()
 {
-	for (int i=0; i<nExcuteCount; ++i)
+	// 防止io_service中没有事件退出
+	m_pWork = new boost::asio::io_service::work(m_ioService);
+
+	while (true)
 	{
-		if (0 == m_ioService.poll_one())
+		boost::system::error_code ec;
+		size_t n = m_ioService.run(ec);
+		if (ec)
 		{
-			// 队列中的事件处理完毕
-			return false;
+			LOGPrint("service run error[" + ec.value() + "]:" + ec.message());
+		}
+		else
+		{
+			// 正常退出
+			break;
 		}
 	}
+
+	LOGPrint("io_service normal finished.");
 
 	return true;
 }
 
-bool CNetService::Run()
+void CNetService::Stop(bool bForceStop)
 {
-_run:
-	try
+	if (nullptr == m_pWork)
 	{
-		size_t n = m_ioService.run();
-
-		LOGPrint("网络线程退出，run " + n + " 次.");
-	}
-	catch (boost::system::system_error &e)
-	{
-		LOGPrint("boost.trycatch:" + e.what());
-		goto _run;
+		// 没有io_service运行
+		return ;
 	}
 
-	return true;
+	delete m_pWork;
+	m_pWork = nullptr;
+
+	if (bForceStop)
+	{
+		// 异步强制退出事件1s后触发
+		m_pTimerStop = new boost::asio::deadline_timer(m_ioService, boost::posix_time::millisec(1000));
+		if (nullptr == m_pTimerStop)
+		{
+			return ;
+		}
+
+		m_pTimerStop->async_wait(boost::bind(&CNetService::OnStop, this, 
+			boost::asio::placeholders::error) );
+	}
+}
+
+void CNetService::OnStop(const boost::system::error_code &ec)
+{
+	delete m_pTimerStop;
+	m_pTimerStop = nullptr;
+
+	m_ioService.stop();
+
+	LOGPrint("强制停止io_service.");
 }
 
 bool CNetService::Poll(int nExcuteCount /*= 0*/)
@@ -102,7 +132,5 @@ IEventManager * CNetService::CreateEventManager(int nThreadNumber /*= 1*/)
 
 	return pEventManager;
 }
-
-
 
 NS_IO_Footer

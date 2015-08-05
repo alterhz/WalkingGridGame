@@ -11,6 +11,9 @@
 
 NS_IO_Header
 
+//计时器检测频率
+#define TIMER_CHECK_INTERVAL	(1000)
+
 class CNetAcceptor : public INetAcceptor
 {
 public:
@@ -24,11 +27,14 @@ public:
 private:
 	bool DoAccept();
 	void OnAccept(boost::asio::ip::tcp::socket *pAcceptSocket, const boost::system::error_code& ec);
+	void OnTimerCheck(const boost::system::error_code& ec);
 
 private:
 	boost::asio::io_service &m_ioService;
 	boost::asio::ip::tcp::acceptor m_acceptor;
+	boost::asio::deadline_timer m_timerCheck;
 	INetClientManager *m_pNetClientManager;
+	int m_nAsyncAcceptErrorCount;
 };
 
 NS_IO_Footer

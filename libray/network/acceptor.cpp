@@ -7,7 +7,9 @@ NS_IO_Header
 CNetAcceptor::CNetAcceptor(boost::asio::io_service &ios)
 	: m_ioService(ios)
 	, m_acceptor(ios)
+	, m_timerCheck(ios, boost::posix_time::millisec(TIMER_CHECK_INTERVAL))
 	, m_pNetClientManager(nullptr)
+	, m_nAsyncAcceptErrorCount(0)
 {
 }
 
@@ -49,11 +51,18 @@ bool CNetAcceptor::Listen(INetClientManager* pNetClientManager, unsigned short w
 		DoAccept();
 	}
 
+	// 异步检测
+	m_timerCheck.async_wait(boost::bind(&CNetAcceptor::OnTimerCheck, this, 
+		boost::asio::placeholders::error) );
+
 	return true;
 }
 
 void CNetAcceptor::Cancel()
 {
+	// 停止异步检测
+	m_timerCheck.cancel();
+
 	m_acceptor.close();
 
 	if (m_pNetClientManager)
@@ -82,12 +91,10 @@ void CNetAcceptor::OnAccept(boost::asio::ip::tcp::socket *pAcceptSocket, const b
 {
 	if (ec)
 	{
-		if (ec.value() == boost::asio::error::operation_aborted)
+		if (ec.value() != boost::asio::error::operation_aborted)
 		{
-			// 关闭处理
-		}
-		else
-		{
+			// 监听失败的数量 
+			++m_nAsyncAcceptErrorCount;
 			// 异常处理
 			LOGPrint("OnAccept:errorid:" + ec.value() + ",message:" + ec.message().c_str());
 		}
@@ -125,6 +132,35 @@ void CNetAcceptor::OnAccept(boost::asio::ip::tcp::socket *pAcceptSocket, const b
 	}
 
 	pNewNetSocket->DoInit(pAcceptSocket, pNewNetClient);
+}
+
+void CNetAcceptor::OnTimerCheck(const boost::system::error_code& ec)
+{
+	if (ec)
+	{
+		if (ec.value() != boost::asio::error::operation_aborted)
+		{
+			LOGPrint("TimerManager error[" + ec.value() + "]:" + ec.message().c_str());
+		}
+
+		return ;
+	}
+
+	m_timerCheck.expires_at(m_timerCheck.expires_at() 
+		+ boost::posix_time::millisec(TIMER_CHECK_INTERVAL));
+
+	m_timerCheck.async_wait(boost::bind(&CNetAcceptor::OnTimerCheck, this, 
+		boost::asio::placeholders::error) );
+
+	// 下面处理检测事项
+	{
+		for (int i=0; i<m_nAsyncAcceptErrorCount; ++i)
+		{
+			DoAccept();
+		}
+
+		m_nAsyncAcceptErrorCount = 0;
+	}
 }
 
 NS_IO_Footer

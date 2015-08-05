@@ -10,10 +10,18 @@
 
 int main(int argc, char* argv[])
 {
-	CApp::getMe().InitDb();
-	CApp::getMe().InitNet();
-
 	CApp::getMe().Run();
+
+	LOGPrint("Have run.");
+
+	system("pause");
+
+	// 停止
+	CApp::getMe().Stop();
+
+	LOGPrint("Have stop.");
+	
+	system("pause");
 
 	return 0;
 }

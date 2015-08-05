@@ -33,6 +33,9 @@ class IEventManager
 public:
 	virtual ~IEventManager() {}
 
+	// 停止
+	virtual void Stop() = 0;
+
 	// 投递异步事件
 	virtual bool PostAsyncEvent(IAsyncEvent *pAsyncEvent) = 0;
 };

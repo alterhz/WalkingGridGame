@@ -18,10 +18,10 @@ public:
 	virtual ~CNetService();
 
 public:
-	// 触发逻辑循环
-	virtual bool DoTick(int nExcuteCount = 1);
 	// Run(阻塞,直到调用stop)
 	virtual bool Run();
+	// 停止(如果队列有异步事件，无法退出时可以使用强制退出)
+	virtual void Stop(bool bForceStop = false);
 	// Pool(非阻塞)参数为0:执行所有事件
 	virtual bool Poll(int nExcuteCount = 0);
 
@@ -34,9 +34,14 @@ public:
 	// 创建EventManager
 	virtual IEventManager * CreateEventManager(int nThreadNumber = 1);
 
+protected:
+	// 强制停止
+	void OnStop(const boost::system::error_code &ec);
+
 private:
 	boost::asio::io_service m_ioService;
 	boost::asio::io_service::work *m_pWork;
+	boost::asio::deadline_timer *m_pTimerStop;
 };
 
 NS_IO_Footer

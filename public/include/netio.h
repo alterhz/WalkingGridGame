@@ -90,12 +90,13 @@ public:
 	virtual ~INetService() {}
 	
 public:
-	// 触发逻辑循环(队列中数据处理完毕返回false)
-	virtual bool DoTick(int nExcuteCount = 1) = 0;
 	// Run(阻塞,直到调用stop)
 	virtual bool Run() = 0;
-	// Pool(非阻塞)参数为0:执行所有事件
+	// Pool(非阻塞)参数为0:执行所有事件(队列中数据处理完毕返回false)
 	virtual bool Poll(int nExcuteCount = 0) = 0;
+	// 停止(如果队列有异步事件，无法退出时可以使用强制退出)
+	virtual void Stop(bool bForceStop = false) = 0;
+
 	// 创建网络监听对象
 	virtual INetAcceptor * CreateListener() = 0;
 	// 创建网络连接器

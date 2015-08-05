@@ -85,6 +85,4 @@ bool CDbConnection::ExecuteSP(const char* szSP)
 	return true;
 }
 
-
-
 NS_IO_Footer
