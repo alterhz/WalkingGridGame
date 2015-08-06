@@ -154,12 +154,17 @@ void CNetAcceptor::OnTimerCheck(const boost::system::error_code& ec)
 
 	// 下面处理检测事项
 	{
-		for (int i=0; i<m_nAsyncAcceptErrorCount; ++i)
+		if (m_nAsyncAcceptErrorCount > 0)
 		{
-			DoAccept();
-		}
+			LOGPrint("有" + m_nAsyncAcceptErrorCount + "个async_accept出现异常。");
 
-		m_nAsyncAcceptErrorCount = 0;
+			for (int i=0; i<m_nAsyncAcceptErrorCount; ++i)
+			{
+				DoAccept();
+			}
+
+			m_nAsyncAcceptErrorCount = 0;
+		}
 	}
 }
 
