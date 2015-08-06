@@ -54,19 +54,19 @@ void CNetConnector::OnConnect(const boost::system::error_code& ec)
 {
 	if (ec)
 	{
-		LOGPrint("OnAccept:errorid:" + ec.value() + ",message:" + ec.message().c_str());
+		if (ec.value() != boost::asio::error::operation_aborted)
+		{
+			//if (ec.value() != boost::asio::error::connection_refused)
+			LOGPrint("OnAccept:errorid:" + ec.value() + ",message:" + ec.message().c_str());
+		}
+
+		if (m_pNetClient)
+		{
+			m_pNetClient->OnError(ec.value());
+		}
 
 		delete m_pAsioSocket;
 		m_pAsioSocket = nullptr;
-
-		if (ec.value() == boost::asio::error::operation_aborted)
-		{
-
-		}
-		else
-		{
-			
-		}
 
 		return ;
 	}
