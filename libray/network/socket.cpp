@@ -99,9 +99,15 @@ void CNetSocket::OnRecv(const boost::system::error_code& ec, size_t nByteTransfe
 {
 	if (ec)
 	{
+		//ec.value() == boost::asio::error::connection_reset
+		//ec.value() == boost::asio::error::eof
+		//ec.value() == boost::asio::error::bad_descriptor
+		if (ec.value() != boost::asio::error::operation_aborted)
+		{
+			LOGPrint("OnRecv:errorid:" + ec.value() + ",message:" + ec.message().c_str());
+		}
+		
 		--m_nAsyncEventCount;
-
-		LOGPrint("OnRecv:errorid:" + ec.value() + ",message:" + ec.message().c_str());
 
 		DoClose();
 
@@ -222,7 +228,13 @@ void CNetSocket::OnSend(const boost::system::error_code &ec, size_t nByteTransfe
 
 	if (ec)
 	{
-		LOGPrint("OnSend:errorid:" + ec.value() + ",message:" + ec.message().c_str());
+		//ec.value() == boost::asio::error::connection_reset
+		//ec.value() == boost::asio::error::eof
+		//ec.value() == boost::asio::error::bad_descriptor
+		if (ec.value() != boost::asio::error::operation_aborted)
+		{
+			LOGPrint("OnSend:errorid:" + ec.value() + ",message:" + ec.message().c_str());
+		}
 
 		DoClose();
 
@@ -278,7 +290,12 @@ void CNetSocket::DoClose()
 	// 断开连接
 	if (m_pAsioSocket->is_open())
 	{
-		m_pAsioSocket->shutdown(boost::asio::socket_base::shutdown_both);
+		boost::system::error_code ec;
+		m_pAsioSocket->shutdown(boost::asio::socket_base::shutdown_both, ec);
+		if (ec)
+		{
+			LOGPrint("shutdown error[" + ec.value() + "]:" + ec.message());
+		}
 		m_pAsioSocket->close();
 	}
 
