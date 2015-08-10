@@ -186,12 +186,16 @@ bool CNetSocket::DoSend(const char *pBuffer, unsigned short wLength)
 		return false;
 	}
 
-	char szData[MAX_SEND_BUFFER_LENGTH] = {0};
+	char szData[8] = {0};
 	unsigned short *pMessageLength = reinterpret_cast<unsigned short *>(szData);
 	*pMessageLength = static_cast<unsigned short>(wLength);
-	memcpy(szData + sizeof(unsigned short), pBuffer, wLength);
 
-	if (!m_ringBuffer.Write(szData, sizeof(unsigned short) + wLength))
+	if (!m_ringBuffer.Write(szData, sizeof(unsigned short)))
+	{
+		return false;
+	}
+
+	if (!m_ringBuffer.Write(pBuffer, wLength))
 	{
 		return false;
 	}
