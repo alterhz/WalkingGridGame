@@ -74,15 +74,11 @@ bool CApp::InitNet()
 		return false;
 	}
 
-	CClientManager *pClientManager = new CClientManager();
-	if (nullptr == pClientManager)
-	{
-		return false;
-	}
+	// 初始化协议
+	CClientManager::getMe().InitProto();
 
 	unsigned short wPort = 8000;
-
-	m_pNetAcceptor->Listen(pClientManager, wPort);
+	m_pNetAcceptor->Listen(CClientManager::instance(), wPort);
 
 	LOGPrint("正在网络监听" + wPort + "端口。");
 

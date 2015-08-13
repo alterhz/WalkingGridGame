@@ -10,7 +10,11 @@
 #include "UtilityInc.h"
 #include "msginc.h"
 
+#include "observer.h"
+
 using namespace NS_IO;
+
+class CClient;
 
 class CClientManager : public INetClientManager, public Singleton<CClientManager>
 {
@@ -18,10 +22,15 @@ public:
 	CClientManager();
 	virtual ~CClientManager();
 
+	bool InitProto();
+
 public:	//ÊÂ¼þ
 	virtual INetClient * OnAccept();
 	// ÊÍ·Å
 	virtual void OnRelease() {}
+
+public:
+	Observer3::IDispatcherManager<const char *, int, CClient *> gDM;
 };
 
 #endif

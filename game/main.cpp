@@ -3,32 +3,32 @@
 // date : 6/17/2015
 // description : 
 
-//#include <iostream>
-//#include "app.h"
-//#include "debug.h"
-//#include "thread.h"
-//
-//int main(int argc, char* argv[])
-//{
-//	CApp::getMe().Run();
-//
-//	LOGPrint("Have run.");
-//
-//	while (true)
-//	{
-//		char szIn[1024] = {0};
-//		std::cin >> szIn;
-//
-//		if (std::string("exit") == szIn)
-//		{
-//			// 停止
-//			CApp::getMe().Stop();
-//		}
-//	}
-//
-//	return 0;
-//}
-//
+#include <iostream>
+#include "app.h"
+#include "debug.h"
+#include "thread.h"
+
+int main(int argc, char* argv[])
+{
+	CApp::getMe().Run();
+
+	LOGPrint("Have run.");
+
+	while (true)
+	{
+		char szIn[1024] = {0};
+		std::cin >> szIn;
+
+		if (std::string("exit") == szIn)
+		{
+			// 停止
+			CApp::getMe().Stop();
+		}
+	}
+
+	return 0;
+}
+
 
 
 #include <tchar.h>
@@ -164,24 +164,24 @@ using namespace std;
 //	}
 //};
 
-#include "observer.h"
-#include "logindispatcher.h"
-
-int main()
-{
-	Observer2::IDispatcherManager<const char *, int> gDM;
-
-	CLoginDispatcher loginDispatcher;
-
-	gDM.AddDispatcher(&loginDispatcher);
-
-	
-	// 接收到消息，并分发
-	char *p = "hello world";
-	gDM.RunExcute(1001, p, 3);
-
-	return 0;
-}
+//#include "observer.h"
+//#include "logindispatcher.h"
+//
+//int main()
+//{
+//	Observer2::IDispatcherManager<const char *, int> gDM;
+//
+//	CLoginDispatcher loginDispatcher;
+//
+//	gDM.AddDispatcher(&loginDispatcher);
+//
+//	
+//	// 接收到消息，并分发
+//	char *p = "hello world";
+//	gDM.RunExcute(1001, p, 3);
+//
+//	return 0;
+//}
 
 //template<typename Handler>
 //class I

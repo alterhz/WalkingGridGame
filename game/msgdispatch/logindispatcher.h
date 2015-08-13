@@ -7,14 +7,19 @@
 #define _LOGINDISPATCHER_H_
 
 #include "observer.h"
+#include "msginc.h"
 
-class CLoginDispatcher : public Observer2::IDispatcher<CLoginDispatcher, const char *, int>
+class CClient;
+
+class CLoginDispatcher : public Observer3::IDispatcher<CLoginDispatcher, const char *, int, CClient *>
 {
 public:
 	virtual void OnInit();
 
 private:
-	void OnRecvTest(const char *pMessage, int nLength);
+	void OnRecvTest(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
+
+	void OnHeartBeat(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 
 };
 

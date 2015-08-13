@@ -1,7 +1,6 @@
 #include "client.h"
 #include "debug.h"
 #include "clientmanager.h"
-#include "msgdispatch.h"
 
 CClient::CClient()
 	: m_pNetSocket(nullptr)
@@ -34,8 +33,6 @@ bool CClient::OnDisconnect()
 
 bool CClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 {
-	//LOGPrint("收到一条长度[" + wLength + "]的消息");
-
 	// 协议解析
 	const unsigned short *pProtocolId = reinterpret_cast<const unsigned short *>(pPacket);
 	unsigned short wProtocolId = *pProtocolId;
@@ -44,9 +41,8 @@ bool CClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 
 	int nMessageLength = wLength - sizeof(unsigned short);
 
-	CMsgDispatch::getMe().SetCurrentClient(this);
-
-	return CMsgDispatch::getMe().Dispatch(wProtocolId, pMessage, nMessageLength);
+	CClientManager::getMe().gDM.RunExcute(wProtocolId, pMessage, nMessageLength, this);
+	return true;
 }
 
 bool CClient::SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage)
