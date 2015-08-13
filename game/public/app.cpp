@@ -130,6 +130,10 @@ bool CApp::OnThreadRun()
 
 	m_pNetService->Run();
 
+	LOGPrint("主逻辑线程停止。");
+
+	exit(0);
+
 	return true;
 }
 
@@ -138,7 +142,7 @@ bool CApp::OnTimerEvent(int nTimerId)
 	static int n = 0;
 	LOGPrint("Timer[" + nTimerId + "]触发" + (++n) + "次");
 
-	if (n > 5)
+	if (n >= 5)
 	{
 		m_pTimerManager->KillTimer(m_nRunTimerId);
 		m_nRunTimerId = 0;
@@ -155,11 +159,17 @@ void CApp::Stop()
 	delete m_pTimerManager;
 	m_pTimerManager = nullptr;
 
-	m_pEventManager->Stop();
+	if (m_pEventManager)
+	{
+		m_pEventManager->Stop();
+	}
 
 	delete m_pEventManager;
 	m_pEventManager = nullptr;
 
-	m_pNetService->Stop();
+	if (m_pNetService)
+	{
+		m_pNetService->Stop();
+	}
 }
 

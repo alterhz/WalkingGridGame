@@ -2,36 +2,9 @@ package gproto.gather;
 
 enum PID
 {
-	CSID_C2G_HeartBeat = 1000;
-	CSID_G2C_HeartBeat = 1001;
+	CSID_C2G_HeartBeat = 10000;
+	CSID_G2C_HeartBeat = 10001;
 	
-	// 充值
-	CSID_O2G_Deposit = 2000;
-	// 账号注册
-	CSID_O2G_AccountReg = 2001;
-	// 角色创建
-	CSID_O2G_RoleCreate = 2002;
-	// 登陆日志
-	CSID_O2G_Login = 2003;
-	// 背包扩充日志
-	CSID_O2G_BagExtend = 2004;
-	// 副本进入次数购买日志
-	CSID_O2G_BuyInstance = 2005;
-	// 游戏币购买日志
-	CSID_O2G_BuyCoin = 2006;
-	// 钻石产出或消耗
-	CSID_O2G_Diamond = 2007;
-	// 金币产出或消耗
-	CSID_O2G_Coin = 2008;
-	// 道具产出或销毁
-	CSID_O2G_Item = 2009;
-	// 装备打造
-	CSID_O2G_Equip = 2010;
-	// 复活日志
-	CSID_O2G_Relive = 2011;
-	// 副本日志
-	CSID_O2G_Instance = 2012;
-	// 竞技场日志
-	CSID_O2G_Arena = 2013;
+	CSID_C2G_StartGame = 10100;
 }
 

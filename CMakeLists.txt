@@ -25,6 +25,6 @@ endif()
 
 enable_testing()
 
+#add_subdirectory(gather)
 add_subdirectory(libray)
-add_subdirectory(gather)
 add_subdirectory(game)

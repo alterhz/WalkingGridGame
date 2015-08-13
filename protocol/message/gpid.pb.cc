@@ -59,17 +59,9 @@ void protobuf_AddDesc_gpid_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\ngpid.proto\022\rgproto.gather*\371\002\n\003PID\022\027\n\022C"
-    "SID_C2G_HeartBeat\020\350\007\022\027\n\022CSID_G2C_HeartBe"
-    "at\020\351\007\022\025\n\020CSID_O2G_Deposit\020\320\017\022\030\n\023CSID_O2G"
-    "_AccountReg\020\321\017\022\030\n\023CSID_O2G_RoleCreate\020\322\017"
-    "\022\023\n\016CSID_O2G_Login\020\323\017\022\027\n\022CSID_O2G_BagExt"
-    "end\020\324\017\022\031\n\024CSID_O2G_BuyInstance\020\325\017\022\025\n\020CSI"
-    "D_O2G_BuyCoin\020\326\017\022\025\n\020CSID_O2G_Diamond\020\327\017\022"
-    "\022\n\rCSID_O2G_Coin\020\330\017\022\022\n\rCSID_O2G_Item\020\331\017\022"
-    "\023\n\016CSID_O2G_Equip\020\332\017\022\024\n\017CSID_O2G_Relive\020"
-    "\333\017\022\026\n\021CSID_O2G_Instance\020\334\017\022\023\n\016CSID_O2G_A"
-    "rena\020\335\017", 407);
+    "\n\ngpid.proto\022\rgproto.gather*P\n\003PID\022\027\n\022CS"
+    "ID_C2G_HeartBeat\020\220N\022\027\n\022CSID_G2C_HeartBea"
+    "t\020\221N\022\027\n\022CSID_C2G_StartGame\020\364N", 109);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gpid.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_gpid_2eproto);
@@ -87,22 +79,9 @@ const ::google::protobuf::EnumDescriptor* PID_descriptor() {
 }
 bool PID_IsValid(int value) {
   switch(value) {
-    case 1000:
-    case 1001:
-    case 2000:
-    case 2001:
-    case 2002:
-    case 2003:
-    case 2004:
-    case 2005:
-    case 2006:
-    case 2007:
-    case 2008:
-    case 2009:
-    case 2010:
-    case 2011:
-    case 2012:
-    case 2013:
+    case 10000:
+    case 10001:
+    case 10100:
       return true;
     default:
       return false;

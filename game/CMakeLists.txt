@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 2.8)
 
 #src
 set(LIB_GAME_SRC
+	${CMAKE_SOURCE_DIR}/public/include/observer.h
+
 	${CMAKE_SOURCE_DIR}/protocol/message/gpid.pb.h
 	${CMAKE_SOURCE_DIR}/protocol/message/gpid.pb.cc
 	${CMAKE_SOURCE_DIR}/protocol/message/gmsg.pb.h
@@ -10,6 +12,10 @@ set(LIB_GAME_SRC
 
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/msgdispatch.h
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/msgdispatch.cpp
+	${CMAKE_SOURCE_DIR}/game/msgdispatch/messagecommand.h
+	${CMAKE_SOURCE_DIR}/game/msgdispatch/messagecommand.cpp
+	${CMAKE_SOURCE_DIR}/game/msgdispatch/logindispatcher.h
+	${CMAKE_SOURCE_DIR}/game/msgdispatch/logindispatcher.cpp
 
     ${CMAKE_SOURCE_DIR}/game/net/client.h
     ${CMAKE_SOURCE_DIR}/game/net/client.cpp

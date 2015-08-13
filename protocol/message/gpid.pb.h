@@ -35,26 +35,13 @@ void protobuf_ShutdownFile_gpid_2eproto();
 
 
 enum PID {
-  CSID_C2G_HeartBeat = 1000,
-  CSID_G2C_HeartBeat = 1001,
-  CSID_O2G_Deposit = 2000,
-  CSID_O2G_AccountReg = 2001,
-  CSID_O2G_RoleCreate = 2002,
-  CSID_O2G_Login = 2003,
-  CSID_O2G_BagExtend = 2004,
-  CSID_O2G_BuyInstance = 2005,
-  CSID_O2G_BuyCoin = 2006,
-  CSID_O2G_Diamond = 2007,
-  CSID_O2G_Coin = 2008,
-  CSID_O2G_Item = 2009,
-  CSID_O2G_Equip = 2010,
-  CSID_O2G_Relive = 2011,
-  CSID_O2G_Instance = 2012,
-  CSID_O2G_Arena = 2013
+  CSID_C2G_HeartBeat = 10000,
+  CSID_G2C_HeartBeat = 10001,
+  CSID_C2G_StartGame = 10100
 };
 bool PID_IsValid(int value);
 const PID PID_MIN = CSID_C2G_HeartBeat;
-const PID PID_MAX = CSID_O2G_Arena;
+const PID PID_MAX = CSID_C2G_StartGame;
 const int PID_ARRAYSIZE = PID_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* PID_descriptor();
