@@ -17,7 +17,7 @@ public:
 	virtual void OnInit();
 
 private:
-
+	void OnHeartBeat(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 };
 
 #endif

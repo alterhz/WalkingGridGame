@@ -23,6 +23,9 @@ set(LIB_GAME_SRC
     ${CMAKE_SOURCE_DIR}/game/public/app.h
     ${CMAKE_SOURCE_DIR}/game/public/app.cpp
 
+    ${CMAKE_SOURCE_DIR}/game/unittest/testclient.h
+    ${CMAKE_SOURCE_DIR}/game/unittest/testclient.cpp
+
     ${CMAKE_SOURCE_DIR}/game/main.cpp
 )
 
@@ -35,6 +38,7 @@ source_group("Packet" REGULAR_EXPRESSION protocol/packet)
 source_group("Net" REGULAR_EXPRESSION game/net)
 source_group("Public" REGULAR_EXPRESSION game/public)
 source_group("MsgDispatch" REGULAR_EXPRESSION game/msgdispatch)
+source_group("UnitTest" REGULAR_EXPRESSION game/unittest)
 
 
 set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/mysql_5_6_20/include)
@@ -54,6 +58,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/game/net
 	${CMAKE_SOURCE_DIR}/game/public
 	${CMAKE_SOURCE_DIR}/game/msgdispatch
+	${CMAKE_SOURCE_DIR}/game/unittest
 )
 
 #link path

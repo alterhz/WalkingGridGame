@@ -2,6 +2,7 @@
 
 #include "debug.h"
 #include "clientmanager.h"
+#include "testclient.h"
 
 CApp::CApp()
 	: m_pNetService(nullptr)
@@ -66,7 +67,7 @@ bool CApp::InitNet()
 		return false;
 	}
 
-	m_nRunTimerId = m_pTimerManager->SetTimer(this, 1000);
+	m_nRunTimerId = m_pTimerManager->SetTimer(this, 100);
 
 	m_pNetAcceptor = m_pNetService->CreateListener();
 	if (nullptr == m_pNetAcceptor)
@@ -81,6 +82,15 @@ bool CApp::InitNet()
 	m_pNetAcceptor->Listen(CClientManager::instance(), wPort);
 
 	LOGPrint("正在网络监听" + wPort + "端口。");
+
+	{
+		// Test客户端连接
+		INetConnector *pNetConnector = m_pNetService->CreateConnector();
+		if (pNetConnector)
+		{
+			CTestClient::getMe().Init(pNetConnector);
+		}
+	}
 
 	return true;
 }
@@ -135,14 +145,14 @@ bool CApp::OnThreadRun()
 
 bool CApp::OnTimerEvent(int nTimerId)
 {
-	static int n = 0;
-	LOGPrint("Timer[" + nTimerId + "]触发" + (++n) + "次");
+	//static int n = 0;
+	//LOGPrint("Timer[" + nTimerId + "]触发" + (++n) + "次");
 
-	if (n >= 5)
-	{
-		m_pTimerManager->KillTimer(m_nRunTimerId);
-		m_nRunTimerId = 0;
-	}
+	//if (n >= 5)
+	//{
+	//	m_pTimerManager->KillTimer(m_nRunTimerId);
+	//	m_nRunTimerId = 0;
+	//}
 
 	return true;
 }

@@ -25,5 +25,6 @@ void CLoginDispatcher::OnHeartBeat(int nProtoId, const char *pMessage, int nLeng
 {
 	DecodeProtoBuf(gproto::gather::MSG_C2G_HeartBeat, msgHeartBeat);
 
+	LOGDebug("CLoginDispatcherÐÄÌø£¡");
 }
 

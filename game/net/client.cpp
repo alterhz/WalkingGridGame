@@ -16,15 +16,16 @@ bool CClient::OnConnected(INetSocket *pNetSocket)
 
 	m_pNetSocket = pNetSocket;
 
-	LOGPrint("有一个客户端连接");
-
+	LOGInfo("有一个客户端连接[localIP:" + m_pNetSocket->GetLocalIP() + ",localPort:"
+		+ m_pNetSocket->GetLocalPort() + ", remoteIP:" + m_pNetSocket->GetRemoteIP() + ", remotePort:"
+		+ m_pNetSocket->GetRemotePort() + "]。");
 
 	return true;
 }
 
 bool CClient::OnDisconnect()
 {
-	LOGPrint("有一个客户端断开");
+	LOGInfo("有一个客户端断开");
 
 	m_pNetSocket = nullptr;
 
