@@ -17,7 +17,6 @@
 // @@protoc_insertion_point(includes)
 
 namespace gproto {
-namespace gather {
 
 namespace {
 
@@ -121,9 +120,9 @@ void protobuf_AddDesc_gmsg_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\ngmsg.proto\022\rgproto.gather\"\023\n\021MSG_C2G_H"
-    "eartBeat\"\023\n\021MSG_G2C_HeartBeat\"%\n\021MSG_C2G"
-    "_StartGame\022\020\n\010rolename\030\001 \002(\014", 108);
+    "\n\ngmsg.proto\022\006gproto\"\023\n\021MSG_C2G_HeartBea"
+    "t\"\023\n\021MSG_G2C_HeartBeat\"%\n\021MSG_C2G_StartG"
+    "ame\022\020\n\010rolename\030\001 \002(\014", 101);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gmsg.proto", &protobuf_RegisterTypes);
   MSG_C2G_HeartBeat::default_instance_ = new MSG_C2G_HeartBeat();
@@ -673,7 +672,6 @@ void MSG_C2G_StartGame::Swap(MSG_C2G_StartGame* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace gather
 }  // namespace gproto
 
 // @@protoc_insertion_point(global_scope)

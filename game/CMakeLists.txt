@@ -10,6 +10,20 @@ set(LIB_GAME_SRC
 	${CMAKE_SOURCE_DIR}/protocol/message/gmsg.pb.cc
 	${CMAKE_SOURCE_DIR}/protocol/message/msginc.h
 
+	${CMAKE_SOURCE_DIR}/game/entity/sprite.h
+	${CMAKE_SOURCE_DIR}/game/entity/sprite.cpp
+	${CMAKE_SOURCE_DIR}/game/entity/role.h
+	${CMAKE_SOURCE_DIR}/game/entity/role.cpp
+	${CMAKE_SOURCE_DIR}/game/entity/monster.h
+	${CMAKE_SOURCE_DIR}/game/entity/monster.cpp
+
+	${CMAKE_SOURCE_DIR}/game/scene/scene.h
+	${CMAKE_SOURCE_DIR}/game/scene/scene.cpp
+	${CMAKE_SOURCE_DIR}/game/scene/landscene.h
+	${CMAKE_SOURCE_DIR}/game/scene/landscene.cpp
+	${CMAKE_SOURCE_DIR}/game/scene/instance.h
+	${CMAKE_SOURCE_DIR}/game/scene/instance.cpp
+
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/logindispatcher.h
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/logindispatcher.cpp
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/gamedispatcher.h
@@ -29,9 +43,11 @@ set(LIB_GAME_SRC
     ${CMAKE_SOURCE_DIR}/game/main.cpp
 )
 
+
 foreach(src ${LIB_GAME_SRC})
 	file(APPEND ${src})
 endforeach(src)
+
 
 source_group("Message" REGULAR_EXPRESSION protocol/message)
 source_group("Packet" REGULAR_EXPRESSION protocol/packet)
@@ -39,11 +55,14 @@ source_group("Net" REGULAR_EXPRESSION game/net)
 source_group("Public" REGULAR_EXPRESSION game/public)
 source_group("MsgDispatch" REGULAR_EXPRESSION game/msgdispatch)
 source_group("UnitTest" REGULAR_EXPRESSION game/unittest)
+source_group("Entity" REGULAR_EXPRESSION game/entity)
+source_group("Scene" REGULAR_EXPRESSION game/scene)
 
 
 set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/mysql_5_6_20/include)
 set(MYSQLPP_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/mysql++_3_2_1/include)
 set(PROTOBUF_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/protobuf-2.5.0/src)
+
 
 #include path
 include_directories(
@@ -59,7 +78,10 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/game/public
 	${CMAKE_SOURCE_DIR}/game/msgdispatch
 	${CMAKE_SOURCE_DIR}/game/unittest
+	${CMAKE_SOURCE_DIR}/game/entity
+	${CMAKE_SOURCE_DIR}/game/scene
 )
+
 
 #link path
 if(WIN32)

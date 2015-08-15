@@ -26,7 +26,6 @@
 // @@protoc_insertion_point(includes)
 
 namespace gproto {
-namespace gather {
 
 // Internal implementation detail -- do not call these.
 void  protobuf_AddDesc_gpid_2eproto();
@@ -65,7 +64,6 @@ inline bool PID_Parse(
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace gather
 }  // namespace gproto
 
 #ifndef SWIG
@@ -73,8 +71,8 @@ namespace google {
 namespace protobuf {
 
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::gproto::gather::PID>() {
-  return ::gproto::gather::PID_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::gproto::PID>() {
+  return ::gproto::PID_descriptor();
 }
 
 }  // namespace google

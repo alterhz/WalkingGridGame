@@ -1,4 +1,4 @@
-package gproto.gather;
+package gproto;
 
 message MSG_C2G_HeartBeat
 {

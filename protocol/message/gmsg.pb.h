@@ -27,7 +27,6 @@
 // @@protoc_insertion_point(includes)
 
 namespace gproto {
-namespace gather {
 
 // Internal implementation detail -- do not call these.
 void  protobuf_AddDesc_gmsg_2eproto();
@@ -94,7 +93,7 @@ class MSG_C2G_HeartBeat : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:gproto.gather.MSG_C2G_HeartBeat)
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_HeartBeat)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -166,7 +165,7 @@ class MSG_G2C_HeartBeat : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:gproto.gather.MSG_G2C_HeartBeat)
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_HeartBeat)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -250,7 +249,7 @@ class MSG_C2G_StartGame : public ::google::protobuf::Message {
   inline ::std::string* release_rolename();
   inline void set_allocated_rolename(::std::string* rolename);
 
-  // @@protoc_insertion_point(class_scope:gproto.gather.MSG_C2G_StartGame)
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_StartGame)
  private:
   inline void set_has_rolename();
   inline void clear_has_rolename();
@@ -357,7 +356,6 @@ inline void MSG_C2G_StartGame::set_allocated_rolename(::std::string* rolename) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace gather
 }  // namespace gproto
 
 #ifndef SWIG

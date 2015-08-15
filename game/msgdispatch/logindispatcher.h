@@ -17,10 +17,10 @@ public:
 	virtual void OnInit();
 
 private:
-	void OnRecvTest(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
-
+	// 心跳
 	void OnHeartBeat(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
-
+	// 开始游戏
+	void OnStartGame(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 };
 
 #endif

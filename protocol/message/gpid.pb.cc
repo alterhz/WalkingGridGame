@@ -17,7 +17,6 @@
 // @@protoc_insertion_point(includes)
 
 namespace gproto {
-namespace gather {
 
 namespace {
 
@@ -59,9 +58,9 @@ void protobuf_AddDesc_gpid_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\ngpid.proto\022\rgproto.gather*P\n\003PID\022\027\n\022CS"
-    "ID_C2G_HeartBeat\020\220N\022\027\n\022CSID_G2C_HeartBea"
-    "t\020\221N\022\027\n\022CSID_C2G_StartGame\020\364N", 109);
+    "\n\ngpid.proto\022\006gproto*P\n\003PID\022\027\n\022CSID_C2G_"
+    "HeartBeat\020\220N\022\027\n\022CSID_G2C_HeartBeat\020\221N\022\027\n"
+    "\022CSID_C2G_StartGame\020\364N", 102);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gpid.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_gpid_2eproto);
@@ -91,7 +90,6 @@ bool PID_IsValid(int value) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace gather
 }  // namespace gproto
 
 // @@protoc_insertion_point(global_scope)

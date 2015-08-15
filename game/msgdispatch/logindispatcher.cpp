@@ -12,19 +12,21 @@ using namespace NS_IO;
 
 void CLoginDispatcher::OnInit()
 {
-	RegMessage(1001, &CLoginDispatcher::OnRecvTest, this);
-	RegMessage(gproto::gather::CSID_C2G_HeartBeat, &CLoginDispatcher::OnHeartBeat, this);
-}
-
-void CLoginDispatcher::OnRecvTest(int nProtoId, const char *pMessage, int nLength, CClient *pClient)
-{
-	std::cout << pMessage << nLength << std::endl;
+	RegMessage(gproto::CSID_C2G_HeartBeat, &CLoginDispatcher::OnHeartBeat, this);
+	RegMessage(gproto::CSID_C2G_StartGame, &CLoginDispatcher::OnStartGame, this);
 }
 
 void CLoginDispatcher::OnHeartBeat(int nProtoId, const char *pMessage, int nLength, CClient *pClient)
 {
-	DecodeProtoBuf(gproto::gather::MSG_C2G_HeartBeat, msgHeartBeat);
+	DecodeProtoBuf(gproto::MSG_C2G_HeartBeat, msgHeartBeat);
 
 	LOGDebug("CLoginDispatcher心跳！");
+}
+
+void CLoginDispatcher::OnStartGame(int nProtoId, const char *pMessage, int nLength, CClient *pClient)
+{
+	DecodeProtoBuf(gproto::MSG_C2G_StartGame, msgStartGame);
+
+	LOGDebug("角色[" + msgStartGame.rolename() + "]开始游戏。");
 }
 

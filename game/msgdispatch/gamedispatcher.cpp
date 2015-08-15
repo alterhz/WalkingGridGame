@@ -5,7 +5,7 @@ using namespace NS_IO;
 
 void CGameDispatcher::OnInit()
 {
-	RegMessage(gproto::gather::CSID_C2G_HeartBeat, &CGameDispatcher::OnHeartBeat, this);
+	RegMessage(gproto::CSID_C2G_HeartBeat, &CGameDispatcher::OnHeartBeat, this);
 }
 
 void CGameDispatcher::OnHeartBeat(int nProtoId, const char *pMessage, int nLength, CClient *pClient)
