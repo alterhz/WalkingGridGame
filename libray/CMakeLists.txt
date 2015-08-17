@@ -10,6 +10,9 @@ set(LIB_LIBRAY_SRC
 	${CMAKE_SOURCE_DIR}/public/include/debug.h
 	${CMAKE_SOURCE_DIR}/libray/network/debug.cpp
 
+	${CMAKE_SOURCE_DIR}/public/include/vector2.h
+	${CMAKE_SOURCE_DIR}/libray/src/vector2.cpp
+
 	${CMAKE_SOURCE_DIR}/libray/network/service.h
 	${CMAKE_SOURCE_DIR}/libray/network/service.cpp
 	${CMAKE_SOURCE_DIR}/libray/network/acceptor.h

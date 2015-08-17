@@ -3,22 +3,7 @@
 #define _ACTION_H_
 
 #include <vector>
-
-struct Vector2
-{
-	int x;
-	int y;
-	bool valid;
-
-	Vector2()
-		: valid(false)
-	{ }
-	Vector2(int _x, int _y)
-		: x(_x)
-		, y(_y) 
-		, valid(true)
-	{ }
-};
+#include "vector2.h"
 
 typedef std::vector<Vector2> VtPath;
 typedef unsigned int MSTIME;
