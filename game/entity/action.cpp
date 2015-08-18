@@ -21,8 +21,6 @@ Vector2 CRunAction::GetCurrentPosition(MSTIME msNow) const
 	
 	double fRunDistance = m_fRunSpeed * (nPassTime / 1000.0f);
 
-	Vector2 v2CurrentPosition;
-
 	if (m_vtRunPath.size() < 2)
 	{
 		LOGError("RunAction路径不应该出现小于2个点。");
@@ -54,8 +52,41 @@ Vector2 CRunAction::GetCurrentPosition(MSTIME msNow) const
 		// 距离超过最远距离
 		return v2Prev;
 	}
+}
 
-	return v2CurrentPosition;
+bool CRunAction::NeedSwitch(MSTIME msNow) const
+{
+	int nPassTime = msNow - m_msTimeBegin;
+
+	double fRunDistance = m_fRunSpeed * (nPassTime / 1000.0f);
+
+	if (m_vtRunPath.size() < 2)
+	{
+		LOGError("RunAction路径不应该出现小于2个点。");
+		return true;
+	}
+	else
+	{
+		float fTotalDistance = 0.f;
+		VtPath::const_iterator it = m_vtRunPath.begin();
+		Vector2 v2Prev = (*it);
+		++it;
+		for (; it!=m_vtRunPath.end(); ++it)
+		{
+			const Vector2 &v2End = (*it);
+			float fDistance = Vector2::Distance(v2Prev, v2End);
+			if (fTotalDistance + fDistance >= fRunDistance)
+			{
+				return false;
+			}
+
+			fTotalDistance += fDistance;
+			v2Prev = v2End;
+		}
+
+		// 距离超过最远距离
+		return true;
+	}
 }
 
 Vector2 CDeadAction::GetCurrentPosition( MSTIME msNow ) const

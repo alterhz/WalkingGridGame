@@ -10,6 +10,8 @@ set(LIB_GAME_SRC
 	${CMAKE_SOURCE_DIR}/protocol/message/gmsg.pb.cc
 	${CMAKE_SOURCE_DIR}/protocol/message/msginc.h
 
+	${CMAKE_SOURCE_DIR}/game/entity/attribute.h
+	${CMAKE_SOURCE_DIR}/game/entity/attribute.cpp
 	${CMAKE_SOURCE_DIR}/game/entity/action.h
 	${CMAKE_SOURCE_DIR}/game/entity/action.cpp
 	${CMAKE_SOURCE_DIR}/game/entity/sprite.h

@@ -6,15 +6,42 @@ int g_nSpriteIdAlloc = 0;
 
 ISprite::ISprite()
 	: m_nId(++g_nSpriteIdAlloc)
-	, m_fSpeed(4.0f)
 	, m_pCurrentAction(nullptr)
 {
+	m_attr.SetAttr(EAttrType_Speed, 4.0f);
 }
 
 ISprite::~ISprite()
 {
 	DestroyAction(m_pCurrentAction);
 	m_pCurrentAction = nullptr;
+}
+
+bool ISprite::DoTick(MSTIME msNow)
+{
+	// ×Ô¶¯ÇÐ»»×´Ì¬
+	OnActionAutoSwitch(msNow);
+
+	return OnTick(msNow);
+}
+
+bool ISprite::OnTick(MSTIME msNow)
+{
+	// Âß¼­Ñ­»·
+	return true;
+}
+
+void ISprite::OnActionAutoSwitch(MSTIME msNow)
+{
+	if (m_pCurrentAction)
+	{
+		if (m_pCurrentAction->NeedSwitch(msNow))
+		{
+			Vector2 v2 = m_pCurrentAction->GetCurrentPosition(msNow);
+			CStandAction *pStandAction = new CStandAction(v2);
+			ChangeAction(pStandAction);
+		}
+	}
 }
 
 Vector2 ISprite::GetCurrentPosition( MSTIME msNow ) const
@@ -46,7 +73,9 @@ bool ISprite::MoveTo( Vector2 &v2 )
 
 bool ISprite::RunTo( VtPath &vtPath, MSTIME msNow)
 {
-	CRunAction *pRunAction = new CRunAction(vtPath, m_fSpeed, msNow);
+	float fSpeed = m_attr.GetAttr(EAttrType_Speed);
+
+	CRunAction *pRunAction = new CRunAction(vtPath, fSpeed, msNow);
 
 	if (nullptr == pRunAction)
 	{
@@ -169,4 +198,28 @@ void ISprite::DestroyAction( IAction *pAction )
 	delete pAction;
 	pAction = nullptr;
 }
+
+void ISprite::SetHP(int nHP)
+{
+	if (nHP > m_attr.GetAttr(EAttrType_MaxHP))
+	{
+		m_attr.SetAttr(EAttrType_HP, m_attr.GetAttr(EAttrType_MaxHP));
+	}
+	else
+	{
+		m_attr.SetAttr(EAttrType_HP, nHP);
+	}
+}
+
+void ISprite::SetMaxHP(int nMaxHP)
+{
+	if (m_attr.GetAttr(EAttrType_HP) > nMaxHP)
+	{
+		m_attr.SetAttr(EAttrType_HP, nMaxHP);
+	}
+
+	m_attr.SetAttr(EAttrType_MaxHP, nMaxHP);
+}
+
+
 

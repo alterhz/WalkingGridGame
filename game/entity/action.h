@@ -23,7 +23,8 @@ public:
 
 public:
 	virtual Vector2 GetCurrentPosition(MSTIME msNow) const = 0;
-	virtual EActionType GetCurrentActionType() const { return EActionType_Null; }
+	virtual EActionType GetCurrentActionType() const = 0;
+	virtual bool NeedSwitch(MSTIME msNow) const { return false; }
 };
 
 class CStandAction : public IAction
@@ -51,6 +52,7 @@ public:
 public:
 	virtual Vector2 GetCurrentPosition(MSTIME msNow) const;
 	virtual EActionType GetCurrentActionType() const { return EActionType_Run; }
+	virtual bool NeedSwitch(MSTIME msNow) const;
 
 private:
 	VtPath m_vtRunPath;	//ÐÐ×ßÂ·¾¶
