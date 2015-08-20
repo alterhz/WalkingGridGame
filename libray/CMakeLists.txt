@@ -2,7 +2,10 @@ cmake_minimum_required (VERSION 2.8)
 
 #src
 set(LIB_LIBRAY_SRC
-	
+
+	${CMAKE_SOURCE_DIR}/3rd/tinyxml2/tinyxml2.h
+	${CMAKE_SOURCE_DIR}/3rd/tinyxml2/tinyxml2.cpp
+
 	${CMAKE_SOURCE_DIR}/public/include/netio.h
 	${CMAKE_SOURCE_DIR}/libray/netio.cpp
 
@@ -12,6 +15,9 @@ set(LIB_LIBRAY_SRC
 
 	${CMAKE_SOURCE_DIR}/public/include/vector2.h
 	${CMAKE_SOURCE_DIR}/libray/src/vector2.cpp
+
+	${CMAKE_SOURCE_DIR}/public/include/tool.h
+	${CMAKE_SOURCE_DIR}/libray/src/tool.cpp
 
 	${CMAKE_SOURCE_DIR}/libray/network/service.h
 	${CMAKE_SOURCE_DIR}/libray/network/service.cpp
@@ -27,7 +33,6 @@ set(LIB_LIBRAY_SRC
 	${CMAKE_SOURCE_DIR}/libray/boostsrc.cpp
 	${CMAKE_SOURCE_DIR}/libray/include/ringbuffer.h
 	${CMAKE_SOURCE_DIR}/libray/include/ringbuffer.cpp
-
 
 	${CMAKE_SOURCE_DIR}/public/include/event.h
 	${CMAKE_SOURCE_DIR}/libray/src/eventmanager.h
@@ -50,12 +55,12 @@ source_group("Public\\Include" REGULAR_EXPRESSION public/include)
 source_group("NetWork" REGULAR_EXPRESSION libray/network)
 source_group("Include" REGULAR_EXPRESSION libray/include)
 source_group("Src" REGULAR_EXPRESSION libray/src)
+source_group("3rd" REGULAR_EXPRESSION 3rd/tinyxml2)
 # source_group end
 
 set(BOOST_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/boost_1_55_0)
 set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/mysql_5_6_20/include)
 set(MYSQLPP_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/mysql++_3_2_1/include)
-
 
 #include path
 include_directories(

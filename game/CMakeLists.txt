@@ -10,6 +10,11 @@ set(LIB_GAME_SRC
 	${CMAKE_SOURCE_DIR}/protocol/message/gmsg.pb.cc
 	${CMAKE_SOURCE_DIR}/protocol/message/msginc.h
 
+	${CMAKE_SOURCE_DIR}/game/configread/configread.h
+	${CMAKE_SOURCE_DIR}/game/configread/configread.cpp
+	${CMAKE_SOURCE_DIR}/game/configread/xmldata.h
+	${CMAKE_SOURCE_DIR}/game/configread/xmldata.cpp
+
 	${CMAKE_SOURCE_DIR}/game/entity/attribute.h
 	${CMAKE_SOURCE_DIR}/game/entity/attribute.cpp
 	${CMAKE_SOURCE_DIR}/game/entity/action.h
@@ -61,6 +66,7 @@ source_group("MsgDispatch" REGULAR_EXPRESSION game/msgdispatch)
 source_group("UnitTest" REGULAR_EXPRESSION game/unittest)
 source_group("Entity" REGULAR_EXPRESSION game/entity)
 source_group("Scene" REGULAR_EXPRESSION game/scene)
+source_group("ConfigRead" REGULAR_EXPRESSION game/configread)
 
 
 set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rd/mysql_5_6_20/include)
@@ -84,6 +90,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/game/unittest
 	${CMAKE_SOURCE_DIR}/game/entity
 	${CMAKE_SOURCE_DIR}/game/scene
+	${CMAKE_SOURCE_DIR}/game/configread
 )
 
 
