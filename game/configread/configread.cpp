@@ -46,39 +46,31 @@ bool CConfigRead<T>::LoadConfigData(std::string strFileName)
 		const tinyxml2::XMLElement *pEleId = pEleRecord->FirstChildElement(m_strKeyName.c_str());
 		if (nullptr == pEleId)
 		{
+			LOGError("配置文件[" + strFileName + "]没有主键:" + m_strKeyName);
 			continue;
 		}
 
 		int nId = string2int(pEleId->GetText());
 
 		T *pXmlData = new T();
-		if (pXmlData)
+		if (nullptr == pXmlData)
 		{
-			pXmlData->SetId(nId);
-			pXmlData->OnRead(pEleRecord);
-
-			m_mapRecord.insert(std::make_pair(pXmlData->GetId(), pXmlData));
+			LOGError("new T() == nullptr.");
+			continue;
 		}
+
+		pXmlData->SetId(nId);
+		pXmlData->OnRead(pEleRecord);
+
+		m_mapRecord.insert(std::make_pair(pXmlData->GetId(), pXmlData));
 	}
 
 	return true;
 }
 
-template<typename T>
-const T * CConfigRead<T>::GetRecord(int nId) const
-{
-	MapT::const_iterator it = m_mapRecord.find(nId);
-	if (it != m_mapRecord.end())
-	{
-		return it->second;
-	}
-
-	return nullptr;
-}
-
-
 //////////////////////////////////////////////////////////////////////////
 CConfigReadManager::CConfigReadManager()
+	: m_nGlobalConfigId(1)
 {
 }
 
@@ -92,7 +84,6 @@ bool CConfigReadManager::LoadConfigData()
 	{
 		return false;
 	}
-
 
 	return true;
 }

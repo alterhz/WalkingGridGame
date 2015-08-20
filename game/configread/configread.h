@@ -10,6 +10,7 @@
 #include <string>
 #include <map>
 #include "xmldata.h"
+#include "utilityinc.h"
 
 template<typename T>
 class CConfigRead
@@ -24,7 +25,16 @@ public:
 public:
 	bool LoadConfigData(std::string strFileName);
 	// 查找数据
-	const T * GetRecord(int nId) const;
+	const T * GetRecord(int nId) const
+	{
+		MapT::const_iterator it = m_mapRecord.find(nId);
+		if (it != m_mapRecord.end())
+		{
+			return it->second;
+		}
+
+		return nullptr;
+	}
 
 protected:
 	// 单条记录载入
@@ -39,16 +49,23 @@ private:
 	MapT m_mapRecord;
 };
 
-class CConfigReadManager
+class CConfigReadManager : public Singleton<CConfigReadManager>
 {
 public:
 	CConfigReadManager();
 	~CConfigReadManager();
 
+	// 载入数据
 	bool LoadConfigData();
 
+	// 全局配置ID
+	int GetGlobalConfigId() const { return m_nGlobalConfigId; }
+
 public:
+	int m_nGlobalConfigId;
+	// 全局配置
 	CConfigRead<CXmlData_Config> xdConfig;
+	
 };
 
 

@@ -3,6 +3,7 @@
 #include "debug.h"
 #include "clientmanager.h"
 #include "testclient.h"
+#include "configread.h"
 
 CApp::CApp()
 	: m_pNetService(nullptr)
@@ -115,6 +116,8 @@ bool CApp::InitDb()
 
 bool CApp::OnInit()
 {
+	CConfigReadManager::getMe().LoadConfigData();
+
 	InitDb();
 
 	InitNet();
