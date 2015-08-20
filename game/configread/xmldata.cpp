@@ -112,6 +112,6 @@ bool IXmlData::ReadBool(const tinyxml2::XMLElement *pEleRecord, std::string strC
 
 void CXmlData_Config::OnRead(const tinyxml2::XMLElement *pEleRecord)
 {
-	ReadInt(pEleRecord, "ATT", nInitAtt);
-	ReadInt(pEleRecord, "HP", nInitHP);
+	ReadInt(pEleRecord, "InitAtt", nInitAtt);
+	ReadInt(pEleRecord, "InitHP", nInitHP);
 }

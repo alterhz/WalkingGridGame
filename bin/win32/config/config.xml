@@ -2,13 +2,12 @@
 <RECORDS>
 <RECORD>
 <ID>1</ID>
-<ATT>40</ATT>
-<HP>500</HP>
+<InitHP>300</InitHP>
+<InitAtt>500</InitAtt>
 </RECORD>
 <RECORD>
 <ID>2</ID>
-<ATT>60</ATT>
-<HP>800</HP>
+<InitHP>400</InitHP>
+<InitAtt>800</InitAtt>
 </RECORD>
-
 </RECORDS>
