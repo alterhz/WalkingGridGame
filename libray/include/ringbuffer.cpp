@@ -5,13 +5,18 @@ CRingBuffer::CRingBuffer(int nLength)
 	, m_nLength(0)
 	, m_nWritePos(0)
 	, m_nReadPos(0)
-	, m_bAutoIncrease(false)
+	, m_bAutoIncrease(true)
+	, m_nIntervalUsedBytes(0)
+	, m_tRecordClock(0)
+	, m_nInitLength(nLength)
 {
 	if (nLength > 0)
 	{
 		m_pData = new char[nLength];
 		m_nLength = nLength;
 	}
+
+	m_tRecordClock = std::clock();
 }
 
 CRingBuffer::~CRingBuffer()
@@ -147,7 +152,9 @@ bool CRingBuffer::ReAlloc(int nLength)
 		return false;
 	}
 
-	if (nLength <= m_nLength)
+	int nUsedLength = GetUsedLength();
+
+	if (m_nLength <= nUsedLength)
 	{
 		return false;
 	}
@@ -166,9 +173,53 @@ bool CRingBuffer::ReAlloc(int nLength)
 	m_pData = pNewData;
 	m_nLength = nLength;
 
-
 	m_nWritePos = nReadLength;
 	m_nReadPos = 0;
 
 	return true;
+}
+
+int CRingBuffer::GetUsedLength()
+{
+	if (m_nWritePos >= m_nReadPos)
+	{
+		int nUsedLength = m_nWritePos - m_nReadPos;
+		return nUsedLength;
+	}
+	else
+	{
+		int nUsedLength = m_nLength - m_nReadPos + m_nWritePos;
+		return nUsedLength;
+	}
+}
+
+void CRingBuffer::DoAutoRelease()
+{
+	if (m_nInitLength * 2 > m_nLength)
+	{
+		// 不需要处理
+		return ;
+	}
+
+	int nUsedLength = GetUsedLength();
+
+	if (nUsedLength > m_nIntervalUsedBytes)
+	{
+		m_nIntervalUsedBytes = nUsedLength;
+	}
+	
+	std::clock_t tNow = std::clock();
+	double dDuration = (tNow - m_tRecordClock) / CLOCKS_PER_SEC;
+	if (dDuration > 3)
+	{
+		// 超过3秒处理一次释放逻辑
+		m_tRecordClock = tNow;
+
+		if (m_nIntervalUsedBytes * 2 < m_nLength)
+		{
+			ReAlloc(m_nLength / 2);
+		}
+
+		m_nIntervalUsedBytes = 0;
+	}
 }
