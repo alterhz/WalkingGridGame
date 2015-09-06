@@ -205,6 +205,8 @@ bool CNetSocket::DoSend(const char *pBuffer, unsigned short wLength)
 		int nReadLength = MAX_SEND_BUFFER_LENGTH - m_nSendLength;
 		m_ringBuffer.Read(m_szSendBuffer, nReadLength);
 
+		m_ringBuffer.DoAutoRelease();
+
 		m_nSendLength = nReadLength;
 
 		unsigned short wLength = *(unsigned short *)m_szSendBuffer;
@@ -249,7 +251,7 @@ void CNetSocket::OnSend(const boost::system::error_code &ec, size_t nByteTransfe
 
 	if (m_nSendLength > 0)
 	{
-		// 理论来讲，这里是进不来的。
+		// 经验来说，只有linux才会进来
 		memmove(m_szSendBuffer, m_szSendBuffer + nByteTransferred, m_nSendLength);
 
 		++m_nAsyncEventCount;
@@ -262,6 +264,8 @@ void CNetSocket::OnSend(const boost::system::error_code &ec, size_t nByteTransfe
 	{
 		int nReadLength = MAX_SEND_BUFFER_LENGTH - m_nSendLength;
 		m_ringBuffer.Read(m_szSendBuffer, nReadLength);
+
+		m_ringBuffer.DoAutoRelease();
 
 		m_nSendLength = nReadLength;
 
