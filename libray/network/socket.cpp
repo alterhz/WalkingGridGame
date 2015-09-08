@@ -40,6 +40,16 @@ unsigned short CNetSocket::GetLocalPort()
 
 void CNetSocket::DoInit(boost::asio::ip::tcp::socket *pAsioSocket, INetClient *pNetClient)
 {
+	if (nullptr == pAsioSocket)
+	{
+		LOGPrint("nullptr == pAsioSocket");
+		return ;
+	}
+
+	// 设置nodelay
+	boost::asio::ip::tcp::no_delay noDelayOption(true);
+	pAsioSocket->set_option(noDelayOption);
+
 	m_pAsioSocket = pAsioSocket;
 	m_pNetClient = pNetClient;
 
