@@ -80,7 +80,7 @@ CConfigReadManager::~CConfigReadManager()
 
 bool CConfigReadManager::LoadConfigData()
 {
-	if (!xdConfig.LoadConfigData("config.xml"))
+	if (!xdConfig.LoadConfigData("../config/config.xml"))
 	{
 		return false;
 	}

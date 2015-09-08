@@ -40,18 +40,30 @@ unsigned short CNetSocket::GetLocalPort()
 
 void CNetSocket::DoInit(boost::asio::ip::tcp::socket *pAsioSocket, INetClient *pNetClient)
 {
-	if (nullptr == pAsioSocket)
+	m_pAsioSocket = pAsioSocket;
+	m_pNetClient = pNetClient;
+
+	if (nullptr == m_pAsioSocket)
 	{
-		LOGPrint("nullptr == pAsioSocket");
+		LOGPrint("nullptr == m_pAsioSocket");
 		return ;
 	}
 
+	boost::system::error_code ecOption;
+	// 设置keepalive
+	boost::asio::socket_base::keep_alive keepAliveOption(true);
+	m_pAsioSocket->set_option(keepAliveOption, ecOption);
+	if (ecOption)
+	{
+		LOGPrint("set keepalive error id:" + ecOption.value() + " - message:" + ecOption.message());
+	}
 	// 设置nodelay
-	boost::asio::ip::tcp::no_delay noDelayOption(true);
-	pAsioSocket->set_option(noDelayOption);
-
-	m_pAsioSocket = pAsioSocket;
-	m_pNetClient = pNetClient;
+	boost::asio::ip::tcp::no_delay noDelayOption(false);
+	m_pAsioSocket->set_option(noDelayOption, ecOption);
+	if (ecOption)
+	{
+		LOGPrint("set nodelay error id:" + ecOption.value() + " - message:" + ecOption.message());
+	}
 
 	// 记录local和remote的IP和port
 	boost::system::error_code ec;

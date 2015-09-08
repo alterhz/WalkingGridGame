@@ -2,6 +2,9 @@
 #include "debug.h"
 using namespace NS_IO;
 
+#include "client.h"
+#include "thread.h"
+
 // 宏定义协议解析，减少代码量
 #define DecodeProtoBuf(proto_msg, msg) proto_msg msg; \
 	if (!msg.ParseFromArray(pMessage, nLength)) \
@@ -21,6 +24,10 @@ void CLoginDispatcher::OnHeartBeat(int nProtoId, const char *pMessage, int nLeng
 	DecodeProtoBuf(gproto::MSG_C2G_HeartBeat, msgHeartBeat);
 
 	LOGDebug("CLoginDispatcher心跳！");
+
+	// 回发心跳
+	gproto::MSG_G2C_HeartBeat msg;
+	pClient->SendMessage(gproto::CSID_G2C_HeartBeat, &msg);
 }
 
 void CLoginDispatcher::OnStartGame(int nProtoId, const char *pMessage, int nLength, CClient *pClient)

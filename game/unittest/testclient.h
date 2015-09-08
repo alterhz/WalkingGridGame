@@ -11,6 +11,8 @@
 #include "utilityinc.h"
 using namespace NS_IO;
 
+#include <ctime>
+
 class CTestClient : public INetClient, public Singleton<CTestClient>
 {
 public:
@@ -37,6 +39,8 @@ protected:
 private:
 	INetConnector *m_pNetConnector;
 	INetSocket *m_pNetSocket;
+
+	std::clock_t m_tBegin;
 };
 
 

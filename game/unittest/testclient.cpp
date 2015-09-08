@@ -70,8 +70,8 @@ bool CTestClient::OnConnected(INetSocket *pNetSocket)
 		+ m_pNetSocket->GetRemotePort() + "]。");
 
 	// 发送测试心跳
-	//gproto::gather::MSG_C2G_HeartBeat msgHeartBeat;
-	//SendMessage(gproto::gather::CSID_C2G_HeartBeat, &msgHeartBeat);
+	gproto::MSG_C2G_HeartBeat msgHeartBeat;
+	SendMessage(gproto::CSID_C2G_HeartBeat, &msgHeartBeat);
 
 	gproto::MSG_C2G_StartGame msgStartGame;
 	msgStartGame.set_rolename("惊天一棍");
@@ -103,6 +103,7 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 	{
 	case gproto::CSID_G2C_HeartBeat:
 		{
+			LOGDebug("回发心跳CSID_G2C_HeartBeat");
 		}
 		break;
 	default:
