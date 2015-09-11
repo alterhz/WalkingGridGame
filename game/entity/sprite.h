@@ -24,6 +24,7 @@ public:
 	ISprite();
 	virtual ~ISprite();
 
+public:	//base
 	int GetId() const { return m_nId; }
 	std::string GetName() const { return m_strName; }
 	void SetName(std::string strName) { m_strName = strName; }
@@ -33,9 +34,14 @@ public:
 	// 设置最大血量
 	void SetMaxHP(int nMaxHP);
 	
-public:
+public:	//base
 	// 获取精灵对象类型
 	virtual ESpriteType GetSpriteType() const = 0;
+
+public:
+	// 进入场景
+	virtual bool EnterScene();
+	virtual bool LeaveScene();
 
 public:
 	// 逻辑循环
@@ -47,11 +53,15 @@ public:
 	// 跑
 	virtual bool RunTo(VtPath &vtPath, MSTIME msNow);
 
+
 protected:
 	// 逻辑循环事件
 	virtual bool OnTick(MSTIME msNow);
 	// 状态自动切换
 	virtual void OnActionAutoSwitch(MSTIME msNow);
+	// 进入离开场景事件
+	virtual bool OnEnterScene();
+	virtual bool OnLeaveScene();
 
 
 protected:

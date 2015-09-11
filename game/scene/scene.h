@@ -6,6 +6,9 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
+class ISprite;
+class CZoneManager;
+
 class IScene
 {
 	friend class CSceneManager;
@@ -21,23 +24,33 @@ public:
 public:
 	virtual ~IScene();
 
-public:
+public:	//base
 	int GetId() const { return m_nId; }
 	bool GetDead() const { return m_bDead; }
 	void SetDead() { m_bDead = true; }
 
+public:	//¹¦ÄÜÂß¼­
+	bool SpriteEnter(ISprite *pSprite);
+	bool SpriteLeave(ISprite *pSprite);
+
 protected:
 	IScene(ESceneType eSceneType);
 	void SetId(int nId) { m_nId = nId; }
-	void DoTick();
+
+	bool Init();
+	bool DoTick();
 
 
 protected:
+	virtual bool OnInit();
 	virtual bool OnTick();
+	virtual bool OnSpriteEnter(ISprite *pSprite);
+	virtual bool OnSpriteLeave(ISprite *pSprite);
 
 private:
 	ESceneType m_eSceneType;
 	int m_nId;
+	CZoneManager *m_pZoneManager;
 
 protected:
 	bool m_bDead;

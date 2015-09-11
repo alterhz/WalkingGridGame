@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 2.8)
 #src
 set(LIB_GAME_SRC
 	${CMAKE_SOURCE_DIR}/public/include/observer.h
+	${CMAKE_SOURCE_DIR}/public/include/macrosdef.h
 
 	${CMAKE_SOURCE_DIR}/protocol/message/gpid.pb.h
 	${CMAKE_SOURCE_DIR}/protocol/message/gpid.pb.cc
@@ -34,6 +35,8 @@ set(LIB_GAME_SRC
 	${CMAKE_SOURCE_DIR}/game/scene/landscene.cpp
 	${CMAKE_SOURCE_DIR}/game/scene/instance.h
 	${CMAKE_SOURCE_DIR}/game/scene/instance.cpp
+	${CMAKE_SOURCE_DIR}/game/scene/zone.h
+	${CMAKE_SOURCE_DIR}/game/scene/zone.cpp
 
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/logindispatcher.h
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/logindispatcher.cpp

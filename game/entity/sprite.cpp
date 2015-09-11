@@ -25,25 +25,6 @@ bool ISprite::DoTick(MSTIME msNow)
 	return OnTick(msNow);
 }
 
-bool ISprite::OnTick(MSTIME msNow)
-{
-	// 逻辑循环
-	return true;
-}
-
-void ISprite::OnActionAutoSwitch(MSTIME msNow)
-{
-	if (m_pCurrentAction)
-	{
-		if (m_pCurrentAction->NeedSwitch(msNow))
-		{
-			Vector2 v2 = m_pCurrentAction->GetCurrentPosition(msNow);
-			CStandAction *pStandAction = new CStandAction(v2);
-			ChangeAction(pStandAction);
-		}
-	}
-}
-
 Vector2 ISprite::GetCurrentPosition( MSTIME msNow ) const
 {
 	if (m_pCurrentAction)
@@ -219,6 +200,49 @@ void ISprite::SetMaxHP(int nMaxHP)
 	}
 
 	m_attr.SetAttr(EAttrType_MaxHP, nMaxHP);
+}
+
+bool ISprite::EnterScene()
+{
+	return OnEnterScene();
+}
+
+bool ISprite::LeaveScene()
+{
+	return OnLeaveScene();
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 事件处理函数
+//////////////////////////////////////////////////////////////////////////
+
+bool ISprite::OnTick(MSTIME msNow)
+{
+	// 逻辑循环
+	return true;
+}
+
+void ISprite::OnActionAutoSwitch(MSTIME msNow)
+{
+	if (m_pCurrentAction)
+	{
+		if (m_pCurrentAction->NeedSwitch(msNow))
+		{
+			Vector2 v2 = m_pCurrentAction->GetCurrentPosition(msNow);
+			CStandAction *pStandAction = new CStandAction(v2);
+			ChangeAction(pStandAction);
+		}
+	}
+}
+
+bool ISprite::OnEnterScene()
+{
+	return true;
+}
+
+bool ISprite::OnLeaveScene()
+{
+	return true;
 }
 
 

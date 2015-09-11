@@ -1,0 +1,30 @@
+#include "zone.h"
+
+CZone::CZone()
+{
+
+}
+
+CZone::~CZone()
+{
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+// ZoneManager
+//////////////////////////////////////////////////////////////////////////
+CZoneManager::CZoneManager()
+{
+
+}
+
+CZoneManager::~CZoneManager()
+{
+
+}
+
+bool CZoneManager::Init()
+{
+	return true;
+}

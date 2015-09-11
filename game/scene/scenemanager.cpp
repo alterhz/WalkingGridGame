@@ -6,6 +6,7 @@ using namespace NS_IO;
 
 #include "landscene.h"
 #include "instance.h"
+#include "macrosdef.h"
 
 CSceneManager::CSceneManager()
 	: m_nSceneIdAlloc(0)
@@ -78,6 +79,9 @@ void CSceneManager::DoTick()
 		if (pScene->GetDead())
 		{
 			it = m_mapScene.erase(it);
+
+			SAFE_DELETE(pScene);
+
 			continue;
 		}
 
