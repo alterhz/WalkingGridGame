@@ -72,6 +72,16 @@ bool ISprite::RunTo( VtPath &vtPath, MSTIME msNow)
 	return false;
 }
 
+bool ISprite::OnEnterScene(IScene *pScene)
+{
+	return true;
+}
+
+bool ISprite::OnLeaveScene(IScene *pScene)
+{
+	return true;
+}
+
 bool ISprite::ChangeAction( IAction *pAction )
 {
 	if (nullptr == pAction)
@@ -202,14 +212,16 @@ void ISprite::SetMaxHP(int nMaxHP)
 	m_attr.SetAttr(EAttrType_MaxHP, nMaxHP);
 }
 
-bool ISprite::EnterScene()
+bool ISprite::DoEnterScene()
 {
-	return OnEnterScene();
+
+
+	return true;
 }
 
-bool ISprite::LeaveScene()
+bool ISprite::DoLeaveScene()
 {
-	return OnLeaveScene();
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -234,16 +246,4 @@ void ISprite::OnActionAutoSwitch(MSTIME msNow)
 		}
 	}
 }
-
-bool ISprite::OnEnterScene()
-{
-	return true;
-}
-
-bool ISprite::OnLeaveScene()
-{
-	return true;
-}
-
-
 

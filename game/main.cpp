@@ -7,6 +7,7 @@
 #include "app.h"
 #include "debug.h"
 #include "thread.h"
+#include "memoryleak.h"
 
 int main(int argc, char* argv[])
 {

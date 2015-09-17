@@ -25,7 +25,7 @@ typedef AutoStr<1024> AutoStr1024;
 // øÿ÷∆Ã®¥Ú”°
 #define LOGPrint(log) { \
 	AutoStr1024 at;	\
-	at + log + "[PRINT][" + __FILE__ + " - " + __LINE__ + "]";	\
+	at + log;	\
 	std::cout << at.GetStr() << std::endl; \
 }
 

@@ -6,6 +6,7 @@
 #ifndef _ZONE_H_
 #define _ZONE_H_
 
+#include "memoryleak.h"
 #include <map>
 
 class CZone

@@ -6,12 +6,17 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
+#include "memoryleak.h"
+#include <map>
+
 class ISprite;
 class CZoneManager;
 
 class IScene
 {
 	friend class CSceneManager;
+
+	typedef std::map<int, ISprite *> MapSprite;
 
 public:
 	enum ESceneType
@@ -51,6 +56,8 @@ private:
 	ESceneType m_eSceneType;
 	int m_nId;
 	CZoneManager *m_pZoneManager;
+
+	MapSprite m_mapSprite;
 
 protected:
 	bool m_bDead;

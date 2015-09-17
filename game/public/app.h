@@ -6,9 +6,10 @@
 #ifndef _APP_H_
 #define _APP_H_
 
+#include "memoryleak.h"
 #include "netio.h"
 #include "event.h"
-#include "UtilityInc.h"
+#include "utilityinc.h"
 #include "thread.h"
 
 using namespace NS_IO;

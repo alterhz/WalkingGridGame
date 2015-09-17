@@ -44,6 +44,14 @@ set(LIB_LIBRAY_SRC
 
 	${CMAKE_SOURCE_DIR}/public/include/thread.h
 	${CMAKE_SOURCE_DIR}/libray/src/thread.cpp
+
+	${CMAKE_SOURCE_DIR}/public/include/memoryoperatornew.h
+	${CMAKE_SOURCE_DIR}/public/include/memoryleak.h
+	${CMAKE_SOURCE_DIR}/public/include/memoryleakinfo.h
+	${CMAKE_SOURCE_DIR}/libray/src/memoryoperatornew.cpp
+	${CMAKE_SOURCE_DIR}/libray/src/memorystatistics.h
+	${CMAKE_SOURCE_DIR}/libray/src/memorystatistics.cpp
+	${CMAKE_SOURCE_DIR}/libray/src/memoryleakinfo.cpp
 )
 
 foreach(src ${LIB_LIBRAY_SRC})

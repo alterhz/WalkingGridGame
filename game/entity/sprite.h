@@ -6,9 +6,12 @@
 #ifndef _SPRITE_H_
 #define _SPRITE_H_
 
+#include "memoryleak.h"
 #include <string>
 #include "action.h"
 #include "attribute.h"
+
+class IScene;
 
 enum ESpriteType
 {
@@ -40,8 +43,8 @@ public:	//base
 
 public:
 	// 进入场景
-	virtual bool EnterScene();
-	virtual bool LeaveScene();
+	virtual bool DoEnterScene();
+	virtual bool DoLeaveScene();
 
 public:
 	// 逻辑循环
@@ -53,16 +56,16 @@ public:
 	// 跑
 	virtual bool RunTo(VtPath &vtPath, MSTIME msNow);
 
+public:
+	virtual bool OnEnterScene(IScene *pScene);
+	virtual bool OnLeaveScene(IScene *pScene);
+
 
 protected:
 	// 逻辑循环事件
 	virtual bool OnTick(MSTIME msNow);
 	// 状态自动切换
 	virtual void OnActionAutoSwitch(MSTIME msNow);
-	// 进入离开场景事件
-	virtual bool OnEnterScene();
-	virtual bool OnLeaveScene();
-
 
 protected:
 	IAction * GetCurrentAction() { return m_pCurrentAction; }
@@ -81,6 +84,11 @@ private:
 	std::string m_strName;
 
 	IAction *m_pCurrentAction;
+
+	int m_nWaitEnterSceneId;
+
+	// 当前所在场景
+	IScene *m_pCurrentScene;
 };
 
 #endif

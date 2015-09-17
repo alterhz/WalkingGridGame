@@ -4,6 +4,7 @@ using namespace NS_IO;
 
 #include "macrosdef.h"
 #include "zone.h"
+#include "sprite.h"
 
 IScene::IScene(ESceneType eSceneType)
 	: m_eSceneType(eSceneType)
@@ -40,7 +41,20 @@ bool IScene::DoTick()
 
 bool IScene::SpriteEnter(ISprite *pSprite)
 {
-	return OnSpriteEnter(pSprite);
+	if (nullptr == pSprite)
+	{
+		LOGError("nullptr == pSprite");
+		return false;
+	}
+
+	// 判断Sprite是否已经在场景中
+
+
+	pSprite->OnEnterScene(this);
+
+	OnSpriteEnter(pSprite);
+
+	return true;
 }
 
 bool IScene::SpriteLeave(ISprite *pSprite)

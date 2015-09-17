@@ -6,6 +6,7 @@
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
+#include "memoryleak.h"
 #include "netio.h"
 #include "msginc.h"
 using namespace NS_IO;

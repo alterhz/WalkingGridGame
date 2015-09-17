@@ -6,6 +6,7 @@
 #ifndef _CONFIGREAD_H_
 #define _CONFIGREAD_H_
 
+#include "memoryleak.h"
 #include "tinyxml2.h"
 #include <string>
 #include <map>

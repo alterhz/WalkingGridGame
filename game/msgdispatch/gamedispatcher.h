@@ -6,6 +6,7 @@
 #ifndef _GAMEDISPATCHER_H_
 #define _GAMEDISPATCHER_H_
 
+#include "memoryleak.h"
 #include "observer.h"
 #include "msginc.h"
 

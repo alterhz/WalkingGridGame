@@ -6,6 +6,7 @@
 #ifndef _XMLDATA_H_
 #define _XMLDATA_H_
 
+#include "memoryleak.h"
 #include <string>
 
 namespace tinyxml2
