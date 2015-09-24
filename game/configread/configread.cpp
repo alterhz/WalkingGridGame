@@ -1,6 +1,7 @@
 #include "configread.h"
 #include "debug.h"
 #include "tool.h"
+#include "file.h"
 using namespace NS_IO;
 
 
@@ -80,7 +81,9 @@ CConfigReadManager::~CConfigReadManager()
 
 bool CConfigReadManager::LoadConfigData()
 {
-	if (!xdConfig.LoadConfigData("../config/config.xml"))
+	std::string strRootPath = NS_IO::GetExeRootPath();
+
+	if (!xdConfig.LoadConfigData(strRootPath + "//..//config//config.xml"))
 	{
 		return false;
 	}

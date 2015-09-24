@@ -45,6 +45,12 @@ set(LIB_LIBRAY_SRC
 	${CMAKE_SOURCE_DIR}/public/include/thread.h
 	${CMAKE_SOURCE_DIR}/libray/src/thread.cpp
 
+	${CMAKE_SOURCE_DIR}/public/include/file.h
+	${CMAKE_SOURCE_DIR}/libray/src/file.cpp
+
+	${CMAKE_SOURCE_DIR}/public/include/mymath.h
+	${CMAKE_SOURCE_DIR}/libray/src/mymath.cpp
+
 	${CMAKE_SOURCE_DIR}/public/include/memoryoperatornew.h
 	${CMAKE_SOURCE_DIR}/public/include/memoryleak.h
 	${CMAKE_SOURCE_DIR}/public/include/memoryleakinfo.h
