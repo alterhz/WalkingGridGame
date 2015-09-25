@@ -5,6 +5,9 @@
 #include "testclient.h"
 #include "configread.h"
 
+#include "memoryleak.h"
+#include "memoryleakinfo.h"
+
 CApp::CApp()
 	: m_pNetService(nullptr)
 	, m_pNetAcceptor(nullptr)
@@ -150,27 +153,18 @@ bool CApp::OnThreadRun()
 
 bool CApp::OnTimerEvent(int nTimerId)
 {
-	//if (nTimerId == m_nRunTimerId)
-	//{
-	//	LOGPrint("\n------------------- 内存泄露信息 ---------------------");
-	//	// 打印内存泄露情况
-	//	VtMemoryLeak vtMemoryLeak = GetMemoryLeak();
-	//	for (InfoMemoryLeak infoMemoryLeak : vtMemoryLeak)
-	//	{
-	//		LOGPrint("onlyIndex:" + infoMemoryLeak.nOnlyIndex + ",leakmemory:" + infoMemoryLeak.nLeakMemory
-	//			+ "[" + infoMemoryLeak.strFileName.c_str() + "-" + infoMemoryLeak.nFileLine + "]");
-	//	}
-	//	LOGPrint("-----------------------------------------------------\n");
-	//}
-
-	//static int n = 0;
-	//LOGPrint("Timer[" + nTimerId + "]触发" + (++n) + "次");
-
-	//if (n >= 5)
-	//{
-	//	m_pTimerManager->KillTimer(m_nRunTimerId);
-	//	m_nRunTimerId = 0;
-	//}
+	if (nTimerId == m_nRunTimerId)
+	{
+		LOGPrint("\n------------------- 内存泄露信息 ---------------------");
+		// 打印内存泄露情况
+		VtMemoryLeak vtMemoryLeak = GetMemoryLeak();
+		for (InfoMemoryLeak infoMemoryLeak : vtMemoryLeak)
+		{
+			LOGPrint("onlyIndex:" + infoMemoryLeak.nOnlyIndex + ",leakmemory:" + infoMemoryLeak.nLeakMemory
+				+ "[" + infoMemoryLeak.strFileName.c_str() + "-" + infoMemoryLeak.nFileLine + "]");
+		}
+		LOGPrint("-----------------------------------------------------\n");
+	}
 
 	return true;
 }
