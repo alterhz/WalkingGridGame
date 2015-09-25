@@ -6,7 +6,6 @@
 #ifndef _TESTCLIENT_H_
 #define _TESTCLIENT_H_
 
-#include "memoryleak.h"
 #include "netio.h"
 #include "msginc.h"
 #include "utilityinc.h"

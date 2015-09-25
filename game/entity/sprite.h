@@ -6,7 +6,6 @@
 #ifndef _SPRITE_H_
 #define _SPRITE_H_
 
-#include "memoryleak.h"
 #include <string>
 #include "action.h"
 #include "attribute.h"

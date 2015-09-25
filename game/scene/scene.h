@@ -6,7 +6,6 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-#include "memoryleak.h"
 #include <map>
 
 class ISprite;

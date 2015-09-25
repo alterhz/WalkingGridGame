@@ -7,7 +7,6 @@
 #include "app.h"
 #include "debug.h"
 #include "thread.h"
-#include "memoryleak.h"
 
 int main(int argc, char* argv[])
 {
@@ -32,13 +31,13 @@ int main(int argc, char* argv[])
 
 
 
-#include <tchar.h>
-#include <iostream>
-#include <stdio.h>
-#include <vector>
-#include <map>
-
-using namespace std;
+//#include <tchar.h>
+//#include <iostream>
+//#include <stdio.h>
+//#include <vector>
+//#include <map>
+//
+//using namespace std;
 
 //namespace Observer2
 //{

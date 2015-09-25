@@ -25,7 +25,7 @@ bool CRole::Init()
 
 	int nConfigHP = pXD_Config->nInitHP;
 
-	m_attr.SetAttr(EAttrType_MaxHP, 300);
+	m_attr.SetAttr(EAttrType_MaxHP, nConfigHP);
 
 	return true;
 }

@@ -9,8 +9,8 @@ using namespace NS_IO;
 IScene::IScene(ESceneType eSceneType)
 	: m_eSceneType(eSceneType)
 	, m_nId(0)
-	, m_bDead(false)
 	, m_pZoneManager(nullptr)
+	, m_bDead(false)
 {
 }
 

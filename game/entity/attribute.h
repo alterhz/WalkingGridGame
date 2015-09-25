@@ -6,7 +6,6 @@
 #ifndef _ATTRIBUTE_H_
 #define _ATTRIBUTE_H_
 
-#include "memoryleak.h"
 #include <map>
 
 enum EAttrType

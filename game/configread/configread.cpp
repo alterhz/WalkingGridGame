@@ -1,8 +1,11 @@
+#include "tinyxml2.h"
+
 #include "configread.h"
 #include "debug.h"
 #include "tool.h"
 #include "file.h"
-using namespace NS_IO;
+
+
 
 
 template<typename T>
@@ -51,7 +54,7 @@ bool CConfigRead<T>::LoadConfigData(std::string strFileName)
 			continue;
 		}
 
-		int nId = string2int(pEleId->GetText());
+		int nId = NS_IO::string2int(pEleId->GetText());
 
 		T *pXmlData = new T();
 		if (nullptr == pXmlData)

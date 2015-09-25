@@ -6,7 +6,6 @@
 #ifndef _XMLDATA_H_
 #define _XMLDATA_H_
 
-#include "memoryleak.h"
 #include <string>
 
 namespace tinyxml2
@@ -27,6 +26,9 @@ class IXmlData
 
 #define NanInt		(-99999);
 #define NanFloat	(-99999.9999);
+	
+public:
+	virtual ~IXmlData() {}
 
 public:
 	virtual int GetId() const { return m_nId; }

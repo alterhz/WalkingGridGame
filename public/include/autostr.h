@@ -6,6 +6,8 @@
 #ifndef _AUTOSTR_H_
 #define _AUTOSTR_H_
 
+#include <string>
+
 #ifndef NS_IO
 
 #define NS_IO		dgs
@@ -13,8 +15,6 @@
 #define NS_IO_Footer	}
 
 #endif	//NS_IO
-
-#include <string>
 
 NS_IO_Header
 

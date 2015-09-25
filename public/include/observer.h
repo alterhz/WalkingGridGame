@@ -15,6 +15,9 @@ namespace Observer2
 	class IRunCallBack
 	{
 	public:
+		virtual ~IRunCallBack() {}
+
+	public:
 		virtual void OnInit() = 0;
 		virtual void DoExcute(int nProtoId, P1 p1, P2 p2) = 0;
 	};
@@ -82,7 +85,7 @@ namespace Observer2
 	private:
 		virtual void DoExcute(int nProtoId, P1 p1, P2 p2)
 		{
-			MapDelegate::iterator itDelegate = m_mapHandler.find(nProtoId);
+			auto itDelegate = m_mapHandler.find(nProtoId);
 			if (itDelegate != m_mapHandler.end())
 			{
 				Delegate dg = itDelegate->second;
@@ -101,6 +104,9 @@ namespace Observer3
 	template<typename P1, typename P2, typename P3>
 	class IRunCallBack
 	{
+	public:
+		virtual ~IRunCallBack() {}
+
 	public:
 		virtual void OnInit() = 0;
 		virtual void DoExcute(int nProtoId, P1 p1, P2 p2, P3 p3) = 0;
@@ -169,7 +175,7 @@ namespace Observer3
 	private:
 		virtual void DoExcute(int nProtoId, P1 p1, P2 p2, P3 p3)
 		{
-			MapDelegate::iterator itDelegate = m_mapHandler.find(nProtoId);
+			auto itDelegate = m_mapHandler.find(nProtoId);
 			if (itDelegate != m_mapHandler.end())
 			{
 				Delegate dg = itDelegate->second;

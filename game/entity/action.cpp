@@ -10,8 +10,8 @@ Vector2 CStandAction::GetCurrentPosition(MSTIME msNow) const
 
 CRunAction::CRunAction(VtPath &vtPath, double fRunSpeed, MSTIME msNow) 
 	: m_vtRunPath(vtPath) 
-	, m_fRunSpeed(fRunSpeed)
 	, m_msTimeBegin(msNow)
+	, m_fRunSpeed(fRunSpeed)
 {
 }
 

@@ -2,7 +2,6 @@
 #include "tinyxml2.h"
 #include "tool.h"
 #include "debug.h"
-using namespace NS_IO;
 
 bool IXmlData::ReadInt(const tinyxml2::XMLElement *pEleRecord, std::string strColumnName, int &n) const
 {
@@ -23,7 +22,7 @@ bool IXmlData::ReadInt(const tinyxml2::XMLElement *pEleRecord, std::string strCo
 		return false;
 	}
 
-	n = string2int(pText);
+	n = NS_IO::string2int(pText);
 
 	return true;
 }
@@ -47,7 +46,7 @@ bool IXmlData::ReadFloat(const tinyxml2::XMLElement *pEleRecord, std::string str
 		return false;
 	}
 
-	dValue = string2double(pText);
+	dValue = NS_IO::string2double(pText);
 
 	return true;
 }
@@ -95,7 +94,7 @@ bool IXmlData::ReadBool(const tinyxml2::XMLElement *pEleRecord, std::string strC
 		return false;
 	}
 
-	int n = string2int(pText);
+	int n = NS_IO::string2int(pText);
 
 	if (0 == n)
 	{

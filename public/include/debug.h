@@ -6,6 +6,10 @@
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
+#include <iostream>
+#include <assert.h>
+#include "autostr.h"
+
 #ifndef NS_IO
 
 #define NS_IO		dgs
@@ -14,13 +18,7 @@
 
 #endif	//NS_IO
 
-#include <iostream>
-#include <assert.h>
-#include "autostr.h"
-
-NS_IO_Header
-
-typedef AutoStr<1024> AutoStr1024;
+typedef NS_IO::AutoStr<1024> AutoStr1024;
 
 // øÿ÷∆Ã®¥Ú”°
 #define LOGPrint(log) { \
@@ -58,6 +56,5 @@ typedef AutoStr<1024> AutoStr1024;
 	std::cout << at.GetStr() << std::endl; \
 }
 
-NS_IO_Footer
 
 #endif

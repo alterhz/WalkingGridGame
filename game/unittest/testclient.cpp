@@ -103,6 +103,12 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 	{
 	case gproto::CSID_G2C_HeartBeat:
 		{
+			gproto::MSG_G2C_HeartBeat msgHeartBeat;
+			if (!msgHeartBeat.ParseFromArray(pMessage, nMessageLength))
+			{
+				return false;
+			}
+
 			LOGDebug("»Ø·¢ĞÄÌøCSID_G2C_HeartBeat");
 		}
 		break;
