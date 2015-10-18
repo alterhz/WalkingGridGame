@@ -26,6 +26,8 @@ set(LIB_GAME_SRC
 	${CMAKE_SOURCE_DIR}/game/entity/role.cpp
 	${CMAKE_SOURCE_DIR}/game/entity/monster.h
 	${CMAKE_SOURCE_DIR}/game/entity/monster.cpp
+	${CMAKE_SOURCE_DIR}/game/entity/country.h
+	${CMAKE_SOURCE_DIR}/game/entity/country.cpp
 
 	${CMAKE_SOURCE_DIR}/game/scene/scenemanager.h
 	${CMAKE_SOURCE_DIR}/game/scene/scenemanager.cpp
@@ -37,6 +39,11 @@ set(LIB_GAME_SRC
 	${CMAKE_SOURCE_DIR}/game/scene/instance.cpp
 	${CMAKE_SOURCE_DIR}/game/scene/zone.h
 	${CMAKE_SOURCE_DIR}/game/scene/zone.cpp
+
+	${CMAKE_SOURCE_DIR}/game/battle/ground.h
+	${CMAKE_SOURCE_DIR}/game/battle/ground.cpp
+	${CMAKE_SOURCE_DIR}/game/battle/battleground.h
+	${CMAKE_SOURCE_DIR}/game/battle/battleground.cpp
 
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/logindispatcher.h
 	${CMAKE_SOURCE_DIR}/game/msgdispatch/logindispatcher.cpp
@@ -71,6 +78,7 @@ source_group("MsgDispatch" REGULAR_EXPRESSION game/msgdispatch)
 source_group("UnitTest" REGULAR_EXPRESSION game/unittest)
 source_group("Entity" REGULAR_EXPRESSION game/entity)
 source_group("Scene" REGULAR_EXPRESSION game/scene)
+source_group("Battle" REGULAR_EXPRESSION game/battle)
 source_group("ConfigRead" REGULAR_EXPRESSION game/configread)
 
 
@@ -95,6 +103,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/game/unittest
 	${CMAKE_SOURCE_DIR}/game/entity
 	${CMAKE_SOURCE_DIR}/game/scene
+	${CMAKE_SOURCE_DIR}/game/battle
 	${CMAKE_SOURCE_DIR}/game/configread
 )
 
