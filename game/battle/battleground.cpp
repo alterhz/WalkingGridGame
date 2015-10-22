@@ -19,20 +19,27 @@ CFrontBattleGround::~CFrontBattleGround()
 
 bool CFrontBattleGround::Init()
 {
-	IGround *pGround = new IGround();
+	// 如果已经存在格子数据，删除
+	if (m_pGround)
+	{
+		delete m_pGround;
+		m_pGround = nullptr;
+	}
+
+	IGround *pGround = new CDemoGround();
 	if (nullptr == pGround)
 	{
 		LOGError("nullptr == pGround");
 		return false;
 	}
 
-	if (!pGround->Init(20, 30))
+	if (!pGround->Init())
 	{
 		LOGError("初始化场景格子失败！");
 		return false;
 	}
 
-
+	m_pGround = pGround;
 
 	return true;
 }

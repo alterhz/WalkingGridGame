@@ -28,6 +28,8 @@ set(LIB_GAME_SRC
 	${CMAKE_SOURCE_DIR}/game/entity/monster.cpp
 	${CMAKE_SOURCE_DIR}/game/entity/country.h
 	${CMAKE_SOURCE_DIR}/game/entity/country.cpp
+	${CMAKE_SOURCE_DIR}/game/entity/hero.h
+	${CMAKE_SOURCE_DIR}/game/entity/hero.cpp
 
 	${CMAKE_SOURCE_DIR}/game/scene/scenemanager.h
 	${CMAKE_SOURCE_DIR}/game/scene/scenemanager.cpp
