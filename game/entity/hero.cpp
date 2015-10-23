@@ -1,14 +1,6 @@
 #include "hero.h"
+#include "debug.h"
+#include "ground.h"
 
 
-IFightObj::IFightObj()
-	: m_nIndexId(0)
-{
-	static int G_nIndexId = 0;
-	m_nIndexId = (++G_nIndexId);
-}
 
-IFightObj::~IFightObj()
-{
-
-}

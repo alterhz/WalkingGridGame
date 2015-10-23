@@ -4,42 +4,15 @@
 #define _GROUND_H_
 
 #include <map>
+#include "macrosdef.h"
+
+class IGObject;
 
 // 格子
 class IGrid
 {
-public:
-	enum EToWard
-	{
-		EToWard_None = 0,	//不通
-		EToWard_X ,	//X方向通畅
-		EToWard_Y,	//Y方向通畅
-		EToWard_Both,	//双向通畅
-	};
+	typedef std::map<int, IGObject *> MapGObject;
 
-public:
-	IGrid();
-	virtual ~IGrid() {}
-
-
-public:
-	int GetX() const { return m_nX; }
-	int GetY() const { return m_nY; }
-
-	void Set(int nX, int nY) { m_nX = nX; m_nY = nY; }
-
-public:
-	// 是否可以行走
-	virtual bool IsWalkable(EToWard eToWard) const { return true; }
-
-private:
-	int m_nX;
-	int m_nY;
-};
-
-// 普通格子
-class CBaseGrid : public IGrid
-{
 public:
 	enum EGroundType
 	{
@@ -52,33 +25,49 @@ public:
 	};
 
 public:
-	CBaseGrid(EGroundType eGroundType);
-	~CBaseGrid() {}
+	IGrid(EGroundType eGroundType, int x, int y);
+	virtual ~IGrid() {}
+
 
 public:
-	void SetGroundType(EGroundType eGroundType) { m_eGroundType = eGroundType; }
+	int GetX() const { return m_nX; }
+	int GetY() const { return m_nY; }
+
 	EGroundType GetGroundType() const { return m_eGroundType; }
 
+	// 添加场景绑定单位
+	bool AddGObject(IGObject *pGObject);
+	bool DelGObject(IGObject *pGObject);
+
 public:
+	// 是否可以行走
 	virtual bool IsWalkable(EToWard eToWard) const;
 
+protected:
+	virtual void OnAddGObject(IGObject *pGObject);
+	virtual void OnDelGObject(IGObject *pGObject);
+
+
 private:
+	IGObject * FindGObject(int nIndexId);
+	IGObject * FindGObject(int nIndexId) const;
+
+
+private:
+	int m_nX;
+	int m_nY;
+	// 场景类型
 	EGroundType m_eGroundType;
+	// 格子上绑定的场景对象，最多2个，如桥梁和战斗单位；如果是城墙，当城墙被摧毁后，可以和战斗单位一起共存。
+	MapGObject m_mapGObject;
 };
 
-// 桥梁
-class CBridgeGrid : public CBaseGrid
+// 普通格子
+class CGrid : public IGrid
 {
 public:
-	CBridgeGrid(EGroundType eGroundType, EToWard eToWard);
-	~CBridgeGrid() {}
-
-public:
-	virtual bool IsWalkable(EToWard eToWard) const;
-
-private:
-	// 可以通过的朝向
-	EToWard m_eToWard;
+	CGrid(EGroundType eGroundType, int x, int y);
+	~CGrid() {}
 };
 
 const int G_nDemoWidthCount = 20;
@@ -97,16 +86,23 @@ public:
 public:
 	virtual bool Init();
 
+	IGrid * GetGrid(int x, int y);
+	IGrid * GetGrid(int x, int y) const;
+
 protected:
 	bool InitGroundSize(int nWGCount, int nHGCount);
 
 protected:
-	int XY2N(int nH, int nW) const;
+	int XY2N(int x, int y) const;
 	int N2X(int n) const;
 	int N2Y(int n) const;
 
 	// 修改目标格子地形数据
-	bool SetGrid(int nX, int nY, IGrid *pGrid);
+	bool SetGrid(int x, int y, IGrid *pGrid);
+
+private:
+	IGrid * Find(int n);
+	IGrid * Find(int n) const;
 
 protected:
 	MapGrid m_mapGrid;
@@ -123,6 +119,8 @@ public:
 public:
 	virtual bool Init(int nWGCount, int nHGCount);
 
+	// 加载
 };
+
 
 #endif

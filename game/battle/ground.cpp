@@ -1,33 +1,59 @@
 #include "ground.h"
 #include "debug.h"
+#include "gobject.h"
 
 
 //格子
-IGrid::IGrid()
-	: m_nX(0)
-	, m_nY(0)
+IGrid::IGrid(EGroundType eGroundType, int x, int y)
+	: m_nX(x)
+	, m_nY(y)
+	, m_eGroundType(eGroundType)
 {
 }
 
-
-// 普通格子
-CBaseGrid::CBaseGrid(EGroundType eGroundType)
-	: m_eGroundType(eGroundType)
-{
-}
-
-bool CBaseGrid::IsWalkable(EToWard eToWard) const
+bool IGrid::IsWalkable(EToWard eToWard) const
 {
 	switch (m_eGroundType)
 	{
-	case CBaseGrid::EGroundType_Land:
-	case CBaseGrid::EGroundType_Sand:
-	case CBaseGrid::EGroundType_Lawn:
-	case CBaseGrid::EGroundType_Snow:
-		return true;	//可以行走
+	case CGrid::EGroundType_Land:
+	case CGrid::EGroundType_Sand:
+	case CGrid::EGroundType_Lawn:
+	case CGrid::EGroundType_Snow:
+		{
+			auto itGObject = m_mapGObject.begin();
+			for (; itGObject!=m_mapGObject.end(); ++itGObject)
+			{
+				if (!itGObject->second->IsWalkable(eToWard))
+				{
+					// 场景中存在阻挡不能过去
+					return false;
+				}
+			}
+
+			return true;	//可以通过
+		}
 		break;
-	case CBaseGrid::EGroundType_River:
-		return false;	//不能通过
+	case CGrid::EGroundType_River:
+		{
+			if (m_mapGObject.size() > 0)
+			{
+				auto itGObject = m_mapGObject.begin();
+				for (; itGObject!=m_mapGObject.end(); ++itGObject)
+				{
+					if (!itGObject->second->IsWalkable(eToWard))
+					{
+						// 场景中存在阻挡不能过去
+						return false;
+					}
+				}
+
+				return true;	//可以通过
+			}
+			else
+			{
+				return false;	//不能通过
+			}
+		}
 		break;
 	default:
 		{
@@ -36,44 +62,94 @@ bool CBaseGrid::IsWalkable(EToWard eToWard) const
 		}
 		break;
 	}
+}
 
-	if (EGroundType_River == m_eGroundType)
+bool IGrid::AddGObject(IGObject *pGObject)
+{
+	if (nullptr == pGObject)
 	{
-		// 河流不可以行走
+		LOGError("nullptr == pGObject");
 		return false;
 	}
+
+	int nIndexId = pGObject->GetIndexId();
+
+	if (FindGObject(nIndexId))
+	{
+		LOGError("GObject对象[" + pGObject->GetIndexId() + "]已经绑定。");
+		return false;
+	}
+
+	m_mapGObject.insert(std::make_pair(pGObject->GetIndexId(), pGObject));
+
+	// 绑定
+	pGObject->BindGrid(this);
+
+	OnAddGObject(pGObject);
+
+	return true;
+}
+
+bool IGrid::DelGObject(IGObject *pGObject)
+{
+	if (nullptr == pGObject)
+	{
+		LOGError("nullptr == pGObject");
+		return false;
+	}
+
+	OnDelGObject(pGObject);
+
+	int nIndexId = pGObject->GetIndexId();
+
+	if (FindGObject(nIndexId))
+	{
+		m_mapGObject.erase(pGObject->GetIndexId());
+	}
+
+	pGObject->BindGrid(nullptr);
+
+	return true;
+}
+
+IGObject * IGrid::FindGObject(int nIndexId)
+{
+	MapGObject::iterator itGObject = m_mapGObject.find(nIndexId);
+	if (itGObject != m_mapGObject.end())
+	{
+		return itGObject->second;
+	}
+
+	return nullptr;
+}
+
+IGObject * IGrid::FindGObject(int nIndexId) const
+{
+	MapGObject::const_iterator itGObject = m_mapGObject.find(nIndexId);
+	if (itGObject != m_mapGObject.end())
+	{
+		return itGObject->second;
+	}
+
+	return nullptr;
+}
+
+void IGrid::OnAddGObject(IGObject *pGObject)
+{
+
+}
+
+void IGrid::OnDelGObject(IGObject *pGObject)
+{
+
 }
 
 
-// 桥梁
-CBridgeGrid::CBridgeGrid(EGroundType eGroundType, EToWard eToWard)
-	: CBaseGrid(eGroundType)
-	, m_eToWard(eToWard)
+// 普通格子
+CGrid::CGrid(EGroundType eGroundType, int x, int y)
+	: IGrid(eGroundType, x, y)
 {
 }
-
-bool CBridgeGrid::IsWalkable(EToWard eToWard) const
-{
-	if (EToWard_None == m_eToWard)
-	{
-		return false;
-	}
-
-	if (EToWard_Both == m_eToWard)
-	{
-		return true;
-	}
-
-	if (m_eToWard == eToWard)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 
 
 IGround::IGround()
@@ -125,30 +201,29 @@ bool IGround::InitGroundSize( int nWGCount, int nHGCount )
 	return true;
 }
 
-int IGround::XY2N( int nH, int nW ) const
+int IGround::XY2N( int x, int y ) const
 {
-	int n = m_nWGCount * nH + nW;
-
+	int n = m_nWGCount * y + x;
 	return n;
 }
 
 int IGround::N2X( int n ) const
 {
-	int nH = n / m_nWGCount;
+	int x = n % m_nWGCount;
 
-	return nH;
+	return x;
 }
 
 int IGround::N2Y( int n ) const
 {
-	int nW = n % m_nWGCount;
+	int y = n / m_nWGCount;
 
-	return nW;
+	return y;
 }
 
-bool IGround::SetGrid( int nX, int nY, IGrid *pGrid )
+bool IGround::SetGrid( int x, int y, IGrid *pGrid )
 {
-	int n = XY2N(nX, nY);
+	int n = XY2N(x, y);
 
 	MapGrid::iterator it = m_mapGrid.find(n);
 	if (it != m_mapGrid.end())
@@ -168,6 +243,42 @@ bool IGround::SetGrid( int nX, int nY, IGrid *pGrid )
 	return false;
 }
 
+IGrid * IGround::GetGrid(int x, int y)
+{
+	int n = XY2N(x, y);
+
+	return Find(n);
+}
+
+IGrid * IGround::GetGrid(int x, int y) const
+{
+	int n = XY2N(x, y);
+
+	return Find(n);
+}
+
+IGrid * IGround::Find(int n)
+{
+	MapGrid::iterator itGrid = m_mapGrid.find(n);
+	if (itGrid != m_mapGrid.end())
+	{
+		return itGrid->second;
+	}
+
+	return nullptr;
+}
+
+IGrid * IGround::Find(int n) const
+{
+	MapGrid::const_iterator itGrid = m_mapGrid.find(n);
+	if (itGrid != m_mapGrid.end())
+	{
+		return itGrid->second;
+	}
+
+	return nullptr;
+}
+
 // demo地形场景
 CDemoGround::CDemoGround()
 {
@@ -183,12 +294,12 @@ bool CDemoGround::Init( int nWGCount, int nHGCount )
 	// 初始化场景地图
 	InitGroundSize(G_nDemoWidthCount, G_nDemoHeigthCount);
 
-	// 修改地形数据
+	// 初始化地形数据
 	for (int nY=0; nY<nHGCount; ++nY)
 	{
 		for (int nX=0; nX<nWGCount; ++nX)
 		{
-			IGrid *pNewGrid = new CBaseGrid(CBaseGrid::EGroundType_Land);
+			IGrid *pNewGrid = new CGrid(CGrid::EGroundType_Land, nX, nY);
 			if (nullptr == pNewGrid)
 			{
 				LOGError("nullptr == pNewGrid");
@@ -198,6 +309,47 @@ bool CDemoGround::Init( int nWGCount, int nHGCount )
 			SetGrid(nX, nY, pNewGrid);
 		}
 	}
+
+	// 加载场景（固定）单位，如桥梁，树木，城墙，大炮
+
+	// 地图中心放入3个桥梁
+	{
+		CGBridge *pNewGBridge = new CGBridge(EToWard_Y);
+		if (nullptr == pNewGBridge)
+		{
+			LOGError("nullptr == pNewGBridge");
+			return false;
+		}
+
+		pNewGBridge->EnterGround(10, 15, this);
+	}
+
+	{
+		CGBridge *pNewGBridge = new CGBridge(EToWard_Y);
+		if (nullptr == pNewGBridge)
+		{
+			LOGError("nullptr == pNewGBridge");
+			return false;
+		}
+
+		pNewGBridge->EnterGround(8, 15, this);
+	}
+
+	{
+		CGBridge *pNewGBridge = new CGBridge(EToWard_Y);
+		if (nullptr == pNewGBridge)
+		{
+			LOGError("nullptr == pNewGBridge");
+			return false;
+		}
+
+		pNewGBridge->EnterGround(12, 15, this);
+	}
+	
+
+	// 加载场景（移动）单位，如小兵，英雄，将领
+
+	// 地图两边放入双方部队
 
 	return true;
 }
