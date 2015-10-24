@@ -5,15 +5,24 @@
 
 #include <map>
 
+#include "utilityinc.h"
+
 class IBattleGround
 {
 public:
-	IBattleGround() {}
-	virtual ~IBattleGround() {}
+	IBattleGround();
+	virtual ~IBattleGround();
+
+	int GetIndexId() const { return m_nIndexId; }
 
 public:
-	virtual bool Init() { return true; }
+	virtual bool Init();
 
+protected:
+	virtual bool OnInit() { return true; }
+
+private:
+	int m_nIndexId;
 };
 
 class ICountry;
@@ -29,16 +38,36 @@ public:
 	~CFrontBattleGround();
 
 public:
-	virtual bool Init();
+	// 初始化
+	virtual bool OnInit();
+
+	// 添加对战双方
+	bool InitTwoCountry(ICountry *pCountryA, ICountry *pCountryB);
 
 
 private:
-	int m_nIndexId;
-	// 国家（部队）列表
-	MapCountry m_mapCountry;
 	// 地形
 	IGround * m_pGround;
+	// 国家（部队）列表
+	MapCountry m_mapCountry;
 };
 
+class CBattleGroundManager : public Singleton<CBattleGroundManager>
+{
+	typedef std::map<int, IBattleGround *> MapBattleGround;
+public:
+	CBattleGroundManager();
+	~CBattleGroundManager();
+
+public:
+	bool Init();
+
+	// 分配一个阵地战场景
+	CFrontBattleGround* CreateFrontBattleGround();
+
+
+private:
+	MapBattleGround m_mapBattleGround;
+};
 
 #endif

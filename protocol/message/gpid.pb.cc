@@ -58,9 +58,10 @@ void protobuf_AddDesc_gpid_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\ngpid.proto\022\006gproto*P\n\003PID\022\027\n\022CSID_C2G_"
+    "\n\ngpid.proto\022\006gproto*~\n\003PID\022\027\n\022CSID_C2G_"
     "HeartBeat\020\220N\022\027\n\022CSID_G2C_HeartBeat\020\221N\022\027\n"
-    "\022CSID_C2G_StartGame\020\364N", 102);
+    "\022CSID_C2G_StartGame\020\364N\022\025\n\020CSID_C2G_Prepa"
+    "re\020\330O\022\025\n\020CSID_G2C_Prepare\020\331O", 148);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gpid.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_gpid_2eproto);
@@ -81,6 +82,8 @@ bool PID_IsValid(int value) {
     case 10000:
     case 10001:
     case 10100:
+    case 10200:
+    case 10201:
       return true;
     default:
       return false;

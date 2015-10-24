@@ -1,9 +1,11 @@
 #include "client.h"
 #include "debug.h"
 #include "clientmanager.h"
+#include "country.h"
 
 CClient::CClient()
 	: m_pNetSocket(nullptr)
+	, m_pCountry(nullptr)
 {
 }
 
@@ -27,6 +29,12 @@ bool CClient::OnDisconnect()
 {
 	LOGInfo("有一个客户端断开");
 
+	if (m_pCountry)
+	{
+		m_pCountry->OnDisconnect();
+		m_pCountry = nullptr;
+	}
+	
 	m_pNetSocket = nullptr;
 
 	return true;
@@ -69,4 +77,19 @@ bool CClient::SendMessage(unsigned short wProtocolId, google::protobuf::Message 
 	}
 
 	return m_pNetSocket->DoSend(szSendBuffer, sizeof(unsigned short) + pMessage->ByteSize());
+}
+
+bool CClient::SendPrepare(bool bOk)
+{
+	gproto::MSG_G2C_Prepare msg;
+	if (bOk)
+	{
+		msg.set_ret(gproto::MSG_G2C_Prepare_EResult_OK);
+	}
+	else
+	{
+		msg.set_ret(gproto::MSG_G2C_Prepare_EResult_ERR);
+	}
+
+	return SendMessage(gproto::CSID_G2C_Prepare, &msg);
 }

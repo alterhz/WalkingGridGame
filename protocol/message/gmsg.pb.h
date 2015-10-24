@@ -23,6 +23,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
@@ -36,7 +37,28 @@ void protobuf_ShutdownFile_gmsg_2eproto();
 class MSG_C2G_HeartBeat;
 class MSG_G2C_HeartBeat;
 class MSG_C2G_StartGame;
+class MSG_C2G_Prepare;
+class MSG_G2C_Prepare;
 
+enum MSG_G2C_Prepare_EResult {
+  MSG_G2C_Prepare_EResult_OK = 1,
+  MSG_G2C_Prepare_EResult_ERR = 2
+};
+bool MSG_G2C_Prepare_EResult_IsValid(int value);
+const MSG_G2C_Prepare_EResult MSG_G2C_Prepare_EResult_EResult_MIN = MSG_G2C_Prepare_EResult_OK;
+const MSG_G2C_Prepare_EResult MSG_G2C_Prepare_EResult_EResult_MAX = MSG_G2C_Prepare_EResult_ERR;
+const int MSG_G2C_Prepare_EResult_EResult_ARRAYSIZE = MSG_G2C_Prepare_EResult_EResult_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* MSG_G2C_Prepare_EResult_descriptor();
+inline const ::std::string& MSG_G2C_Prepare_EResult_Name(MSG_G2C_Prepare_EResult value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    MSG_G2C_Prepare_EResult_descriptor(), value);
+}
+inline bool MSG_G2C_Prepare_EResult_Parse(
+    const ::std::string& name, MSG_G2C_Prepare_EResult* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<MSG_G2C_Prepare_EResult>(
+    MSG_G2C_Prepare_EResult_descriptor(), name, value);
+}
 // ===================================================================
 
 class MSG_C2G_HeartBeat : public ::google::protobuf::Message {
@@ -268,6 +290,184 @@ class MSG_C2G_StartGame : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static MSG_C2G_StartGame* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class MSG_C2G_Prepare : public ::google::protobuf::Message {
+ public:
+  MSG_C2G_Prepare();
+  virtual ~MSG_C2G_Prepare();
+
+  MSG_C2G_Prepare(const MSG_C2G_Prepare& from);
+
+  inline MSG_C2G_Prepare& operator=(const MSG_C2G_Prepare& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_C2G_Prepare& default_instance();
+
+  void Swap(MSG_C2G_Prepare* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_C2G_Prepare* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_C2G_Prepare& from);
+  void MergeFrom(const MSG_C2G_Prepare& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_Prepare)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_C2G_Prepare* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_Prepare : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_Prepare();
+  virtual ~MSG_G2C_Prepare();
+
+  MSG_G2C_Prepare(const MSG_G2C_Prepare& from);
+
+  inline MSG_G2C_Prepare& operator=(const MSG_G2C_Prepare& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_Prepare& default_instance();
+
+  void Swap(MSG_G2C_Prepare* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_Prepare* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_Prepare& from);
+  void MergeFrom(const MSG_G2C_Prepare& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  typedef MSG_G2C_Prepare_EResult EResult;
+  static const EResult OK = MSG_G2C_Prepare_EResult_OK;
+  static const EResult ERR = MSG_G2C_Prepare_EResult_ERR;
+  static inline bool EResult_IsValid(int value) {
+    return MSG_G2C_Prepare_EResult_IsValid(value);
+  }
+  static const EResult EResult_MIN =
+    MSG_G2C_Prepare_EResult_EResult_MIN;
+  static const EResult EResult_MAX =
+    MSG_G2C_Prepare_EResult_EResult_MAX;
+  static const int EResult_ARRAYSIZE =
+    MSG_G2C_Prepare_EResult_EResult_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  EResult_descriptor() {
+    return MSG_G2C_Prepare_EResult_descriptor();
+  }
+  static inline const ::std::string& EResult_Name(EResult value) {
+    return MSG_G2C_Prepare_EResult_Name(value);
+  }
+  static inline bool EResult_Parse(const ::std::string& name,
+      EResult* value) {
+    return MSG_G2C_Prepare_EResult_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // required .gproto.MSG_G2C_Prepare.EResult ret = 1;
+  inline bool has_ret() const;
+  inline void clear_ret();
+  static const int kRetFieldNumber = 1;
+  inline ::gproto::MSG_G2C_Prepare_EResult ret() const;
+  inline void set_ret(::gproto::MSG_G2C_Prepare_EResult value);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_Prepare)
+ private:
+  inline void set_has_ret();
+  inline void clear_has_ret();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  int ret_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_Prepare* default_instance_;
+};
 // ===================================================================
 
 
@@ -353,6 +553,37 @@ inline void MSG_C2G_StartGame::set_allocated_rolename(::std::string* rolename) {
   }
 }
 
+// -------------------------------------------------------------------
+
+// MSG_C2G_Prepare
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_Prepare
+
+// required .gproto.MSG_G2C_Prepare.EResult ret = 1;
+inline bool MSG_G2C_Prepare::has_ret() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_Prepare::set_has_ret() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_Prepare::clear_has_ret() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_Prepare::clear_ret() {
+  ret_ = 1;
+  clear_has_ret();
+}
+inline ::gproto::MSG_G2C_Prepare_EResult MSG_G2C_Prepare::ret() const {
+  return static_cast< ::gproto::MSG_G2C_Prepare_EResult >(ret_);
+}
+inline void MSG_G2C_Prepare::set_ret(::gproto::MSG_G2C_Prepare_EResult value) {
+  assert(::gproto::MSG_G2C_Prepare_EResult_IsValid(value));
+  set_has_ret();
+  ret_ = value;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -362,6 +593,10 @@ inline void MSG_C2G_StartGame::set_allocated_rolename(::std::string* rolename) {
 namespace google {
 namespace protobuf {
 
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::gproto::MSG_G2C_Prepare_EResult>() {
+  return ::gproto::MSG_G2C_Prepare_EResult_descriptor();
+}
 
 }  // namespace google
 }  // namespace protobuf

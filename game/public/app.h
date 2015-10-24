@@ -24,6 +24,8 @@ public:
 	bool Run();
 	// 停止
 	void Stop();
+	// 释放
+	void Release();
 
 	// 投递异步事件
 	bool PostAsyncEvent(IAsyncEvent *pAsyncEvent);

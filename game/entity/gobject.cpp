@@ -12,6 +12,11 @@ IGObject::IGObject()
 	m_nIndexId = (++G_nIndexId);
 }
 
+bool IGObject::Init()
+{
+	return OnInit();
+}
+
 bool IGObject::EnterGround(int x, int y, IGround *pGround)
 {
 	if (nullptr == pGround)
@@ -57,6 +62,38 @@ bool CGBridge::IsWalkable(EToWard eToWard) const
 	}
 }
 
+// 战斗对象
+IFightGObject::IFightGObject()
+{
+
+}
+
+IFightGObject::~IFightGObject()
+{
+
+}
+
+bool IFightGObject::OnInit()
+{
+	// 初始化战斗属性
+	m_nHP = 100;
+	m_nAtt = 10;
+
+	return true;
+}
+
+
+// 可行走对象
+IWalkableGObject::IWalkableGObject()
+{
+
+}
+
+IWalkableGObject::~IWalkableGObject()
+{
+
+}
+
 bool IWalkableGObject::Move(int x, int y)
 {
 	if (nullptr == m_pGround)
@@ -92,3 +129,16 @@ bool IWalkableGObject::Move(int x, int y)
 
 	return true;
 }
+
+
+CDogFace::CDogFace()
+{
+
+}
+
+CDogFace::~CDogFace()
+{
+
+}
+
+

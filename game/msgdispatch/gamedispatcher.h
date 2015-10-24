@@ -19,6 +19,9 @@ public:
 private:
 	// ÐÄÌø
 	void OnHeartBeat(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
+
+	// ×¼±¸
+	void OnPrepare(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 };
 
 #endif

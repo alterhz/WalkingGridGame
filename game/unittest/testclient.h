@@ -13,7 +13,7 @@ using namespace NS_IO;
 
 #include <ctime>
 
-class CTestClient : public INetClient, public Singleton<CTestClient>
+class CTestClient : public INetClient
 {
 public:
 	CTestClient();
@@ -24,6 +24,10 @@ public:
 	bool SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage);
 
 	void Disconnect();
+
+public:
+	// 准备
+	bool SendPrepare();
 
 protected:
 	// 网络连接事件
@@ -41,6 +45,21 @@ private:
 	INetSocket *m_pNetSocket;
 
 	std::clock_t m_tBegin;
+};
+
+class CTestClientManager : public Singleton<CTestClientManager>
+{
+public:
+	CTestClientManager();
+	~CTestClientManager();
+
+public:
+	void Init(NS_IO::INetService *pNetService);
+
+
+private:
+	CTestClient *m_pTestClientA;
+	CTestClient *m_pTestClientB;
 };
 
 

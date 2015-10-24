@@ -8,6 +8,8 @@
 #include "memoryleak.h"
 #include "memoryleakinfo.h"
 
+#include "country.h"
+
 CApp::CApp()
 	: m_pNetService(nullptr)
 	, m_pNetAcceptor(nullptr)
@@ -89,11 +91,7 @@ bool CApp::InitNet()
 
 	{
 		// Test客户端连接
-		INetConnector *pNetConnector = m_pNetService->CreateConnector();
-		if (pNetConnector)
-		{
-			CTestClient::getMe().Init(pNetConnector);
-		}
+		CTestClientManager::getMe().Init(m_pNetService);
 	}
 
 	return true;
@@ -189,5 +187,12 @@ void CApp::Stop()
 	{
 		m_pNetService->Stop();
 	}
+
+	Release();
+}
+
+void CApp::Release()
+{
+	CCountryManager::delMe();
 }
 

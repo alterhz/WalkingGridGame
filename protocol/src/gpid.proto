@@ -6,5 +6,8 @@ enum PID
 	CSID_G2C_HeartBeat = 10001;
 	
 	CSID_C2G_StartGame = 10100;
+	
+	CSID_C2G_Prepare	= 10200;
+	CSID_G2C_Prepare	= 10201;
 }
 

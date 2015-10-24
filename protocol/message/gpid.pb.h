@@ -36,11 +36,13 @@ void protobuf_ShutdownFile_gpid_2eproto();
 enum PID {
   CSID_C2G_HeartBeat = 10000,
   CSID_G2C_HeartBeat = 10001,
-  CSID_C2G_StartGame = 10100
+  CSID_C2G_StartGame = 10100,
+  CSID_C2G_Prepare = 10200,
+  CSID_G2C_Prepare = 10201
 };
 bool PID_IsValid(int value);
 const PID PID_MIN = CSID_C2G_HeartBeat;
-const PID PID_MAX = CSID_C2G_StartGame;
+const PID PID_MAX = CSID_G2C_Prepare;
 const int PID_ARRAYSIZE = PID_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* PID_descriptor();

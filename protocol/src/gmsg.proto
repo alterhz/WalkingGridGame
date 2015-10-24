@@ -12,3 +12,17 @@ message MSG_C2G_StartGame
 {
 	required bytes rolename = 1;
 }
+
+// 准备
+message MSG_C2G_Prepare
+{
+}
+message MSG_G2C_Prepare
+{
+	enum EResult
+	{
+		OK = 1;
+		ERR = 2;
+	}
+	required EResult ret = 1;
+}

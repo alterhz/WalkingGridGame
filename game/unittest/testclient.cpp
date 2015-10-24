@@ -69,13 +69,15 @@ bool CTestClient::OnConnected(INetSocket *pNetSocket)
 		+ m_pNetSocket->GetLocalPort() + ", remoteIP:" + m_pNetSocket->GetRemoteIP() + ", remotePort:"
 		+ m_pNetSocket->GetRemotePort() + "]。");
 
-	// 发送测试心跳
-	gproto::MSG_C2G_HeartBeat msgHeartBeat;
-	SendMessage(gproto::CSID_C2G_HeartBeat, &msgHeartBeat);
+	//// 发送测试心跳
+	//gproto::MSG_C2G_HeartBeat msgHeartBeat;
+	//SendMessage(gproto::CSID_C2G_HeartBeat, &msgHeartBeat);
 
-	gproto::MSG_C2G_StartGame msgStartGame;
-	msgStartGame.set_rolename("惊天一棍");
-	SendMessage(gproto::CSID_C2G_StartGame, &msgStartGame);
+	//gproto::MSG_C2G_StartGame msgStartGame;
+	//msgStartGame.set_rolename("惊天一棍");
+	//SendMessage(gproto::CSID_C2G_StartGame, &msgStartGame);
+
+	SendPrepare();
 
 	return true;
 }
@@ -124,4 +126,54 @@ bool CTestClient::OnError(int nErrCode)
 	LOGInfo("连接服务器失败。");
 
 	return true;
+}
+
+bool CTestClient::SendPrepare()
+{
+	gproto::MSG_C2G_Prepare msg;
+
+	return SendMessage(gproto::CSID_C2G_Prepare, &msg);
+}
+
+
+CTestClientManager::CTestClientManager()
+	: m_pTestClientA(new CTestClient)
+	, m_pTestClientB(new CTestClient)
+{
+}
+
+CTestClientManager::~CTestClientManager()
+{
+	delete m_pTestClientA;
+	m_pTestClientA = nullptr;
+
+	delete m_pTestClientB;
+	m_pTestClientB = nullptr;
+}
+
+void CTestClientManager::Init(NS_IO::INetService *pNetService)
+{
+	if (nullptr == pNetService)
+	{
+		LOGError("nullptr == pNetService");
+		return ;
+	}
+
+	if (nullptr == m_pTestClientA || nullptr == m_pTestClientB)
+	{
+		LOGError("nullptr == m_pTestClientA || nullptr == m_pTestClientB");
+		return ;
+	}
+
+	INetConnector *pNetConnectorA = pNetService->CreateConnector();
+	if (pNetConnectorA)
+	{
+		m_pTestClientA->Init(pNetConnectorA);
+	}
+
+	INetConnector *pNetConnectorB = pNetService->CreateConnector();
+	if (pNetConnectorB)
+	{
+		m_pTestClientB->Init(pNetConnectorB);
+	}
 }

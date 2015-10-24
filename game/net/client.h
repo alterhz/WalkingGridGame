@@ -10,11 +10,16 @@
 #include "msginc.h"
 using namespace NS_IO;
 
+class ICountry;
+
 class CClient : public INetClient
 {
 public:
 	CClient();
 	virtual ~CClient() {}
+
+	void SetCountry(ICountry *pCountry) { m_pCountry = pCountry; }
+	ICountry * GetCountry() { return m_pCountry; }
 
 public:
 	// 网络连接事件
@@ -29,8 +34,13 @@ public:
 public:
 	bool SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage);
 
+public:
+	bool SendPrepare(bool bOk);
+
 private:
 	INetSocket *m_pNetSocket;
+	// 国家部队
+	ICountry *m_pCountry;
 };
 
 #endif

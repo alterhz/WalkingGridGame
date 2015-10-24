@@ -26,8 +26,14 @@ public:
 	IGrid * GetGrid() const { return m_pGrid; }
 	void BindGrid(IGrid *pGrid) { m_pGrid = pGrid; }
 
+public:
+	// 初始化函数
+	bool Init();
 	// 进入场景
 	bool EnterGround(int x, int y, IGround *pGround);
+
+protected:
+	virtual bool OnInit() { return true; }
 
 public:
 	// 获取对象类型
@@ -76,8 +82,8 @@ private:
 class IFightGObject : public IGObject
 {
 public:
-	IFightGObject() {}
-	virtual ~IFightGObject() {}
+	IFightGObject();
+	virtual ~IFightGObject();
 
 public:
 	// 对象不可以通过(一个格子不能存在两个角色单位)
@@ -85,6 +91,8 @@ public:
 	// 获取战斗对象
 	virtual IFightGObject * GetFightGObject() { return this; }
 
+protected:
+	virtual bool OnInit();
 
 public:
 	virtual int GetHP() const { return m_nHP; }
@@ -99,8 +107,8 @@ protected:
 class IWalkableGObject : public IFightGObject
 {
 public:
-	IWalkableGObject() {}
-	virtual ~IWalkableGObject() {}
+	IWalkableGObject();
+	virtual ~IWalkableGObject();
 
 public:
 	// 获取可行走对象
@@ -127,8 +135,8 @@ public:
 class CHero : public IWalkableGObject 
 {
 public:
-	CHero();
-	~CHero();
+	CHero() {}
+	~CHero() {}
 
 public:
 	virtual GObjectType GetType() const { return GObjectType_Hero; }
@@ -139,8 +147,8 @@ public:
 class CSirdar : public IFightGObject
 {
 public:
-	CSirdar();
-	~CSirdar();
+	CSirdar() {}
+	~CSirdar() {}
 
 public:
 	virtual GObjectType GetType() const { return GObjectType_Sirdar; }

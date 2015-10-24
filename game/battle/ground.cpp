@@ -347,9 +347,30 @@ bool CDemoGround::Init( int nWGCount, int nHGCount )
 	}
 	
 
-	// 加载场景（移动）单位，如小兵，英雄，将领
+	// 加载场景（移动）中立单位
+	{
+		CDogFace *pNewDogFace = new CDogFace();
+		if (nullptr == pNewDogFace)
+		{
+			LOGError("nullptr == pNewDogFace");
+			return false;
+		}
 
-	// 地图两边放入双方部队
+		pNewDogFace->Init();
+		pNewDogFace->EnterGround(1, 15, this);
+	}
+
+	{
+		CDogFace *pNewDogFace = new CDogFace();
+		if (nullptr == pNewDogFace)
+		{
+			LOGError("nullptr == pNewDogFace");
+			return false;
+		}
+
+		pNewDogFace->Init();
+		pNewDogFace->EnterGround(18, 15, this);
+	}
 
 	return true;
 }
