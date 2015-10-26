@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="yes"?>
+<RECORDS>
+<RECORD>
+<SN>1</SN>
+<Name>草地</Name>
+<Src>/src/grass.bat</Src>
+<Type>1</Type>
+<Effects>1,5</Effects>
+<Walkable>1</Walkable>
+</RECORD>
+<RECORD>
+<SN>2</SN>
+<Name>沙地</Name>
+<Src>/src/sand.bat</Src>
+<Type>2</Type>
+<Effects>1,3</Effects>
+<Walkable>1</Walkable>
+</RECORD>
+<RECORD>
+<SN>3</SN>
+<Name>石头</Name>
+<Src>/src/stone.bat</Src>
+<Type>3</Type>
+<Effects>2,4</Effects>
+<Walkable>0</Walkable>
+</RECORD>
+</RECORDS>

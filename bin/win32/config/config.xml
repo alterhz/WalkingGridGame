@@ -1,13 +1,18 @@
 <?xml version="1.0" standalone="yes"?>
 <RECORDS>
 <RECORD>
-<ID>1</ID>
+<SN>1</SN>
 <InitHP>300</InitHP>
 <InitAtt>500</InitAtt>
 </RECORD>
 <RECORD>
-<ID>2</ID>
+<SN>2</SN>
 <InitHP>400</InitHP>
 <InitAtt>800</InitAtt>
+</RECORD>
+<RECORD>
+<SN>3</SN>
+<InitHP>500</InitHP>
+<InitAtt>600</InitAtt>
 </RECORD>
 </RECORDS>
