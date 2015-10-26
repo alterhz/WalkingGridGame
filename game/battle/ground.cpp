@@ -1,24 +1,60 @@
 #include "ground.h"
 #include "debug.h"
+
 #include "gobject.h"
 
 
+
 //格子
-IGrid::IGrid(EGroundType eGroundType, int x, int y)
-	: m_nX(x)
+IGrid::IGrid(int x, int y)
+	: m_nSN(0)
+	, m_pXmlData_Ground(nullptr)
+	, m_nX(x)
 	, m_nY(y)
-	, m_eGroundType(eGroundType)
 {
+}
+
+bool IGrid::Init(int nSN)
+{
+	m_nSN = nSN;
+
+	const CXmlData_Ground *pXmlData_Ground = CConfigReadManager::getMe().xdGround.GetRecord(m_nSN);
+	if (nullptr == pXmlData_Ground)
+	{
+		LOGError("查找Ground的SN[" + m_nSN + "]没有找到。");
+		return false;
+	}
+
+	m_pXmlData_Ground = pXmlData_Ground;
+
+	return true;
+}
+
+EGroundType IGrid::GetGroundType() const
+{
+	if (nullptr == m_pXmlData_Ground)
+	{
+		LOGError("nullptr == m_pXmlData_Ground");
+		return EGroundType_None;
+	}
+
+	return m_pXmlData_Ground->eGroundType;
 }
 
 bool IGrid::IsWalkable(EToWard eToWard) const
 {
-	switch (m_eGroundType)
+	if (nullptr == m_pXmlData_Ground)
 	{
-	case CGrid::EGroundType_Land:
-	case CGrid::EGroundType_Sand:
-	case CGrid::EGroundType_Lawn:
-	case CGrid::EGroundType_Snow:
+		LOGError("nullptr == m_pXmlData_Ground");
+		return false;
+	}
+
+	switch (m_pXmlData_Ground->eToWard)
+	{
+	case EGroundType_Land:
+	case EGroundType_Sand:
+	case EGroundType_Lawn:
+	case EGroundType_Snow:
 		{
 			auto itGObject = m_mapGObject.begin();
 			for (; itGObject!=m_mapGObject.end(); ++itGObject)
@@ -33,7 +69,7 @@ bool IGrid::IsWalkable(EToWard eToWard) const
 			return true;	//可以通过
 		}
 		break;
-	case CGrid::EGroundType_River:
+	case EGroundType_River:
 		{
 			if (m_mapGObject.size() > 0)
 			{
@@ -57,7 +93,7 @@ bool IGrid::IsWalkable(EToWard eToWard) const
 		break;
 	default:
 		{
-			LOGError("格子类型[" + static_cast<int>(m_eGroundType) + "]错误。");
+			LOGError("格子类型[" + static_cast<int>(m_pXmlData_Ground->eToWard) + "]错误。");
 			return false;
 		}
 		break;
@@ -145,9 +181,13 @@ void IGrid::OnDelGObject(IGObject *pGObject)
 }
 
 
+
+
+
+
 // 普通格子
-CGrid::CGrid(EGroundType eGroundType, int x, int y)
-	: IGrid(eGroundType, x, y)
+CGrid::CGrid(int x, int y)
+	: IGrid(x, y)
 {
 }
 
@@ -299,10 +339,18 @@ bool CDemoGround::Init( int nWGCount, int nHGCount )
 	{
 		for (int nX=0; nX<nWGCount; ++nX)
 		{
-			IGrid *pNewGrid = new CGrid(CGrid::EGroundType_Land, nX, nY);
+			IGrid *pNewGrid = new CGrid(nX, nY);
 			if (nullptr == pNewGrid)
 			{
 				LOGError("nullptr == pNewGrid");
+				continue;
+			}
+
+			int nSN = 1;
+
+			if (!pNewGrid->Init(nSN))
+			{
+				LOGError("初始化地图格子[SN:" + nSN + "]失败。");
 				continue;
 			}
 
@@ -314,34 +362,40 @@ bool CDemoGround::Init( int nWGCount, int nHGCount )
 
 	// 地图中心放入3个桥梁
 	{
-		CGBridge *pNewGBridge = new CGBridge(EToWard_Y);
+		CStillObject *pNewGBridge = new CStillObject();
 		if (nullptr == pNewGBridge)
 		{
 			LOGError("nullptr == pNewGBridge");
 			return false;
 		}
+
+		pNewGBridge->Init(1);
 
 		pNewGBridge->EnterGround(10, 15, this);
 	}
 
 	{
-		CGBridge *pNewGBridge = new CGBridge(EToWard_Y);
+		CStillObject *pNewGBridge = new CStillObject();
 		if (nullptr == pNewGBridge)
 		{
 			LOGError("nullptr == pNewGBridge");
 			return false;
 		}
+
+		pNewGBridge->Init(2);
 
 		pNewGBridge->EnterGround(8, 15, this);
 	}
 
 	{
-		CGBridge *pNewGBridge = new CGBridge(EToWard_Y);
+		CStillObject *pNewGBridge = new CStillObject();
 		if (nullptr == pNewGBridge)
 		{
 			LOGError("nullptr == pNewGBridge");
 			return false;
 		}
+
+		pNewGBridge->Init(2);
 
 		pNewGBridge->EnterGround(12, 15, this);
 	}
@@ -349,26 +403,26 @@ bool CDemoGround::Init( int nWGCount, int nHGCount )
 
 	// 加载场景（移动）中立单位
 	{
-		CDogFace *pNewDogFace = new CDogFace();
+		CWalkableObject *pNewDogFace = new CWalkableObject();
 		if (nullptr == pNewDogFace)
 		{
 			LOGError("nullptr == pNewDogFace");
 			return false;
 		}
 
-		pNewDogFace->Init();
+		pNewDogFace->Init(1);
 		pNewDogFace->EnterGround(1, 15, this);
 	}
 
 	{
-		CDogFace *pNewDogFace = new CDogFace();
+		CWalkableObject *pNewDogFace = new CWalkableObject();
 		if (nullptr == pNewDogFace)
 		{
 			LOGError("nullptr == pNewDogFace");
 			return false;
 		}
 
-		pNewDogFace->Init();
+		pNewDogFace->Init(1);
 		pNewDogFace->EnterGround(18, 15, this);
 	}
 

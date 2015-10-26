@@ -16,6 +16,16 @@ typedef std::vector<int> VtInt;
 typedef std::map<int, int> MapInt;
 typedef std::list<int> ListInt;
 
+enum EGroundType
+{
+	EGroundType_None = 0,
+	EGroundType_Land = 1,	//土地
+	EGroundType_Sand = 2,	//沙地
+	EGroundType_River = 3,	//河流
+	EGroundType_Lawn = 4,	//草地
+	EGroundType_Snow = 5,	//雪地
+};
+
 enum EToWard
 {
 	EToWard_None = 0,	//不通
@@ -27,14 +37,12 @@ enum EToWard
 enum GObjectType
 {
 	GObjectType_Base  = 0,	//基础对象
-	GObjectType_Bridge,		//桥梁
-	GObjectType_DogFace,	//小兵
-	GObjectType_Hero,	//英雄
-	GObjectType_Sirdar,	//将领
+	GObjectType_Still,
+	GObjectType_Walkable,
 };
 
 // 战斗对象
-class IFightGObject;
-typedef std::vector<IFightGObject *> VtFightGObject;
+class IGObject;
+typedef std::vector<IGObject *> VtGObject;
 
 #endif

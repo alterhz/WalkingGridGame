@@ -52,7 +52,7 @@ void ICountry::OnDisconnect()
 
 }
 
-bool ICountry::AddFightGObject(IFightGObject *pFightGObject)
+bool ICountry::AddFightGObject(IGObject *pFightGObject)
 {
 	if (nullptr == pFightGObject)
 	{
@@ -65,9 +65,9 @@ bool ICountry::AddFightGObject(IFightGObject *pFightGObject)
 	return true;
 }
 
-bool ICountry::AddFightGObject(const VtFightGObject &vtFightGObject)
+bool ICountry::AddFightGObject(const VtGObject &vtFightGObject)
 {
-	for (IFightGObject *pFightGObject : vtFightGObject)
+	for (IGObject *pFightGObject : vtFightGObject)
 	{
 		m_vtFightGObject.push_back(pFightGObject);
 	}

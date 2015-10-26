@@ -119,101 +119,101 @@ bool CFrontBattleGround::InitTwoCountry(ICountry *pCountryA, ICountry *pCountryB
 
 	// 测试，给双方添加部队
 	{
-		VtFightGObject vtFightGObject;
+		VtGObject vtGObject;
 		// 添加将领
-		CSirdar *pSirdar = new CSirdar();
+		CStillObject*pSirdar = new CStillObject();
 		if (pSirdar)
 		{
-			pSirdar->Init();
+			pSirdar->Init(4);
 
-			vtFightGObject.push_back(pSirdar);
+			vtGObject.push_back(pSirdar);
 		}
 
 		// 添加英雄
-		CHero *pHeroA = new CHero();
+		CWalkableObject *pHeroA = new CWalkableObject();
 		if (pHeroA)
 		{
-			pHeroA->Init();
+			pHeroA->Init(2);
 
-			vtFightGObject.push_back(pHeroA);
+			vtGObject.push_back(pHeroA);
 		}
 
-		CHero *pHeroB = new CHero();
+		CWalkableObject *pHeroB = new CWalkableObject();
 		if (pHeroB)
 		{
-			pHeroB->Init();
+			pHeroB->Init(3);
 
-			vtFightGObject.push_back(pHeroB);
+			vtGObject.push_back(pHeroB);
 		}
 
 		// 添加小兵
-		CDogFace *pDogFaceA = new CDogFace();
+		CWalkableObject *pDogFaceA = new CWalkableObject();
 		if (pDogFaceA)
 		{
-			pDogFaceA->Init();
+			pDogFaceA->Init(1);
 
-			vtFightGObject.push_back(pDogFaceA);
+			vtGObject.push_back(pDogFaceA);
 		}
 
-		CDogFace *pDogFaceB = new CDogFace();
+		CWalkableObject *pDogFaceB = new CWalkableObject();
 		if (pDogFaceB)
 		{
-			pDogFaceB->Init();
+			pDogFaceB->Init(1);
 
-			vtFightGObject.push_back(pDogFaceB);
+			vtGObject.push_back(pDogFaceB);
 		}
 
 		pCountryA->ClearFightGObject();
-		pCountryA->AddFightGObject(vtFightGObject);
+		pCountryA->AddFightGObject(vtGObject);
 	}
 
 	{
-		VtFightGObject vtFightGObject;
+		VtGObject vtGObject;
 		// 添加将领
-		CSirdar *pSirdar = new CSirdar();
+		CStillObject*pSirdar = new CStillObject();
 		if (pSirdar)
 		{
-			pSirdar->Init();
+			pSirdar->Init(4);
 
-			vtFightGObject.push_back(pSirdar);
+			vtGObject.push_back(pSirdar);
 		}
 
 		// 添加英雄
-		CHero *pHeroA = new CHero();
+		CWalkableObject *pHeroA = new CWalkableObject();
 		if (pHeroA)
 		{
-			pHeroA->Init();
+			pHeroA->Init(2);
 
-			vtFightGObject.push_back(pHeroA);
+			vtGObject.push_back(pHeroA);
 		}
 
-		CHero *pHeroB = new CHero();
+		CWalkableObject *pHeroB = new CWalkableObject();
 		if (pHeroB)
 		{
-			pHeroB->Init();
+			pHeroB->Init(3);
 
-			vtFightGObject.push_back(pHeroB);
+			vtGObject.push_back(pHeroB);
 		}
 
 		// 添加小兵
-		CDogFace *pDogFaceA = new CDogFace();
+		CWalkableObject *pDogFaceA = new CWalkableObject();
 		if (pDogFaceA)
 		{
-			pDogFaceA->Init();
+			pDogFaceA->Init(1);
 
-			vtFightGObject.push_back(pDogFaceA);
+			vtGObject.push_back(pDogFaceA);
 		}
 
-		CDogFace *pDogFaceB = new CDogFace();
+		CWalkableObject *pDogFaceB = new CWalkableObject();
 		if (pDogFaceB)
 		{
-			pDogFaceB->Init();
+			pDogFaceB->Init(1);
 
-			vtFightGObject.push_back(pDogFaceB);
+			vtGObject.push_back(pDogFaceB);
 		}
 
 		pCountryB->ClearFightGObject();
-		pCountryB->AddFightGObject(vtFightGObject);
+		pCountryB->AddFightGObject(vtGObject);
 	}
 
 	m_mapCountry.insert(std::make_pair(pCountryA->GetIndexId(), pCountryA));

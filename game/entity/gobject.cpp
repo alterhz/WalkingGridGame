@@ -7,13 +7,16 @@ IGObject::IGObject()
 	, m_nX(0)
 	, m_nY(0)
 	, m_pGround(nullptr)
+	, m_nCampId(0)
 {
 	static int G_nIndexId = 0;
 	m_nIndexId = (++G_nIndexId);
 }
 
-bool IGObject::Init()
+bool IGObject::Init(int nSN)
 {
+	m_nSN = nSN;
+
 	return OnInit();
 }
 
@@ -40,19 +43,50 @@ bool IGObject::EnterGround(int x, int y, IGround *pGround)
 	return true;
 }
 
-bool CGBridge::IsWalkable(EToWard eToWard) const
+// 静止场景对象
+CStillObject::CStillObject()
+	: m_pXmlData_Still(nullptr)
 {
-	if (EToWard_None == m_eToWard)
+}
+
+CStillObject::~CStillObject()
+{
+}
+
+bool CStillObject::OnInit()
+{
+	// 加载角色对象
+	const CXmlData_Still *pXmlData_Still = CConfigReadManager::getMe().xdStill.GetRecord(m_nSN);
+	if (nullptr == pXmlData_Still)
+	{
+		LOGError("加载CXmlData_Object对象[" + m_nSN + "]失败。");
+		return false;
+	}
+
+	m_pXmlData_Still = pXmlData_Still;
+
+	return true;
+}
+
+bool CStillObject::IsWalkable(EToWard eToWard) const
+{
+	if (nullptr == m_pXmlData_Still)
+	{
+		LOGError("nullptr == m_pXmlData_Object");
+		return false;
+	}
+
+	if (EToWard_None == m_pXmlData_Still->eToWard)
 	{
 		return false;
 	}
 
-	if (EToWard_Both == m_eToWard)
+	if (EToWard_Both == m_pXmlData_Still->eToWard)
 	{
 		return true;
 	}
 
-	if (m_eToWard == eToWard)
+	if (m_pXmlData_Still->eToWard == eToWard)
 	{
 		return true;
 	}
@@ -62,42 +96,54 @@ bool CGBridge::IsWalkable(EToWard eToWard) const
 	}
 }
 
-// 战斗对象
-IFightGObject::IFightGObject()
-	: m_nHP(0)
-	, m_nSP(0)
-	, m_nAtt(0)
+bool CStillObject::IsCanAttack() const
+{
+	if (nullptr == m_pXmlData_Still)
+	{
+		LOGError("nullptr == m_pXmlData_Object");
+		return false;
+	}
+
+	return m_pXmlData_Still->bCanDestroy;
+}
+
+bool CStillObject::IsFlag() const
+{
+	if (nullptr == m_pXmlData_Still)
+	{
+		LOGError("nullptr == m_pXmlData_Object");
+		return false;
+	}
+
+	return m_pXmlData_Still->bFlag;
+}
+
+// 场景角色
+CWalkableObject::CWalkableObject()
+	: m_pXmlData_Walkable(nullptr)
 {
 }
 
-IFightGObject::~IFightGObject()
+CWalkableObject::~CWalkableObject()
 {
-
 }
 
-bool IFightGObject::OnInit()
+bool CWalkableObject::OnInit()
 {
-	// 初始化战斗属性
-	m_nHP = 100;
-	m_nSP = 0;
-	m_nAtt = 10;
+	// 加载角色对象
+	const CXmlData_Walkable *pXmlData_Walkable = CConfigReadManager::getMe().xdWalkable.GetRecord(m_nSN);
+	if (nullptr == pXmlData_Walkable)
+	{
+		LOGError("加载Charactar对象[" + m_nSN + "]失败。");
+		return false;
+	}
+
+	m_pXmlData_Walkable = pXmlData_Walkable;
 
 	return true;
 }
 
-
-// 可行走对象
-IWalkableGObject::IWalkableGObject()
-{
-
-}
-
-IWalkableGObject::~IWalkableGObject()
-{
-
-}
-
-bool IWalkableGObject::Move(int x, int y)
+bool CWalkableObject::Move(int x, int y)
 {
 	if (nullptr == m_pGround)
 	{
@@ -112,7 +158,7 @@ bool IWalkableGObject::Move(int x, int y)
 	}
 
 	// 步长
-	int nStepLength = 1;
+	int nStepLength = GetWalkLength();
 
 	// 判断是否可以行走过去
 
@@ -133,15 +179,41 @@ bool IWalkableGObject::Move(int x, int y)
 	return true;
 }
 
-
-CDogFace::CDogFace()
+bool CWalkableObject::IsWalkable(EToWard eToWard) const
 {
+	if (nullptr == m_pXmlData_Walkable)
+	{
+		LOGError("nullptr == m_pXmlData_Charactar");
+		return false;
+	}
 
+	if (EToWard_None == m_pXmlData_Walkable->eToWard)
+	{
+		return false;
+	}
+
+	if (EToWard_Both == m_pXmlData_Walkable->eToWard)
+	{
+		return true;
+	}
+
+	if (m_pXmlData_Walkable->eToWard == eToWard)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-CDogFace::~CDogFace()
+int CWalkableObject::GetWalkLength() const
 {
+	if (m_pXmlData_Walkable)
+	{
+		return m_pXmlData_Walkable->nWalkLength;
+	}
 
+	return 0;
 }
-
 

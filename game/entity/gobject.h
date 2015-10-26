@@ -4,11 +4,13 @@
 #define _GROUNDOBJECT_H_
 
 #include "macrosdef.h"
+#include "xmldata.h"
 
 class IGrid;
 class IGround;
-class IFightGObject;
-class IWalkableGObject;
+
+class CStillObject;
+class CWalkableObject;
 
 
 // 场景对象
@@ -26,9 +28,14 @@ public:
 	IGrid * GetGrid() const { return m_pGrid; }
 	void BindGrid(IGrid *pGrid) { m_pGrid = pGrid; }
 
+	// 阵营
+	void SetCampId(int nCampId) { m_nCampId = nCampId; }
+	int GetCampId() const { return m_nCampId; }
+
+
 public:
 	// 初始化函数
-	bool Init();
+	bool Init(int nSN);
 	// 进入场景
 	bool EnterGround(int x, int y, IGround *pGround);
 
@@ -38,18 +45,26 @@ protected:
 public:
 	// 获取对象类型
 	virtual GObjectType GetType() const = 0;
-	// 获取战斗对象
-	virtual IFightGObject * GetFightGObject() { return nullptr; }
-	// 获取可行走对象
-	virtual IWalkableGObject * GetWalkableGObject() { return nullptr; }
-
+	// 获取静止对象
+	virtual CStillObject * GetStillObject() { return nullptr; }
+	// 获取移动对象
+	virtual CWalkableObject* GetWalkableObject() { return nullptr; }
 	// 对象不可以通过(一个格子不能存在两个角色单位)
 	virtual bool IsWalkable(EToWard eToWard) const = 0;
+	
+	// 战斗相关
+	// 是否可以攻击
+	virtual bool IsCanAttack() const { return true; }
+	virtual int GetHP() const { return 0; }
+	virtual int GetSP() const { return 0; }
+	virtual int GetAtt() const { return 0; }
+
 
 private:
 	int m_nIndexId;
 
 protected:
+	int m_nSN;
 	// 位置数据
 	int m_nX;
 	int m_nY;
@@ -58,103 +73,65 @@ protected:
 
 	// 格子
 	IGrid *m_pGrid;
+	// 阵营Id
+	int m_nCampId;
 };
 
-// 桥梁
-class CGBridge : public IGObject
+// 静止（不可以移动）的场景对象
+class CStillObject : public IGObject
 {
 public:
-	CGBridge(EToWard eToWard) 
-		: m_eToWard(eToWard)
-	{}
-	~CGBridge() {}
-
-public:
-	virtual GObjectType GetType() const { return GObjectType_Bridge; }
-	virtual bool IsWalkable(EToWard eToWard) const;
-
-private:
-	// 可以通过的朝向
-	EToWard m_eToWard;
-};
-
-// 战斗对象
-class IFightGObject : public IGObject
-{
-public:
-	IFightGObject();
-	virtual ~IFightGObject();
-
-public:
-	// 对象不可以通过(一个格子不能存在两个角色单位)
-	virtual bool IsWalkable(EToWard eToWard) const { return false; }
-	// 获取战斗对象
-	virtual IFightGObject * GetFightGObject() { return this; }
+	CStillObject();
+	virtual ~CStillObject();
 
 protected:
+	// 对象类型
+	virtual GObjectType GetType() const { return GObjectType_Still; }
+	// 获取静止对象
+	virtual CStillObject * GetStillObject() { return this; }
+	// 初始化
 	virtual bool OnInit();
+	// 是否可以通过
+	virtual bool IsWalkable(EToWard eToWard) const;
+	//战斗相关
+	virtual bool IsCanAttack() const;
 
 public:
-	virtual int GetHP() const { return m_nHP; }
-	virtual int GetSP() const { return m_nSP; }
-	virtual int GetAtt() const { return m_nAtt; }
+	// 是否为旗帜类型（将领）
+	bool IsFlag() const;
 
 protected:
-	int m_nHP;
-	int m_nSP;
-	int m_nAtt;
+	const CXmlData_Still *m_pXmlData_Still;
 };
 
-// 可行走对象
-class IWalkableGObject : public IFightGObject
+// 角色对象
+class CWalkableObject : public IGObject
 {
 public:
-	IWalkableGObject();
-	virtual ~IWalkableGObject();
+	CWalkableObject();
+	virtual ~CWalkableObject();
 
-public:
-	// 获取可行走对象
-	virtual IWalkableGObject * GetWalkableGObject() { return this; }
+protected:
+	// 对象类型
+	virtual GObjectType GetType() const { return GObjectType_Walkable; }
+	// 获取移动对象
+	virtual CWalkableObject * GetWalkableObject() { return this; }
+	// 初始化
+	virtual bool OnInit();
+	// 对象不可以通过(一个格子不能存在两个角色单位)
+	virtual bool IsWalkable(EToWard eToWard) const;
+	// 战斗相关
+	virtual bool IsCanAttack() const { return true; }
+	
 
 public:
 	// 行走
 	bool Move(int x, int y);
+	// 获取移动步长
+	int GetWalkLength() const;
 
-};
-
-// 小兵
-class CDogFace : public IWalkableGObject 
-{
-public:
-	CDogFace();
-	~CDogFace();
-
-public:
-	virtual GObjectType GetType() const { return GObjectType_DogFace; }
-};
-
-// 英雄
-class CHero : public IWalkableGObject 
-{
-public:
-	CHero() {}
-	~CHero() {}
-
-public:
-	virtual GObjectType GetType() const { return GObjectType_Hero; }
-
-};
-
-// 将领（司令官）
-class CSirdar : public IFightGObject
-{
-public:
-	CSirdar() {}
-	~CSirdar() {}
-
-public:
-	virtual GObjectType GetType() const { return GObjectType_Sirdar; }
-
+protected:
+	const CXmlData_Walkable *m_pXmlData_Walkable;
 };
 
 

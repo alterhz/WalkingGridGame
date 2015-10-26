@@ -96,5 +96,15 @@ bool CConfigReadManager::LoadConfigData()
 		return false;
 	}
 
+	if (!xdStill.LoadConfigData(strRootPath + "//..//config//still.xml"))
+	{
+		return false;
+	}
+
+	if (!xdWalkable.LoadConfigData(strRootPath + "//..//config//walkable.xml"))
+	{
+		return false;
+	}
+
 	return true;
 }

@@ -5,6 +5,7 @@
 
 #include <map>
 #include "macrosdef.h"
+#include "configread.h"
 
 class IGObject;
 
@@ -14,26 +15,16 @@ class IGrid
 	typedef std::map<int, IGObject *> MapGObject;
 
 public:
-	enum EGroundType
-	{
-		EGroundType_Null = 0,
-		EGroundType_Land,	//土地
-		EGroundType_Sand,	//沙地
-		EGroundType_River,	//河流
-		EGroundType_Lawn,	//草地
-		EGroundType_Snow,	//雪地
-	};
-
-public:
-	IGrid(EGroundType eGroundType, int x, int y);
+	IGrid(int x, int y);
 	virtual ~IGrid() {}
-
 
 public:
 	int GetX() const { return m_nX; }
 	int GetY() const { return m_nY; }
 
-	EGroundType GetGroundType() const { return m_eGroundType; }
+	EGroundType GetGroundType() const;
+
+	bool Init(int nSN);
 
 	// 添加场景绑定单位
 	bool AddGObject(IGObject *pGObject);
@@ -52,12 +43,11 @@ private:
 	IGObject * FindGObject(int nIndexId);
 	IGObject * FindGObject(int nIndexId) const;
 
-
 private:
+	int m_nSN;
+	const CXmlData_Ground *m_pXmlData_Ground;
 	int m_nX;
 	int m_nY;
-	// 场景类型
-	EGroundType m_eGroundType;
 	// 格子上绑定的场景对象，最多2个，如桥梁和战斗单位；如果是城墙，当城墙被摧毁后，可以和战斗单位一起共存。
 	MapGObject m_mapGObject;
 };
@@ -66,7 +56,7 @@ private:
 class CGrid : public IGrid
 {
 public:
-	CGrid(EGroundType eGroundType, int x, int y);
+	CGrid(int x, int y);
 	~CGrid() {}
 };
 

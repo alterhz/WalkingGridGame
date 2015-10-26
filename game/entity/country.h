@@ -29,13 +29,13 @@ public:
 
 public:
 	// 添加战斗部队
-	bool AddFightGObject(IFightGObject *pFightGObject);
-	bool AddFightGObject(const VtFightGObject &vtFightGObject);
+	bool AddFightGObject(IGObject *pFightGObject);
+	bool AddFightGObject(const VtGObject &vtFightGObject);
 	// 清空战斗部队
 	void ClearFightGObject() { m_vtFightGObject.clear(); }
 
 	// 获取战斗部队
-	const VtFightGObject & GetFightGObject() const { return m_vtFightGObject; }
+	const VtGObject & GetFightGObject() const { return m_vtFightGObject; }
 
 public:
 	void OnConnected(CClient *pClient);
@@ -55,7 +55,7 @@ private:
 	time_t m_tDisconnect;
 
 	// 部队
-	VtFightGObject m_vtFightGObject;
+	VtGObject m_vtFightGObject;
 };
 
 class CCountry : public ICountry

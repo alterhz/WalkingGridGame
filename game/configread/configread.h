@@ -72,6 +72,8 @@ public:
 	// »´æ÷≈‰÷√
 	CConfigRead<CXmlData_Config> xdConfig;
 	CConfigRead<CXmlData_Ground> xdGround;
+	CConfigRead<CXmlData_Still> xdStill;
+	CConfigRead<CXmlData_Walkable> xdWalkable;
 };
 
 

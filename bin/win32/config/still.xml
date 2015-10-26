@@ -10,6 +10,7 @@
 <ToWard>1</ToWard>
 <CanDestroy>0</CanDestroy>
 <HP>1</HP>
+<Flag>0</Flag>
 </RECORD>
 <RECORD>
 <SN>2</SN>
@@ -21,6 +22,7 @@
 <ToWard>2</ToWard>
 <CanDestroy>0</CanDestroy>
 <HP>1</HP>
+<Flag>0</Flag>
 </RECORD>
 <RECORD>
 <SN>3</SN>
@@ -32,5 +34,18 @@
 <ToWard>0</ToWard>
 <CanDestroy>1</CanDestroy>
 <HP>8</HP>
+<Flag>0</Flag>
+</RECORD>
+<RECORD>
+<SN>4</SN>
+<Name>将领</Name>
+<Resource>src/sirdar.bat</Resource>
+<DestroyResource>src/sirdar_2.bat</DestroyResource>
+<TakeUpGridX>1</TakeUpGridX>
+<TakeUpGridY>1</TakeUpGridY>
+<ToWard>0</ToWard>
+<CanDestroy>1</CanDestroy>
+<HP>100</HP>
+<Flag>1</Flag>
 </RECORD>
 </RECORDS>

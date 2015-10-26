@@ -134,3 +134,44 @@ void CXmlData_Ground::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
 	ReadInt(pEleRecord, "ToWard", nToWard);
 	eToWard = static_cast<EToWard>(nToWard);
 }
+
+void CXmlData_Still::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
+{
+	ReadString(pEleRecord, "Name", strName);
+	ReadString(pEleRecord, "Resource", strResource);
+	ReadString(pEleRecord, "DestroyResource", strDestroyDesource);
+
+	ReadInt(pEleRecord, "TakeUpGridX", nTakeUpGridX);
+	ReadInt(pEleRecord, "TakeUpGridY", nTakeUpGridY);
+
+	int nToWard = 0;
+	ReadInt(pEleRecord, "ToWard", nToWard);
+	eToWard = static_cast<EToWard>(nToWard);
+
+	ReadBool(pEleRecord, "CanDestroy", bCanDestroy);
+
+	ReadInt(pEleRecord, "HP", nHP);
+
+	ReadBool(pEleRecord, "Flag", bFlag);
+}
+
+void CXmlData_Walkable::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
+{
+	ReadString(pEleRecord, "Name", strName);
+	ReadString(pEleRecord, "Resource", strResource);
+	ReadString(pEleRecord, "DestroyResource", strDeadDesource);
+
+	ReadInt(pEleRecord, "TakeUpGridX", nTakeUpGridX);
+	ReadInt(pEleRecord, "TakeUpGridY", nTakeUpGridY);
+
+	int nToWard = 0;
+	ReadInt(pEleRecord, "ToWard", nToWard);
+	eToWard = static_cast<EToWard>(nToWard);
+
+	ReadInt(pEleRecord, "WalkLength", nWalkLength);
+
+	// 优势地形
+	std::string strSuperGround;
+	ReadString(pEleRecord, "SuperGround", strSuperGround);
+
+}

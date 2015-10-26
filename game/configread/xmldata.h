@@ -47,6 +47,7 @@ private:
 	int m_nSN;
 };
 
+// 全局配置
 class CXmlData_Config : public IXmlData
 {
 public:
@@ -63,20 +64,14 @@ public:
 	int nInitHP;	//初始化血量
 };
 
+// 地形
 class CXmlData_Ground : public IXmlData
 {
 public:
-	enum EGroundType
-	{
-		EGroundType_Grass	= 1,
-		EGroundType_Sand	= 2,
-		EGroundType_Stone	= 3,
-	};
-
-public:
 	CXmlData_Ground()
+		: eGroundType(EGroundType_None)
+		, eToWard(EToWard_None)
 	{
-
 	}
 	~CXmlData_Ground() {}
 
@@ -90,5 +85,51 @@ public:
 	std::string strEffects;
 	EToWard eToWard;
 };
+
+// 场景物体
+class CXmlData_Still : public IXmlData
+{
+public:
+	CXmlData_Still()
+	{
+	}
+	~CXmlData_Still() {}
+
+	// 单条记录载入
+	virtual void OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord);
+
+	std::string strName;
+	std::string strResource;
+	std::string strDestroyDesource;
+	int nTakeUpGridX;
+	int nTakeUpGridY;
+	EToWard eToWard;
+	bool bCanDestroy;
+	int nHP;
+	bool bFlag;
+};
+
+// 场景角色
+class CXmlData_Walkable : public IXmlData
+{
+public:
+	CXmlData_Walkable()
+	{
+	}
+	~CXmlData_Walkable() {}
+
+	// 单条记录载入
+	virtual void OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord);
+
+	std::string strName;
+	std::string strResource;
+	std::string strDeadDesource;
+	int nTakeUpGridX;
+	int nTakeUpGridY;
+	EToWard eToWard;
+	int nWalkLength;
+	VtInt vtSuperGrounds;
+};
+
 
 #endif
