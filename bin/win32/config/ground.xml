@@ -4,7 +4,7 @@
 <SN>1</SN>
 <Name>草地</Name>
 <Src>/src/grass.bat</Src>
-<Type>1</Type>
+<Type>4</Type>
 <Effects>1,5</Effects>
 <ToWard>3</ToWard>
 </RECORD>
@@ -18,7 +18,7 @@
 </RECORD>
 <RECORD>
 <SN>3</SN>
-<Name>石头</Name>
+<Name>河流</Name>
 <Src>/src/stone.bat</Src>
 <Type>3</Type>
 <Effects>2,4</Effects>
