@@ -71,6 +71,7 @@ public:
 	int m_nGlobalConfigId;
 	// »´æ÷≈‰÷√
 	CConfigRead<CXmlData_Config> xdConfig;
+	CConfigRead<CXmlData_Ground> xdGround;
 };
 
 

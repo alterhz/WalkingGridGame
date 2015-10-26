@@ -11,7 +11,7 @@
 template<typename T>
 CConfigRead<T>::CConfigRead()
 	: m_strRecordNodeName("RECORD")
-	, m_strKeyName("ID")
+	, m_strKeyName("SN")
 {
 }
 
@@ -54,7 +54,7 @@ bool CConfigRead<T>::LoadConfigData(std::string strFileName)
 			continue;
 		}
 
-		int nId = NS_IO::string2int(pEleId->GetText());
+		int nSN = NS_IO::string2int(pEleId->GetText());
 
 		T *pXmlData = new T();
 		if (nullptr == pXmlData)
@@ -63,10 +63,10 @@ bool CConfigRead<T>::LoadConfigData(std::string strFileName)
 			continue;
 		}
 
-		pXmlData->SetId(nId);
-		pXmlData->OnRead(pEleRecord);
+		pXmlData->SetSN(nSN);
+		pXmlData->OnRead(nSN, pEleRecord);
 
-		m_mapRecord.insert(std::make_pair(pXmlData->GetId(), pXmlData));
+		m_mapRecord.insert(std::make_pair(pXmlData->GetSN(), pXmlData));
 	}
 
 	return true;
@@ -87,6 +87,11 @@ bool CConfigReadManager::LoadConfigData()
 	std::string strRootPath = NS_IO::GetExeRootPath();
 
 	if (!xdConfig.LoadConfigData(strRootPath + "//..//config//config.xml"))
+	{
+		return false;
+	}
+
+	if (!xdGround.LoadConfigData(strRootPath + "//..//config//ground.xml"))
 	{
 		return false;
 	}

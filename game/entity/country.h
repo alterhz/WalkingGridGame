@@ -6,9 +6,11 @@
 #include <map>
 #include <vector>
 #include <list>
-#include "utilityinc.h"
-#include "msginc.h"
+
 #include "event.h"
+#include "msginc.h"
+#include "macrosdef.h"
+#include "utilityinc.h"
 
 class CClient;
 
@@ -26,6 +28,16 @@ public:
 	CClient * GetClient() const { return m_pClient; }
 
 public:
+	// 添加战斗部队
+	bool AddFightGObject(IFightGObject *pFightGObject);
+	bool AddFightGObject(const VtFightGObject &vtFightGObject);
+	// 清空战斗部队
+	void ClearFightGObject() { m_vtFightGObject.clear(); }
+
+	// 获取战斗部队
+	const VtFightGObject & GetFightGObject() const { return m_vtFightGObject; }
+
+public:
 	void OnConnected(CClient *pClient);
 	void OnDisconnect();
 
@@ -41,6 +53,9 @@ private:
 	CClient *m_pClient;
 	// 断开时间
 	time_t m_tDisconnect;
+
+	// 部队
+	VtFightGObject m_vtFightGObject;
 };
 
 class CCountry : public ICountry

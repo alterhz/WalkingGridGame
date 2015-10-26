@@ -26,3 +26,41 @@ message MSG_G2C_Prepare
 	}
 	required EResult ret = 1;
 }
+
+// 获取场景数据
+message MSG_C2G_GetGroundInfo
+{
+}
+// 格子
+message Info_Grid
+{
+	required int32 sn = 1;
+	required int32 x = 2;
+	required int32 y = 3;
+}
+// 场景对象
+message Info_GObject
+{
+	required int32 indexid = 1;
+	required int32 sn = 2;
+	required int32 x = 3;
+	required int32 y = 4;
+	required int32 hp = 5;
+	required int32 sp = 6;
+	required int32 level = 7;
+	required int32 groupid = 8;
+}
+message MSG_G2C_GetGroundInfo
+{
+	required int32 wgcount = 1;
+	required int32 hgcount = 2;
+	repeated Info_Grid grids = 3;
+	repeated Info_GObject gobjects = 4;
+}
+
+
+
+
+
+
+

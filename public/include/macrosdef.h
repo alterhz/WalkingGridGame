@@ -33,4 +33,8 @@ enum GObjectType
 	GObjectType_Sirdar,	//将领
 };
 
+// 战斗对象
+class IFightGObject;
+typedef std::vector<IFightGObject *> VtFightGObject;
+
 #endif

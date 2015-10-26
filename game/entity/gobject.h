@@ -96,10 +96,12 @@ protected:
 
 public:
 	virtual int GetHP() const { return m_nHP; }
+	virtual int GetSP() const { return m_nSP; }
 	virtual int GetAtt() const { return m_nAtt; }
 
 protected:
 	int m_nHP;
+	int m_nSP;
 	int m_nAtt;
 };
 

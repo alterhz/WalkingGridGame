@@ -23,7 +23,7 @@ bool CRole::Init()
 		return false;
 	}
 
-	int nConfigHP = pXD_Config->nInitHP;
+	float nConfigHP = static_cast<float>(pXD_Config->nInitHP);
 
 	m_attr.SetAttr(EAttrType_MaxHP, nConfigHP);
 

@@ -64,8 +64,10 @@ bool CGBridge::IsWalkable(EToWard eToWard) const
 
 // 战斗对象
 IFightGObject::IFightGObject()
+	: m_nHP(0)
+	, m_nSP(0)
+	, m_nAtt(0)
 {
-
 }
 
 IFightGObject::~IFightGObject()
@@ -77,6 +79,7 @@ bool IFightGObject::OnInit()
 {
 	// 初始化战斗属性
 	m_nHP = 100;
+	m_nSP = 0;
 	m_nAtt = 10;
 
 	return true;

@@ -6,7 +6,7 @@
 <Src>/src/grass.bat</Src>
 <Type>1</Type>
 <Effects>1,5</Effects>
-<Walkable>1</Walkable>
+<ToWard>3</ToWard>
 </RECORD>
 <RECORD>
 <SN>2</SN>
@@ -14,7 +14,7 @@
 <Src>/src/sand.bat</Src>
 <Type>2</Type>
 <Effects>1,3</Effects>
-<Walkable>1</Walkable>
+<ToWard>3</ToWard>
 </RECORD>
 <RECORD>
 <SN>3</SN>
@@ -22,6 +22,6 @@
 <Src>/src/stone.bat</Src>
 <Type>3</Type>
 <Effects>2,4</Effects>
-<Walkable>0</Walkable>
+<ToWard>0</ToWard>
 </RECORD>
 </RECORDS>

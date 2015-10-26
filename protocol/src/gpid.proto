@@ -9,5 +9,8 @@ enum PID
 	
 	CSID_C2G_Prepare	= 10200;
 	CSID_G2C_Prepare	= 10201;
+	
+	CSID_C2G_GetGroundInfo	= 20100;
+	CSID_G2C_GetGroundInfo	= 20101;
 }
 

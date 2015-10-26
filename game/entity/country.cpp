@@ -52,6 +52,29 @@ void ICountry::OnDisconnect()
 
 }
 
+bool ICountry::AddFightGObject(IFightGObject *pFightGObject)
+{
+	if (nullptr == pFightGObject)
+	{
+		LOGError("nullptr == pFightGObject");
+		return false;
+	}
+
+	m_vtFightGObject.push_back(pFightGObject);
+
+	return true;
+}
+
+bool ICountry::AddFightGObject(const VtFightGObject &vtFightGObject)
+{
+	for (IFightGObject *pFightGObject : vtFightGObject)
+	{
+		m_vtFightGObject.push_back(pFightGObject);
+	}
+
+	return true;
+}
+
 
 
 // CCountry
@@ -131,6 +154,12 @@ bool CCountryManager::OnTimerEvent(int nTimerId)
 void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 {
 	LOGDebug("两个国家(部队)匹配成功。");
+
+	if (nullptr == pCountryA || nullptr == pCountryB)
+	{
+		LOGError("nullptr == pCountryA || nullptr == pCountryB");
+		return ;
+	}
 
 	// 创建场景
 	CFrontBattleGround *pNewFrontBattleGround = CBattleGroundManager::getMe().CreateFrontBattleGround();

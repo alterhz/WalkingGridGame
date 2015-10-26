@@ -109,8 +109,28 @@ bool IXmlData::ReadBool(const tinyxml2::XMLElement *pEleRecord, std::string strC
 }
 
 
-void CXmlData_Config::OnRead(const tinyxml2::XMLElement *pEleRecord)
+#define READINT(NAME, VAR) ReadInt(pEleRecord, NAME, VAR)
+//////////////////////////////////////////////////////////////////////////
+// ≈‰÷√Œƒº˛◊÷∂Œ∆•≈‰∂¡»°
+
+void CXmlData_Config::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
 {
 	ReadInt(pEleRecord, "InitAtt", nInitAtt);
 	ReadInt(pEleRecord, "InitHP", nInitHP);
+}
+
+void CXmlData_Ground::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
+{
+	ReadString(pEleRecord, "Name", strName);
+	ReadString(pEleRecord, "Src", strSrc);
+
+	int nGroundType = 0;
+	ReadInt(pEleRecord, "Type", nGroundType);
+	eGroundType = static_cast<EGroundType>(nGroundType);
+
+	ReadString(pEleRecord, "Effects", strEffects);
+
+	int nToWard = 0;
+	ReadInt(pEleRecord, "ToWard", nToWard);
+	eToWard = static_cast<EToWard>(nToWard);
 }
