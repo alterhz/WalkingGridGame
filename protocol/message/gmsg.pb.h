@@ -48,6 +48,7 @@ class MSG_C2G_GetGroundInfo;
 class Info_Grid;
 class Info_GObject;
 class MSG_G2C_GetGroundInfo;
+class MSG_G2C_GObjectEnterGround;
 
 enum MSG_G2C_Prepare_EResult {
   MSG_G2C_Prepare_EResult_OK = 1,
@@ -1452,6 +1453,90 @@ class MSG_G2C_GetGroundInfo : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static MSG_G2C_GetGroundInfo* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class MSG_G2C_GObjectEnterGround : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_GObjectEnterGround();
+  virtual ~MSG_G2C_GObjectEnterGround();
+
+  MSG_G2C_GObjectEnterGround(const MSG_G2C_GObjectEnterGround& from);
+
+  inline MSG_G2C_GObjectEnterGround& operator=(const MSG_G2C_GObjectEnterGround& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_GObjectEnterGround& default_instance();
+
+  void Swap(MSG_G2C_GObjectEnterGround* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_GObjectEnterGround* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_GObjectEnterGround& from);
+  void MergeFrom(const MSG_G2C_GObjectEnterGround& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .gproto.Info_GObject gobject = 1;
+  inline bool has_gobject() const;
+  inline void clear_gobject();
+  static const int kGobjectFieldNumber = 1;
+  inline const ::gproto::Info_GObject& gobject() const;
+  inline ::gproto::Info_GObject* mutable_gobject();
+  inline ::gproto::Info_GObject* release_gobject();
+  inline void set_allocated_gobject(::gproto::Info_GObject* gobject);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_GObjectEnterGround)
+ private:
+  inline void set_has_gobject();
+  inline void clear_has_gobject();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::gproto::Info_GObject* gobject_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_GObjectEnterGround* default_instance_;
+};
 // ===================================================================
 
 
@@ -2029,6 +2114,48 @@ MSG_G2C_GetGroundInfo::gobjects() const {
 inline ::google::protobuf::RepeatedPtrField< ::gproto::Info_GObject >*
 MSG_G2C_GetGroundInfo::mutable_gobjects() {
   return &gobjects_;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_GObjectEnterGround
+
+// required .gproto.Info_GObject gobject = 1;
+inline bool MSG_G2C_GObjectEnterGround::has_gobject() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_GObjectEnterGround::set_has_gobject() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_GObjectEnterGround::clear_has_gobject() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_GObjectEnterGround::clear_gobject() {
+  if (gobject_ != NULL) gobject_->::gproto::Info_GObject::Clear();
+  clear_has_gobject();
+}
+inline const ::gproto::Info_GObject& MSG_G2C_GObjectEnterGround::gobject() const {
+  return gobject_ != NULL ? *gobject_ : *default_instance_->gobject_;
+}
+inline ::gproto::Info_GObject* MSG_G2C_GObjectEnterGround::mutable_gobject() {
+  set_has_gobject();
+  if (gobject_ == NULL) gobject_ = new ::gproto::Info_GObject;
+  return gobject_;
+}
+inline ::gproto::Info_GObject* MSG_G2C_GObjectEnterGround::release_gobject() {
+  clear_has_gobject();
+  ::gproto::Info_GObject* temp = gobject_;
+  gobject_ = NULL;
+  return temp;
+}
+inline void MSG_G2C_GObjectEnterGround::set_allocated_gobject(::gproto::Info_GObject* gobject) {
+  delete gobject_;
+  gobject_ = gobject;
+  if (gobject) {
+    set_has_gobject();
+  } else {
+    clear_has_gobject();
+  }
 }
 
 

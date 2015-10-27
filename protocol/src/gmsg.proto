@@ -95,6 +95,11 @@ message MSG_G2C_GetGroundInfo
 	repeated Info_GObject gobjects = 4;
 }
 
+message MSG_G2C_GObjectEnterGround
+{
+	required Info_GObject gobject = 1;
+}
+
 
 
 

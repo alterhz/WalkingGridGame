@@ -58,7 +58,7 @@ void protobuf_AddDesc_gpid_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\ngpid.proto\022\006gproto*\310\002\n\003PID\022\027\n\022CSID_C2G"
+    "\n\ngpid.proto\022\006gproto*\353\002\n\003PID\022\027\n\022CSID_C2G"
     "_HeartBeat\020\220N\022\027\n\022CSID_G2C_HeartBeat\020\221N\022\027"
     "\n\022CSID_C2G_StartGame\020\364N\022\025\n\020CSID_C2G_Prep"
     "are\020\330O\022\025\n\020CSID_G2C_Prepare\020\331O\022\034\n\026CSID_G2"
@@ -66,7 +66,8 @@ void protobuf_AddDesc_gpid_2eproto() {
     "und\020\205\235\001\022\032\n\024CSID_G2C_EnterGround\020\206\235\001\022\032\n\024C"
     "SID_C2G_LeaveGround\020\207\235\001\022\032\n\024CSID_G2C_Leav"
     "eGround\020\210\235\001\022\034\n\026CSID_C2G_GetGroundInfo\020\216\235"
-    "\001\022\034\n\026CSID_G2C_GetGroundInfo\020\217\235\001", 351);
+    "\001\022\034\n\026CSID_G2C_GetGroundInfo\020\217\235\001\022!\n\033CSID_"
+    "G2C_GObjectEnterGround\020\230\235\001", 386);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gpid.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_gpid_2eproto);
@@ -96,6 +97,7 @@ bool PID_IsValid(int value) {
     case 20104:
     case 20110:
     case 20111:
+    case 20120:
       return true;
     default:
       return false;

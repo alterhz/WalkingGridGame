@@ -100,6 +100,41 @@ bool ICountry::SendGetGroundInfo(int nWGCount, int nHGCount, const MapGrid &mapG
 	return SendMessage(gproto::CSID_G2C_GetGroundInfo, &msg);
 }
 
+bool ICountry::SendGObjectEnterGround(GObjectType gObjectType, int nIndexId, int nSN, int x, int y, int nHP, int nMaxHP, 
+									  int nSP, int nLevel, int nCampId)
+{
+	gproto::MSG_G2C_GObjectEnterGround msg;
+
+	gproto::Info_GObject *pInfoGObject = msg.mutable_gobject();
+	if (pInfoGObject)
+	{
+		if (GObjectType_Still == gObjectType)
+		{
+			pInfoGObject->set_type(gproto::Info_GObject_EType_Still);
+		}
+		else if (GObjectType_Walkable == gObjectType)
+		{
+			pInfoGObject->set_type(gproto::Info_GObject_EType_Walkable);
+		}
+		else
+		{
+			pInfoGObject->set_type(gproto::Info_GObject_EType_None);
+		}
+
+		pInfoGObject->set_indexid(nIndexId);
+		pInfoGObject->set_sn(nSN);
+		pInfoGObject->set_x(x);
+		pInfoGObject->set_y(y);
+		pInfoGObject->set_hp(nHP);
+		pInfoGObject->set_maxhp(nMaxHP);
+		pInfoGObject->set_sp(nSP);
+		pInfoGObject->set_level(nLevel);
+		pInfoGObject->set_campid(nCampId);
+	}
+
+	return SendMessage(gproto::CSID_G2C_GObjectEnterGround, &msg);
+}
+
 bool ICountry::SendPrepareGround()
 {
 	gproto::MSG_G2C_PrepareGround msg;
@@ -235,6 +270,7 @@ void ICountry::LeaveGround()
 		SendLeaveGround(false);
 	}
 }
+
 
 
 

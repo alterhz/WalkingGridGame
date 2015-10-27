@@ -178,6 +178,31 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 			}
 		}
 		break;
+	case gproto::CSID_G2C_GObjectEnterGround:
+		{
+			gproto::MSG_G2C_GObjectEnterGround msgGObjectEnterGround;
+			if (!msgGObjectEnterGround.ParseFromArray(pMessage, nMessageLength))
+			{
+				LOGError("–≠“ÈCSID_G2C_GObjectEnterGroundΩ‚¬Î ß∞‹°£");
+				return false;
+			}
+
+			const gproto::Info_GObject &infoGObject = msgGObjectEnterGround.gobject();
+
+			if (gproto::Info_GObject_EType_Still == infoGObject.type())
+			{
+				LOGPrint("Still EnterGround -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
+					+ ",Y:" + infoGObject.y() + ",HP:" + infoGObject.hp() + ",maxhp:" + infoGObject.maxhp() + ",SP:" + infoGObject.sp() 
+					+ ",level:" + infoGObject.level() + ",campid:" + infoGObject.campid());
+			}
+			else
+			{
+				LOGPrint("Walkable EnterGround -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
+					+ ",Y:" + infoGObject.y() + ",HP:" + infoGObject.hp() + ",maxhp:" + infoGObject.maxhp() + ",SP:" + infoGObject.sp()
+					+ ",level:" + infoGObject.level() + ",campid:" + infoGObject.campid());
+			}	
+		}
+		break;
 	default:
 		break;
 	}

@@ -159,18 +159,16 @@ bool IBattleGround::GObjectEnter(IGObject *pGObject)
 
 	pGObject->SetBattleGround(this);
 
-	OnGObjectEnter(pGObject);
-
 	int nX = pGObject->GetX();
 	int nY = pGObject->GetY();
 
 	IGrid *pGrid = GetGrid(nX, nY);
-	if (nullptr == pGrid)
+	if (pGrid)
 	{
-		return false;
+		pGrid->AddGObject(pGObject);
 	}
 
-	pGrid->AddGObject(pGObject);
+	OnGObjectEnter(pGObject);
 
 	return true;
 }
@@ -231,6 +229,31 @@ IGObject * IBattleGround::FindGObject(int nIndexId) const
 	}
 
 	return nullptr;
+}
+
+bool IBattleGround::OnGObjectEnter(IGObject *pGObject)
+{
+	if (nullptr == pGObject)
+	{
+		LOGError("nullptr == pGObject");
+		return false;
+	}
+
+	// 通知场景中的国家，添加了一个GObject
+	auto itCountry = m_mapCountry.begin();
+	for (; itCountry!= m_mapCountry.end(); ++itCountry)
+	{
+		ICountry *pCountry = itCountry->second;
+
+		if (pCountry)
+		{
+			pCountry->SendGObjectEnterGround(pGObject->GetType(), pGObject->GetIndexId(), 
+				pGObject->GetSN(), pGObject->GetX(), pGObject->GetY(), pGObject->GetHP(), 
+				pGObject->GetMaxHP(), pGObject->GetSP(), pGObject->GetLevel(), pGObject->GetCampId());
+		}
+	}
+
+	return true;
 }
 
 const int G_nDemoWidthCount = 20;

@@ -45,11 +45,12 @@ enum PID {
   CSID_C2G_LeaveGround = 20103,
   CSID_G2C_LeaveGround = 20104,
   CSID_C2G_GetGroundInfo = 20110,
-  CSID_G2C_GetGroundInfo = 20111
+  CSID_G2C_GetGroundInfo = 20111,
+  CSID_G2C_GObjectEnterGround = 20120
 };
 bool PID_IsValid(int value);
 const PID PID_MIN = CSID_C2G_HeartBeat;
-const PID PID_MAX = CSID_G2C_GetGroundInfo;
+const PID PID_MAX = CSID_G2C_GObjectEnterGround;
 const int PID_ARRAYSIZE = PID_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* PID_descriptor();

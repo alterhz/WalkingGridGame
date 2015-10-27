@@ -55,7 +55,7 @@ protected:
 
 	virtual bool OnEnter(ICountry *pCountry) { return true; }
 	virtual bool OnLeave(ICountry *pCountry) { return true; }
-	virtual bool OnGObjectEnter(IGObject *pGObject) { return true; }
+	virtual bool OnGObjectEnter(IGObject *pGObject);
 	virtual bool OnGObjectLeave(IGObject *pGObject) { return true; }
 
 private:

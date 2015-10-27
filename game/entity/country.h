@@ -62,6 +62,9 @@ public:	// 消息发送
 	bool SendEnterGround(bool bOk);
 	// 离开场景应答
 	bool SendLeaveGround(bool bOk);
+	// GObject进入场景
+	bool SendGObjectEnterGround(GObjectType gObjectType, int nIndexId, int nSN, int x, int y,
+		int nHP, int nMaxHP, int nSP, int nLevel, int nCampId);
 
 private:
 	bool SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage);

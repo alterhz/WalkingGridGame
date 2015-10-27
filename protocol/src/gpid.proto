@@ -19,5 +19,7 @@ enum PID
 	
 	CSID_C2G_GetGroundInfo	= 20110;
 	CSID_G2C_GetGroundInfo	= 20111;
+	
+	CSID_G2C_GObjectEnterGround	= 20120;
 }
 
