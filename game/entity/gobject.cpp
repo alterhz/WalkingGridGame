@@ -1,13 +1,17 @@
 #include "gobject.h"
 #include "debug.h"
 #include "ground.h"
+#include "battleground.h"
 
 IGObject::IGObject()
 	: m_nIndexId(0)
 	, m_nX(0)
 	, m_nY(0)
-	, m_pGround(nullptr)
+	, m_pBattleGround(nullptr)
 	, m_nCampId(0)
+	, m_nHP(0)
+	, m_nSP(0)
+	, m_nLevel(1)
 {
 	static int G_nIndexId = 0;
 	m_nIndexId = (++G_nIndexId);
@@ -20,25 +24,18 @@ bool IGObject::Init(int nSN)
 	return OnInit();
 }
 
-bool IGObject::EnterGround(int x, int y, IGround *pGround)
+bool IGObject::EnterGround(int x, int y, IBattleGround *pBattleGround)
 {
-	if (nullptr == pGround)
+	if (nullptr == pBattleGround)
 	{
-		LOGError("nullptr == pGround");
+		LOGError("nullptr == pBattleGround");
 		return false;
 	}
 
-	m_nX = x;
-	m_nY = y;
-	m_pGround = pGround;
+	SetXY(x, y);
 
-	IGrid *pGrid = m_pGround->GetGrid(m_nX, m_nY);
-	if (nullptr == pGrid)
-	{
-		return false;
-	}
-
-	pGrid->AddGObject(this);
+	// 进入场景
+	pBattleGround->GObjectEnter(this);
 
 	return true;
 }
@@ -64,6 +61,9 @@ bool CStillObject::OnInit()
 	}
 
 	m_pXmlData_Still = pXmlData_Still;
+
+	// 初始化当前血量
+	m_nHP = m_pXmlData_Still->nHP;
 
 	return true;
 }
@@ -118,6 +118,16 @@ bool CStillObject::IsFlag() const
 	return m_pXmlData_Still->bFlag;
 }
 
+int CStillObject::GetMaxHP() const
+{
+	if (nullptr == m_pXmlData_Still)
+	{
+		return m_pXmlData_Still->nHP;
+	}
+
+	return 1;
+}
+
 // 场景角色
 CWalkableObject::CWalkableObject()
 	: m_pXmlData_Walkable(nullptr)
@@ -140,18 +150,21 @@ bool CWalkableObject::OnInit()
 
 	m_pXmlData_Walkable = pXmlData_Walkable;
 
+	// 初始化当前血量
+	m_nHP = 99;
+
 	return true;
 }
 
 bool CWalkableObject::Move(int x, int y)
 {
-	if (nullptr == m_pGround)
+	if (nullptr == m_pBattleGround)
 	{
 		LOGError("nullptr == m_pGround");
 		return false;
 	}
 
-	IGrid *pGrid = m_pGround->GetGrid(x, y);
+	IGrid *pGrid = m_pBattleGround->GetGrid(x, y);
 	if (nullptr == pGrid)
 	{
 		return false;

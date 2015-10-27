@@ -19,6 +19,7 @@ public:
 	virtual ~IGrid() {}
 
 public:
+	int GetSN() const { return m_nSN; }
 	int GetX() const { return m_nX; }
 	int GetY() const { return m_nY; }
 
@@ -60,9 +61,6 @@ public:
 	~CGrid() {}
 };
 
-const int G_nDemoWidthCount = 20;
-const int G_nDemoHeigthCount = 30;
-
 // 地形
 class IGround
 {
@@ -73,11 +71,14 @@ public:
 	IGround();
 	virtual ~IGround();
 
-public:
-	virtual bool Init();
+	int GetWGCount() const { return m_nWGCount; }
+	int GetHGCount() const { return m_nHGCount; }
 
+public:
 	IGrid * GetGrid(int x, int y);
 	IGrid * GetGrid(int x, int y) const;
+	const MapGrid & GetMapGrid() const { return m_mapGrid; }
+	MapGrid & GetMapGrid() { return m_mapGrid; }
 
 protected:
 	bool InitGroundSize(int nWGCount, int nHGCount);
@@ -99,18 +100,5 @@ protected:
 	int m_nWGCount;	//Width方向Grid数量
 	int m_nHGCount;	//Heigth方向Grid数量
 };
-
-class CDemoGround : public IGround
-{
-public:
-	CDemoGround();
-	~CDemoGround();
-
-public:
-	virtual bool Init(int nWGCount, int nHGCount);
-
-	// 加载
-};
-
 
 #endif

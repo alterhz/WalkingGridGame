@@ -108,10 +108,74 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 			gproto::MSG_G2C_HeartBeat msgHeartBeat;
 			if (!msgHeartBeat.ParseFromArray(pMessage, nMessageLength))
 			{
+				LOGError("协议CSID_G2C_HeartBeat解码失败。");
 				return false;
 			}
 
 			LOGDebug("回发心跳CSID_G2C_HeartBeat");
+		}
+		break;
+	case gproto::CSID_G2C_PrepareGround:
+		{
+			// 准备场景
+			SendEnterGround();
+		}
+		break;
+	case gproto::CSID_G2C_EnterGround:
+		{
+			gproto::MSG_G2C_EnterGround msgEnterGround;
+			if (!msgEnterGround.ParseFromArray(pMessage, nMessageLength))
+			{
+				LOGError("协议CSID_G2C_EnterGround解码失败。");
+				return false;
+			}
+
+			// 进入场景成功
+			if (gproto::MSG_G2C_EnterGround_EResult_ERR == msgEnterGround.ret())
+			{
+				LOGDebug("进入场景失败。");
+			}
+			else
+			{
+				SendGetGroundInfo();
+			}
+		}
+		break;
+	case gproto::CSID_G2C_GetGroundInfo:
+		{
+			gproto::MSG_G2C_GetGroundInfo msgGetGroundInfo;
+			if (!msgGetGroundInfo.ParseFromArray(pMessage, nMessageLength))
+			{
+				LOGError("协议CSID_G2C_GetGroundInfo解码失败。");
+				return false;
+			}
+
+			LOGPrint("场景尺寸W:" + msgGetGroundInfo.wgcount() + ",H:" + msgGetGroundInfo.hgcount());
+
+			for (int i=0; i<msgGetGroundInfo.grids_size(); ++i)
+			{
+				const gproto::Info_Grid &infoGrid = msgGetGroundInfo.grids(i);
+
+				LOGPrint("SN:" + infoGrid.sn() + ",X:" + infoGrid.x() + ",Y:" + infoGrid.y());
+			}
+
+			for (int i=0; i<msgGetGroundInfo.gobjects_size(); ++i)
+			{
+				const gproto::Info_GObject &infoGObject = msgGetGroundInfo.gobjects(i);
+
+				if (gproto::Info_GObject_EType_Still == infoGObject.type())
+				{
+					LOGPrint("Still -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
+						+ ",Y:" + infoGObject.y() + ",HP:" + infoGObject.hp() + ",maxhp:" + infoGObject.maxhp() + ",SP:" + infoGObject.sp() 
+						+ ",level:" + infoGObject.level() + ",campid:" + infoGObject.campid());
+				}
+				else
+				{
+					LOGPrint("Walkable -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
+						+ ",Y:" + infoGObject.y() + ",HP:" + infoGObject.hp() + ",maxhp:" + infoGObject.maxhp() + ",SP:" + infoGObject.sp()
+						+ ",level:" + infoGObject.level() + ",campid:" + infoGObject.campid());
+				}
+			}
 		}
 		break;
 	default:
@@ -131,8 +195,19 @@ bool CTestClient::OnError(int nErrCode)
 bool CTestClient::SendPrepare()
 {
 	gproto::MSG_C2G_Prepare msg;
-
 	return SendMessage(gproto::CSID_C2G_Prepare, &msg);
+}
+
+bool CTestClient::SendEnterGround()
+{
+	gproto::MSG_C2G_EnterGround msg;
+	return SendMessage(gproto::CSID_C2G_EnterGround, &msg);
+}
+
+bool CTestClient::SendGetGroundInfo()
+{
+	gproto::MSG_C2G_GetGroundInfo msg;
+	return SendMessage(gproto::CSID_C2G_GetGroundInfo, &msg);
 }
 
 

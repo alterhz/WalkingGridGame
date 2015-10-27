@@ -180,11 +180,6 @@ void IGrid::OnDelGObject(IGObject *pGObject)
 
 }
 
-
-
-
-
-
 // 普通格子
 CGrid::CGrid(int x, int y)
 	: IGrid(x, y)
@@ -208,13 +203,6 @@ IGround::~IGround()
 	m_mapGrid.clear();
 }
 
-bool IGround::Init()
-{
-	InitGroundSize(G_nDemoWidthCount, G_nDemoHeigthCount);
-
-	return true;
-}
-
 bool IGround::InitGroundSize( int nWGCount, int nHGCount )
 {
 	if (nWGCount <=0
@@ -228,11 +216,11 @@ bool IGround::InitGroundSize( int nWGCount, int nHGCount )
 
 	m_mapGrid.clear();
 
-	for (int i=0; i<m_nHGCount; ++i)
+	for (int y=0; y<m_nHGCount; ++y)
 	{
-		for (int j=0; j<m_nWGCount; ++j)
+		for (int x=0; x<m_nWGCount; ++x)
 		{
-			int n = XY2N(i, j);
+			int n = XY2N(x, y);
 
 			m_mapGrid.insert(std::make_pair(n, nullptr));
 		}
@@ -319,112 +307,3 @@ IGrid * IGround::Find(int n) const
 	return nullptr;
 }
 
-// demo地形场景
-CDemoGround::CDemoGround()
-{
-}
-
-CDemoGround::~CDemoGround()
-{
-
-}
-
-bool CDemoGround::Init( int nWGCount, int nHGCount )
-{
-	// 初始化场景地图
-	InitGroundSize(G_nDemoWidthCount, G_nDemoHeigthCount);
-
-	// 初始化地形数据
-	for (int nY=0; nY<nHGCount; ++nY)
-	{
-		for (int nX=0; nX<nWGCount; ++nX)
-		{
-			IGrid *pNewGrid = new CGrid(nX, nY);
-			if (nullptr == pNewGrid)
-			{
-				LOGError("nullptr == pNewGrid");
-				continue;
-			}
-
-			int nSN = 1;
-
-			if (!pNewGrid->Init(nSN))
-			{
-				LOGError("初始化地图格子[SN:" + nSN + "]失败。");
-				continue;
-			}
-
-			SetGrid(nX, nY, pNewGrid);
-		}
-	}
-
-	// 加载场景（固定）单位，如桥梁，树木，城墙，大炮
-
-	// 地图中心放入3个桥梁
-	{
-		CStillObject *pNewGBridge = new CStillObject();
-		if (nullptr == pNewGBridge)
-		{
-			LOGError("nullptr == pNewGBridge");
-			return false;
-		}
-
-		pNewGBridge->Init(1);
-
-		pNewGBridge->EnterGround(10, 15, this);
-	}
-
-	{
-		CStillObject *pNewGBridge = new CStillObject();
-		if (nullptr == pNewGBridge)
-		{
-			LOGError("nullptr == pNewGBridge");
-			return false;
-		}
-
-		pNewGBridge->Init(2);
-
-		pNewGBridge->EnterGround(8, 15, this);
-	}
-
-	{
-		CStillObject *pNewGBridge = new CStillObject();
-		if (nullptr == pNewGBridge)
-		{
-			LOGError("nullptr == pNewGBridge");
-			return false;
-		}
-
-		pNewGBridge->Init(2);
-
-		pNewGBridge->EnterGround(12, 15, this);
-	}
-	
-
-	// 加载场景（移动）中立单位
-	{
-		CWalkableObject *pNewDogFace = new CWalkableObject();
-		if (nullptr == pNewDogFace)
-		{
-			LOGError("nullptr == pNewDogFace");
-			return false;
-		}
-
-		pNewDogFace->Init(1);
-		pNewDogFace->EnterGround(1, 15, this);
-	}
-
-	{
-		CWalkableObject *pNewDogFace = new CWalkableObject();
-		if (nullptr == pNewDogFace)
-		{
-			LOGError("nullptr == pNewDogFace");
-			return false;
-		}
-
-		pNewDogFace->Init(1);
-		pNewDogFace->EnterGround(18, 15, this);
-	}
-
-	return true;
-}

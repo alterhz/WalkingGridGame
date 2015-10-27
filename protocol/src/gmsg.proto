@@ -27,6 +27,35 @@ message MSG_G2C_Prepare
 	required EResult ret = 1;
 }
 
+message MSG_G2C_PrepareGround
+{
+}
+
+message MSG_C2G_EnterGround
+{
+}
+message MSG_G2C_EnterGround
+{
+	enum EResult
+	{
+		OK = 1;
+		ERR = 2;
+	}
+	required EResult ret = 1;
+}
+message MSG_C2G_LeaveGround
+{
+}
+message MSG_G2C_LeaveGround
+{
+	enum EResult
+	{
+		OK = 1;
+		ERR = 2;
+	}
+	required EResult ret = 1;
+}
+
 // 获取场景数据
 message MSG_C2G_GetGroundInfo
 {
@@ -41,14 +70,22 @@ message Info_Grid
 // 场景对象
 message Info_GObject
 {
-	required int32 indexid = 1;
-	required int32 sn = 2;
-	required int32 x = 3;
-	required int32 y = 4;
-	required int32 hp = 5;
-	required int32 sp = 6;
-	required int32 level = 7;
-	required int32 groupid = 8;
+	enum EType
+	{
+		None = 0;
+		Still = 1;
+		Walkable = 2;
+	}
+	required EType type = 1;
+	required int32 indexid = 2;
+	required int32 sn = 3;
+	required int32 x = 4;
+	required int32 y = 5;
+	required int32 hp = 6;
+	required int32 maxhp = 7;
+	required int32 sp = 8;
+	required int32 level = 9;
+	required int32 campid = 10;
 }
 message MSG_G2C_GetGroundInfo
 {

@@ -9,8 +9,15 @@ enum PID
 	
 	CSID_C2G_Prepare	= 10200;
 	CSID_G2C_Prepare	= 10201;
+
+	CSID_G2C_PrepareGround	= 20100;
 	
-	CSID_C2G_GetGroundInfo	= 20100;
-	CSID_G2C_GetGroundInfo	= 20101;
+	CSID_C2G_EnterGround	= 20101;
+	CSID_G2C_EnterGround	= 20102;
+	CSID_C2G_LeaveGround	= 20103;
+	CSID_G2C_LeaveGround	= 20104;
+	
+	CSID_C2G_GetGroundInfo	= 20110;
+	CSID_G2C_GetGroundInfo	= 20111;
 }
 

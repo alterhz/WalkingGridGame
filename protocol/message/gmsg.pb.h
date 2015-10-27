@@ -39,6 +39,15 @@ class MSG_G2C_HeartBeat;
 class MSG_C2G_StartGame;
 class MSG_C2G_Prepare;
 class MSG_G2C_Prepare;
+class MSG_G2C_PrepareGround;
+class MSG_C2G_EnterGround;
+class MSG_G2C_EnterGround;
+class MSG_C2G_LeaveGround;
+class MSG_G2C_LeaveGround;
+class MSG_C2G_GetGroundInfo;
+class Info_Grid;
+class Info_GObject;
+class MSG_G2C_GetGroundInfo;
 
 enum MSG_G2C_Prepare_EResult {
   MSG_G2C_Prepare_EResult_OK = 1,
@@ -58,6 +67,64 @@ inline bool MSG_G2C_Prepare_EResult_Parse(
     const ::std::string& name, MSG_G2C_Prepare_EResult* value) {
   return ::google::protobuf::internal::ParseNamedEnum<MSG_G2C_Prepare_EResult>(
     MSG_G2C_Prepare_EResult_descriptor(), name, value);
+}
+enum MSG_G2C_EnterGround_EResult {
+  MSG_G2C_EnterGround_EResult_OK = 1,
+  MSG_G2C_EnterGround_EResult_ERR = 2
+};
+bool MSG_G2C_EnterGround_EResult_IsValid(int value);
+const MSG_G2C_EnterGround_EResult MSG_G2C_EnterGround_EResult_EResult_MIN = MSG_G2C_EnterGround_EResult_OK;
+const MSG_G2C_EnterGround_EResult MSG_G2C_EnterGround_EResult_EResult_MAX = MSG_G2C_EnterGround_EResult_ERR;
+const int MSG_G2C_EnterGround_EResult_EResult_ARRAYSIZE = MSG_G2C_EnterGround_EResult_EResult_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* MSG_G2C_EnterGround_EResult_descriptor();
+inline const ::std::string& MSG_G2C_EnterGround_EResult_Name(MSG_G2C_EnterGround_EResult value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    MSG_G2C_EnterGround_EResult_descriptor(), value);
+}
+inline bool MSG_G2C_EnterGround_EResult_Parse(
+    const ::std::string& name, MSG_G2C_EnterGround_EResult* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<MSG_G2C_EnterGround_EResult>(
+    MSG_G2C_EnterGround_EResult_descriptor(), name, value);
+}
+enum MSG_G2C_LeaveGround_EResult {
+  MSG_G2C_LeaveGround_EResult_OK = 1,
+  MSG_G2C_LeaveGround_EResult_ERR = 2
+};
+bool MSG_G2C_LeaveGround_EResult_IsValid(int value);
+const MSG_G2C_LeaveGround_EResult MSG_G2C_LeaveGround_EResult_EResult_MIN = MSG_G2C_LeaveGround_EResult_OK;
+const MSG_G2C_LeaveGround_EResult MSG_G2C_LeaveGround_EResult_EResult_MAX = MSG_G2C_LeaveGround_EResult_ERR;
+const int MSG_G2C_LeaveGround_EResult_EResult_ARRAYSIZE = MSG_G2C_LeaveGround_EResult_EResult_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* MSG_G2C_LeaveGround_EResult_descriptor();
+inline const ::std::string& MSG_G2C_LeaveGround_EResult_Name(MSG_G2C_LeaveGround_EResult value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    MSG_G2C_LeaveGround_EResult_descriptor(), value);
+}
+inline bool MSG_G2C_LeaveGround_EResult_Parse(
+    const ::std::string& name, MSG_G2C_LeaveGround_EResult* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<MSG_G2C_LeaveGround_EResult>(
+    MSG_G2C_LeaveGround_EResult_descriptor(), name, value);
+}
+enum Info_GObject_EType {
+  Info_GObject_EType_None = 0,
+  Info_GObject_EType_Still = 1,
+  Info_GObject_EType_Walkable = 2
+};
+bool Info_GObject_EType_IsValid(int value);
+const Info_GObject_EType Info_GObject_EType_EType_MIN = Info_GObject_EType_None;
+const Info_GObject_EType Info_GObject_EType_EType_MAX = Info_GObject_EType_Walkable;
+const int Info_GObject_EType_EType_ARRAYSIZE = Info_GObject_EType_EType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* Info_GObject_EType_descriptor();
+inline const ::std::string& Info_GObject_EType_Name(Info_GObject_EType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    Info_GObject_EType_descriptor(), value);
+}
+inline bool Info_GObject_EType_Parse(
+    const ::std::string& name, Info_GObject_EType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<Info_GObject_EType>(
+    Info_GObject_EType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -468,6 +535,923 @@ class MSG_G2C_Prepare : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static MSG_G2C_Prepare* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class MSG_G2C_PrepareGround : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_PrepareGround();
+  virtual ~MSG_G2C_PrepareGround();
+
+  MSG_G2C_PrepareGround(const MSG_G2C_PrepareGround& from);
+
+  inline MSG_G2C_PrepareGround& operator=(const MSG_G2C_PrepareGround& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_PrepareGround& default_instance();
+
+  void Swap(MSG_G2C_PrepareGround* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_PrepareGround* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_PrepareGround& from);
+  void MergeFrom(const MSG_G2C_PrepareGround& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_PrepareGround)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_PrepareGround* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_C2G_EnterGround : public ::google::protobuf::Message {
+ public:
+  MSG_C2G_EnterGround();
+  virtual ~MSG_C2G_EnterGround();
+
+  MSG_C2G_EnterGround(const MSG_C2G_EnterGround& from);
+
+  inline MSG_C2G_EnterGround& operator=(const MSG_C2G_EnterGround& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_C2G_EnterGround& default_instance();
+
+  void Swap(MSG_C2G_EnterGround* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_C2G_EnterGround* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_C2G_EnterGround& from);
+  void MergeFrom(const MSG_C2G_EnterGround& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_EnterGround)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_C2G_EnterGround* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_EnterGround : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_EnterGround();
+  virtual ~MSG_G2C_EnterGround();
+
+  MSG_G2C_EnterGround(const MSG_G2C_EnterGround& from);
+
+  inline MSG_G2C_EnterGround& operator=(const MSG_G2C_EnterGround& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_EnterGround& default_instance();
+
+  void Swap(MSG_G2C_EnterGround* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_EnterGround* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_EnterGround& from);
+  void MergeFrom(const MSG_G2C_EnterGround& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  typedef MSG_G2C_EnterGround_EResult EResult;
+  static const EResult OK = MSG_G2C_EnterGround_EResult_OK;
+  static const EResult ERR = MSG_G2C_EnterGround_EResult_ERR;
+  static inline bool EResult_IsValid(int value) {
+    return MSG_G2C_EnterGround_EResult_IsValid(value);
+  }
+  static const EResult EResult_MIN =
+    MSG_G2C_EnterGround_EResult_EResult_MIN;
+  static const EResult EResult_MAX =
+    MSG_G2C_EnterGround_EResult_EResult_MAX;
+  static const int EResult_ARRAYSIZE =
+    MSG_G2C_EnterGround_EResult_EResult_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  EResult_descriptor() {
+    return MSG_G2C_EnterGround_EResult_descriptor();
+  }
+  static inline const ::std::string& EResult_Name(EResult value) {
+    return MSG_G2C_EnterGround_EResult_Name(value);
+  }
+  static inline bool EResult_Parse(const ::std::string& name,
+      EResult* value) {
+    return MSG_G2C_EnterGround_EResult_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // required .gproto.MSG_G2C_EnterGround.EResult ret = 1;
+  inline bool has_ret() const;
+  inline void clear_ret();
+  static const int kRetFieldNumber = 1;
+  inline ::gproto::MSG_G2C_EnterGround_EResult ret() const;
+  inline void set_ret(::gproto::MSG_G2C_EnterGround_EResult value);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_EnterGround)
+ private:
+  inline void set_has_ret();
+  inline void clear_has_ret();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  int ret_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_EnterGround* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_C2G_LeaveGround : public ::google::protobuf::Message {
+ public:
+  MSG_C2G_LeaveGround();
+  virtual ~MSG_C2G_LeaveGround();
+
+  MSG_C2G_LeaveGround(const MSG_C2G_LeaveGround& from);
+
+  inline MSG_C2G_LeaveGround& operator=(const MSG_C2G_LeaveGround& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_C2G_LeaveGround& default_instance();
+
+  void Swap(MSG_C2G_LeaveGround* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_C2G_LeaveGround* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_C2G_LeaveGround& from);
+  void MergeFrom(const MSG_C2G_LeaveGround& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_LeaveGround)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_C2G_LeaveGround* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_LeaveGround : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_LeaveGround();
+  virtual ~MSG_G2C_LeaveGround();
+
+  MSG_G2C_LeaveGround(const MSG_G2C_LeaveGround& from);
+
+  inline MSG_G2C_LeaveGround& operator=(const MSG_G2C_LeaveGround& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_LeaveGround& default_instance();
+
+  void Swap(MSG_G2C_LeaveGround* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_LeaveGround* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_LeaveGround& from);
+  void MergeFrom(const MSG_G2C_LeaveGround& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  typedef MSG_G2C_LeaveGround_EResult EResult;
+  static const EResult OK = MSG_G2C_LeaveGround_EResult_OK;
+  static const EResult ERR = MSG_G2C_LeaveGround_EResult_ERR;
+  static inline bool EResult_IsValid(int value) {
+    return MSG_G2C_LeaveGround_EResult_IsValid(value);
+  }
+  static const EResult EResult_MIN =
+    MSG_G2C_LeaveGround_EResult_EResult_MIN;
+  static const EResult EResult_MAX =
+    MSG_G2C_LeaveGround_EResult_EResult_MAX;
+  static const int EResult_ARRAYSIZE =
+    MSG_G2C_LeaveGround_EResult_EResult_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  EResult_descriptor() {
+    return MSG_G2C_LeaveGround_EResult_descriptor();
+  }
+  static inline const ::std::string& EResult_Name(EResult value) {
+    return MSG_G2C_LeaveGround_EResult_Name(value);
+  }
+  static inline bool EResult_Parse(const ::std::string& name,
+      EResult* value) {
+    return MSG_G2C_LeaveGround_EResult_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // required .gproto.MSG_G2C_LeaveGround.EResult ret = 1;
+  inline bool has_ret() const;
+  inline void clear_ret();
+  static const int kRetFieldNumber = 1;
+  inline ::gproto::MSG_G2C_LeaveGround_EResult ret() const;
+  inline void set_ret(::gproto::MSG_G2C_LeaveGround_EResult value);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_LeaveGround)
+ private:
+  inline void set_has_ret();
+  inline void clear_has_ret();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  int ret_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_LeaveGround* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_C2G_GetGroundInfo : public ::google::protobuf::Message {
+ public:
+  MSG_C2G_GetGroundInfo();
+  virtual ~MSG_C2G_GetGroundInfo();
+
+  MSG_C2G_GetGroundInfo(const MSG_C2G_GetGroundInfo& from);
+
+  inline MSG_C2G_GetGroundInfo& operator=(const MSG_C2G_GetGroundInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_C2G_GetGroundInfo& default_instance();
+
+  void Swap(MSG_C2G_GetGroundInfo* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_C2G_GetGroundInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_C2G_GetGroundInfo& from);
+  void MergeFrom(const MSG_C2G_GetGroundInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_GetGroundInfo)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_C2G_GetGroundInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Info_Grid : public ::google::protobuf::Message {
+ public:
+  Info_Grid();
+  virtual ~Info_Grid();
+
+  Info_Grid(const Info_Grid& from);
+
+  inline Info_Grid& operator=(const Info_Grid& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Info_Grid& default_instance();
+
+  void Swap(Info_Grid* other);
+
+  // implements Message ----------------------------------------------
+
+  Info_Grid* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Info_Grid& from);
+  void MergeFrom(const Info_Grid& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 sn = 1;
+  inline bool has_sn() const;
+  inline void clear_sn();
+  static const int kSnFieldNumber = 1;
+  inline ::google::protobuf::int32 sn() const;
+  inline void set_sn(::google::protobuf::int32 value);
+
+  // required int32 x = 2;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 2;
+  inline ::google::protobuf::int32 x() const;
+  inline void set_x(::google::protobuf::int32 value);
+
+  // required int32 y = 3;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 3;
+  inline ::google::protobuf::int32 y() const;
+  inline void set_y(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:gproto.Info_Grid)
+ private:
+  inline void set_has_sn();
+  inline void clear_has_sn();
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 sn_;
+  ::google::protobuf::int32 x_;
+  ::google::protobuf::int32 y_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static Info_Grid* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Info_GObject : public ::google::protobuf::Message {
+ public:
+  Info_GObject();
+  virtual ~Info_GObject();
+
+  Info_GObject(const Info_GObject& from);
+
+  inline Info_GObject& operator=(const Info_GObject& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Info_GObject& default_instance();
+
+  void Swap(Info_GObject* other);
+
+  // implements Message ----------------------------------------------
+
+  Info_GObject* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Info_GObject& from);
+  void MergeFrom(const Info_GObject& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  typedef Info_GObject_EType EType;
+  static const EType None = Info_GObject_EType_None;
+  static const EType Still = Info_GObject_EType_Still;
+  static const EType Walkable = Info_GObject_EType_Walkable;
+  static inline bool EType_IsValid(int value) {
+    return Info_GObject_EType_IsValid(value);
+  }
+  static const EType EType_MIN =
+    Info_GObject_EType_EType_MIN;
+  static const EType EType_MAX =
+    Info_GObject_EType_EType_MAX;
+  static const int EType_ARRAYSIZE =
+    Info_GObject_EType_EType_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  EType_descriptor() {
+    return Info_GObject_EType_descriptor();
+  }
+  static inline const ::std::string& EType_Name(EType value) {
+    return Info_GObject_EType_Name(value);
+  }
+  static inline bool EType_Parse(const ::std::string& name,
+      EType* value) {
+    return Info_GObject_EType_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // required .gproto.Info_GObject.EType type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline ::gproto::Info_GObject_EType type() const;
+  inline void set_type(::gproto::Info_GObject_EType value);
+
+  // required int32 indexid = 2;
+  inline bool has_indexid() const;
+  inline void clear_indexid();
+  static const int kIndexidFieldNumber = 2;
+  inline ::google::protobuf::int32 indexid() const;
+  inline void set_indexid(::google::protobuf::int32 value);
+
+  // required int32 sn = 3;
+  inline bool has_sn() const;
+  inline void clear_sn();
+  static const int kSnFieldNumber = 3;
+  inline ::google::protobuf::int32 sn() const;
+  inline void set_sn(::google::protobuf::int32 value);
+
+  // required int32 x = 4;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 4;
+  inline ::google::protobuf::int32 x() const;
+  inline void set_x(::google::protobuf::int32 value);
+
+  // required int32 y = 5;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 5;
+  inline ::google::protobuf::int32 y() const;
+  inline void set_y(::google::protobuf::int32 value);
+
+  // required int32 hp = 6;
+  inline bool has_hp() const;
+  inline void clear_hp();
+  static const int kHpFieldNumber = 6;
+  inline ::google::protobuf::int32 hp() const;
+  inline void set_hp(::google::protobuf::int32 value);
+
+  // required int32 maxhp = 7;
+  inline bool has_maxhp() const;
+  inline void clear_maxhp();
+  static const int kMaxhpFieldNumber = 7;
+  inline ::google::protobuf::int32 maxhp() const;
+  inline void set_maxhp(::google::protobuf::int32 value);
+
+  // required int32 sp = 8;
+  inline bool has_sp() const;
+  inline void clear_sp();
+  static const int kSpFieldNumber = 8;
+  inline ::google::protobuf::int32 sp() const;
+  inline void set_sp(::google::protobuf::int32 value);
+
+  // required int32 level = 9;
+  inline bool has_level() const;
+  inline void clear_level();
+  static const int kLevelFieldNumber = 9;
+  inline ::google::protobuf::int32 level() const;
+  inline void set_level(::google::protobuf::int32 value);
+
+  // required int32 campid = 10;
+  inline bool has_campid() const;
+  inline void clear_campid();
+  static const int kCampidFieldNumber = 10;
+  inline ::google::protobuf::int32 campid() const;
+  inline void set_campid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:gproto.Info_GObject)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_indexid();
+  inline void clear_has_indexid();
+  inline void set_has_sn();
+  inline void clear_has_sn();
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  inline void set_has_hp();
+  inline void clear_has_hp();
+  inline void set_has_maxhp();
+  inline void clear_has_maxhp();
+  inline void set_has_sp();
+  inline void clear_has_sp();
+  inline void set_has_level();
+  inline void clear_has_level();
+  inline void set_has_campid();
+  inline void clear_has_campid();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  int type_;
+  ::google::protobuf::int32 indexid_;
+  ::google::protobuf::int32 sn_;
+  ::google::protobuf::int32 x_;
+  ::google::protobuf::int32 y_;
+  ::google::protobuf::int32 hp_;
+  ::google::protobuf::int32 maxhp_;
+  ::google::protobuf::int32 sp_;
+  ::google::protobuf::int32 level_;
+  ::google::protobuf::int32 campid_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(10 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static Info_GObject* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_GetGroundInfo : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_GetGroundInfo();
+  virtual ~MSG_G2C_GetGroundInfo();
+
+  MSG_G2C_GetGroundInfo(const MSG_G2C_GetGroundInfo& from);
+
+  inline MSG_G2C_GetGroundInfo& operator=(const MSG_G2C_GetGroundInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_GetGroundInfo& default_instance();
+
+  void Swap(MSG_G2C_GetGroundInfo* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_GetGroundInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_GetGroundInfo& from);
+  void MergeFrom(const MSG_G2C_GetGroundInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 wgcount = 1;
+  inline bool has_wgcount() const;
+  inline void clear_wgcount();
+  static const int kWgcountFieldNumber = 1;
+  inline ::google::protobuf::int32 wgcount() const;
+  inline void set_wgcount(::google::protobuf::int32 value);
+
+  // required int32 hgcount = 2;
+  inline bool has_hgcount() const;
+  inline void clear_hgcount();
+  static const int kHgcountFieldNumber = 2;
+  inline ::google::protobuf::int32 hgcount() const;
+  inline void set_hgcount(::google::protobuf::int32 value);
+
+  // repeated .gproto.Info_Grid grids = 3;
+  inline int grids_size() const;
+  inline void clear_grids();
+  static const int kGridsFieldNumber = 3;
+  inline const ::gproto::Info_Grid& grids(int index) const;
+  inline ::gproto::Info_Grid* mutable_grids(int index);
+  inline ::gproto::Info_Grid* add_grids();
+  inline const ::google::protobuf::RepeatedPtrField< ::gproto::Info_Grid >&
+      grids() const;
+  inline ::google::protobuf::RepeatedPtrField< ::gproto::Info_Grid >*
+      mutable_grids();
+
+  // repeated .gproto.Info_GObject gobjects = 4;
+  inline int gobjects_size() const;
+  inline void clear_gobjects();
+  static const int kGobjectsFieldNumber = 4;
+  inline const ::gproto::Info_GObject& gobjects(int index) const;
+  inline ::gproto::Info_GObject* mutable_gobjects(int index);
+  inline ::gproto::Info_GObject* add_gobjects();
+  inline const ::google::protobuf::RepeatedPtrField< ::gproto::Info_GObject >&
+      gobjects() const;
+  inline ::google::protobuf::RepeatedPtrField< ::gproto::Info_GObject >*
+      mutable_gobjects();
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_GetGroundInfo)
+ private:
+  inline void set_has_wgcount();
+  inline void clear_has_wgcount();
+  inline void set_has_hgcount();
+  inline void clear_has_hgcount();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 wgcount_;
+  ::google::protobuf::int32 hgcount_;
+  ::google::protobuf::RepeatedPtrField< ::gproto::Info_Grid > grids_;
+  ::google::protobuf::RepeatedPtrField< ::gproto::Info_GObject > gobjects_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_GetGroundInfo* default_instance_;
+};
 // ===================================================================
 
 
@@ -584,6 +1568,469 @@ inline void MSG_G2C_Prepare::set_ret(::gproto::MSG_G2C_Prepare_EResult value) {
   ret_ = value;
 }
 
+// -------------------------------------------------------------------
+
+// MSG_G2C_PrepareGround
+
+// -------------------------------------------------------------------
+
+// MSG_C2G_EnterGround
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_EnterGround
+
+// required .gproto.MSG_G2C_EnterGround.EResult ret = 1;
+inline bool MSG_G2C_EnterGround::has_ret() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_EnterGround::set_has_ret() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_EnterGround::clear_has_ret() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_EnterGround::clear_ret() {
+  ret_ = 1;
+  clear_has_ret();
+}
+inline ::gproto::MSG_G2C_EnterGround_EResult MSG_G2C_EnterGround::ret() const {
+  return static_cast< ::gproto::MSG_G2C_EnterGround_EResult >(ret_);
+}
+inline void MSG_G2C_EnterGround::set_ret(::gproto::MSG_G2C_EnterGround_EResult value) {
+  assert(::gproto::MSG_G2C_EnterGround_EResult_IsValid(value));
+  set_has_ret();
+  ret_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_C2G_LeaveGround
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_LeaveGround
+
+// required .gproto.MSG_G2C_LeaveGround.EResult ret = 1;
+inline bool MSG_G2C_LeaveGround::has_ret() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_LeaveGround::set_has_ret() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_LeaveGround::clear_has_ret() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_LeaveGround::clear_ret() {
+  ret_ = 1;
+  clear_has_ret();
+}
+inline ::gproto::MSG_G2C_LeaveGround_EResult MSG_G2C_LeaveGround::ret() const {
+  return static_cast< ::gproto::MSG_G2C_LeaveGround_EResult >(ret_);
+}
+inline void MSG_G2C_LeaveGround::set_ret(::gproto::MSG_G2C_LeaveGround_EResult value) {
+  assert(::gproto::MSG_G2C_LeaveGround_EResult_IsValid(value));
+  set_has_ret();
+  ret_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_C2G_GetGroundInfo
+
+// -------------------------------------------------------------------
+
+// Info_Grid
+
+// required int32 sn = 1;
+inline bool Info_Grid::has_sn() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Info_Grid::set_has_sn() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Info_Grid::clear_has_sn() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Info_Grid::clear_sn() {
+  sn_ = 0;
+  clear_has_sn();
+}
+inline ::google::protobuf::int32 Info_Grid::sn() const {
+  return sn_;
+}
+inline void Info_Grid::set_sn(::google::protobuf::int32 value) {
+  set_has_sn();
+  sn_ = value;
+}
+
+// required int32 x = 2;
+inline bool Info_Grid::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Info_Grid::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Info_Grid::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Info_Grid::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline ::google::protobuf::int32 Info_Grid::x() const {
+  return x_;
+}
+inline void Info_Grid::set_x(::google::protobuf::int32 value) {
+  set_has_x();
+  x_ = value;
+}
+
+// required int32 y = 3;
+inline bool Info_Grid::has_y() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Info_Grid::set_has_y() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Info_Grid::clear_has_y() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Info_Grid::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline ::google::protobuf::int32 Info_Grid::y() const {
+  return y_;
+}
+inline void Info_Grid::set_y(::google::protobuf::int32 value) {
+  set_has_y();
+  y_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// Info_GObject
+
+// required .gproto.Info_GObject.EType type = 1;
+inline bool Info_GObject::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Info_GObject::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Info_GObject::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Info_GObject::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::gproto::Info_GObject_EType Info_GObject::type() const {
+  return static_cast< ::gproto::Info_GObject_EType >(type_);
+}
+inline void Info_GObject::set_type(::gproto::Info_GObject_EType value) {
+  assert(::gproto::Info_GObject_EType_IsValid(value));
+  set_has_type();
+  type_ = value;
+}
+
+// required int32 indexid = 2;
+inline bool Info_GObject::has_indexid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Info_GObject::set_has_indexid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Info_GObject::clear_has_indexid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Info_GObject::clear_indexid() {
+  indexid_ = 0;
+  clear_has_indexid();
+}
+inline ::google::protobuf::int32 Info_GObject::indexid() const {
+  return indexid_;
+}
+inline void Info_GObject::set_indexid(::google::protobuf::int32 value) {
+  set_has_indexid();
+  indexid_ = value;
+}
+
+// required int32 sn = 3;
+inline bool Info_GObject::has_sn() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Info_GObject::set_has_sn() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Info_GObject::clear_has_sn() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Info_GObject::clear_sn() {
+  sn_ = 0;
+  clear_has_sn();
+}
+inline ::google::protobuf::int32 Info_GObject::sn() const {
+  return sn_;
+}
+inline void Info_GObject::set_sn(::google::protobuf::int32 value) {
+  set_has_sn();
+  sn_ = value;
+}
+
+// required int32 x = 4;
+inline bool Info_GObject::has_x() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Info_GObject::set_has_x() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Info_GObject::clear_has_x() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Info_GObject::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline ::google::protobuf::int32 Info_GObject::x() const {
+  return x_;
+}
+inline void Info_GObject::set_x(::google::protobuf::int32 value) {
+  set_has_x();
+  x_ = value;
+}
+
+// required int32 y = 5;
+inline bool Info_GObject::has_y() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Info_GObject::set_has_y() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Info_GObject::clear_has_y() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Info_GObject::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline ::google::protobuf::int32 Info_GObject::y() const {
+  return y_;
+}
+inline void Info_GObject::set_y(::google::protobuf::int32 value) {
+  set_has_y();
+  y_ = value;
+}
+
+// required int32 hp = 6;
+inline bool Info_GObject::has_hp() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void Info_GObject::set_has_hp() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void Info_GObject::clear_has_hp() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void Info_GObject::clear_hp() {
+  hp_ = 0;
+  clear_has_hp();
+}
+inline ::google::protobuf::int32 Info_GObject::hp() const {
+  return hp_;
+}
+inline void Info_GObject::set_hp(::google::protobuf::int32 value) {
+  set_has_hp();
+  hp_ = value;
+}
+
+// required int32 maxhp = 7;
+inline bool Info_GObject::has_maxhp() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void Info_GObject::set_has_maxhp() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void Info_GObject::clear_has_maxhp() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void Info_GObject::clear_maxhp() {
+  maxhp_ = 0;
+  clear_has_maxhp();
+}
+inline ::google::protobuf::int32 Info_GObject::maxhp() const {
+  return maxhp_;
+}
+inline void Info_GObject::set_maxhp(::google::protobuf::int32 value) {
+  set_has_maxhp();
+  maxhp_ = value;
+}
+
+// required int32 sp = 8;
+inline bool Info_GObject::has_sp() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void Info_GObject::set_has_sp() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void Info_GObject::clear_has_sp() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void Info_GObject::clear_sp() {
+  sp_ = 0;
+  clear_has_sp();
+}
+inline ::google::protobuf::int32 Info_GObject::sp() const {
+  return sp_;
+}
+inline void Info_GObject::set_sp(::google::protobuf::int32 value) {
+  set_has_sp();
+  sp_ = value;
+}
+
+// required int32 level = 9;
+inline bool Info_GObject::has_level() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void Info_GObject::set_has_level() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void Info_GObject::clear_has_level() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void Info_GObject::clear_level() {
+  level_ = 0;
+  clear_has_level();
+}
+inline ::google::protobuf::int32 Info_GObject::level() const {
+  return level_;
+}
+inline void Info_GObject::set_level(::google::protobuf::int32 value) {
+  set_has_level();
+  level_ = value;
+}
+
+// required int32 campid = 10;
+inline bool Info_GObject::has_campid() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void Info_GObject::set_has_campid() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void Info_GObject::clear_has_campid() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void Info_GObject::clear_campid() {
+  campid_ = 0;
+  clear_has_campid();
+}
+inline ::google::protobuf::int32 Info_GObject::campid() const {
+  return campid_;
+}
+inline void Info_GObject::set_campid(::google::protobuf::int32 value) {
+  set_has_campid();
+  campid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_GetGroundInfo
+
+// required int32 wgcount = 1;
+inline bool MSG_G2C_GetGroundInfo::has_wgcount() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_GetGroundInfo::set_has_wgcount() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_GetGroundInfo::clear_has_wgcount() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_GetGroundInfo::clear_wgcount() {
+  wgcount_ = 0;
+  clear_has_wgcount();
+}
+inline ::google::protobuf::int32 MSG_G2C_GetGroundInfo::wgcount() const {
+  return wgcount_;
+}
+inline void MSG_G2C_GetGroundInfo::set_wgcount(::google::protobuf::int32 value) {
+  set_has_wgcount();
+  wgcount_ = value;
+}
+
+// required int32 hgcount = 2;
+inline bool MSG_G2C_GetGroundInfo::has_hgcount() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void MSG_G2C_GetGroundInfo::set_has_hgcount() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void MSG_G2C_GetGroundInfo::clear_has_hgcount() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void MSG_G2C_GetGroundInfo::clear_hgcount() {
+  hgcount_ = 0;
+  clear_has_hgcount();
+}
+inline ::google::protobuf::int32 MSG_G2C_GetGroundInfo::hgcount() const {
+  return hgcount_;
+}
+inline void MSG_G2C_GetGroundInfo::set_hgcount(::google::protobuf::int32 value) {
+  set_has_hgcount();
+  hgcount_ = value;
+}
+
+// repeated .gproto.Info_Grid grids = 3;
+inline int MSG_G2C_GetGroundInfo::grids_size() const {
+  return grids_.size();
+}
+inline void MSG_G2C_GetGroundInfo::clear_grids() {
+  grids_.Clear();
+}
+inline const ::gproto::Info_Grid& MSG_G2C_GetGroundInfo::grids(int index) const {
+  return grids_.Get(index);
+}
+inline ::gproto::Info_Grid* MSG_G2C_GetGroundInfo::mutable_grids(int index) {
+  return grids_.Mutable(index);
+}
+inline ::gproto::Info_Grid* MSG_G2C_GetGroundInfo::add_grids() {
+  return grids_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::gproto::Info_Grid >&
+MSG_G2C_GetGroundInfo::grids() const {
+  return grids_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::gproto::Info_Grid >*
+MSG_G2C_GetGroundInfo::mutable_grids() {
+  return &grids_;
+}
+
+// repeated .gproto.Info_GObject gobjects = 4;
+inline int MSG_G2C_GetGroundInfo::gobjects_size() const {
+  return gobjects_.size();
+}
+inline void MSG_G2C_GetGroundInfo::clear_gobjects() {
+  gobjects_.Clear();
+}
+inline const ::gproto::Info_GObject& MSG_G2C_GetGroundInfo::gobjects(int index) const {
+  return gobjects_.Get(index);
+}
+inline ::gproto::Info_GObject* MSG_G2C_GetGroundInfo::mutable_gobjects(int index) {
+  return gobjects_.Mutable(index);
+}
+inline ::gproto::Info_GObject* MSG_G2C_GetGroundInfo::add_gobjects() {
+  return gobjects_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::gproto::Info_GObject >&
+MSG_G2C_GetGroundInfo::gobjects() const {
+  return gobjects_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::gproto::Info_GObject >*
+MSG_G2C_GetGroundInfo::mutable_gobjects() {
+  return &gobjects_;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -596,6 +2043,18 @@ namespace protobuf {
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::gproto::MSG_G2C_Prepare_EResult>() {
   return ::gproto::MSG_G2C_Prepare_EResult_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::gproto::MSG_G2C_EnterGround_EResult>() {
+  return ::gproto::MSG_G2C_EnterGround_EResult_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::gproto::MSG_G2C_LeaveGround_EResult>() {
+  return ::gproto::MSG_G2C_LeaveGround_EResult_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::gproto::Info_GObject_EType>() {
+  return ::gproto::Info_GObject_EType_descriptor();
 }
 
 }  // namespace google

@@ -28,6 +28,10 @@ public:
 public:
 	// 准备
 	bool SendPrepare();
+	// 进入场景
+	bool SendEnterGround();
+	// 获取场景数据
+	bool SendGetGroundInfo();
 
 protected:
 	// 网络连接事件

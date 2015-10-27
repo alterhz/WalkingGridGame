@@ -7,6 +7,7 @@
 #include "gobject.h"
 #include "ground.h"
 
+
 IBattleGround::IBattleGround()
 	: m_nIndexId(0)
 	, m_eStatus(EStatus_Waiting)
@@ -17,7 +18,6 @@ IBattleGround::IBattleGround()
 
 IBattleGround::~IBattleGround()
 {
-
 }
 
 bool IBattleGround::Init()
@@ -67,171 +67,302 @@ bool IBattleGround::ChangeStatus(EStatus eStatus)
 
 void IBattleGround::GetGroundInfo(ICountry *pCountry)
 {
-	LOGDebug("Country[" + pCountry->GetIndexId() + "]获取场景数据。");
+	if (nullptr == pCountry)
+	{
+		LOGError("nullptr == pCountry");
+		return ;
+	}
+
+	pCountry->SendGetGroundInfo(m_nWGCount, m_nHGCount, m_mapGrid, m_mapGObject);
 }
 
+ICountry * IBattleGround::FindCountry(int nIndexId)
+{
+	MapCountry::iterator itCountry = m_mapCountry.find(nIndexId);
+	if (itCountry != m_mapCountry.end())
+	{
+		return itCountry->second;
+	}
+
+	return nullptr;
+}
+
+ICountry * IBattleGround::FindCountry(int nIndexId) const
+{
+	MapCountry::const_iterator itCountry = m_mapCountry.find(nIndexId);
+	if (itCountry != m_mapCountry.end())
+	{
+		return itCountry->second;
+	}
+
+	return nullptr;
+}
+
+bool IBattleGround::Enter(ICountry *pCountry)
+{
+	if (nullptr == pCountry)
+	{
+		LOGError("nullptr == pCountry");
+		return false;
+	}
+
+	if (FindCountry(pCountry->GetIndexId()))
+	{
+		LOGError("Country[" + pCountry->GetIndexId() + "]重复进入战场。");
+		return false;
+	}
+
+	// 进入战场完毕
+	m_mapCountry.insert(std::make_pair(pCountry->GetIndexId(), pCountry));
+	pCountry->SetBattleGround(this);
+
+	return true;
+}
+
+bool IBattleGround::Leave(ICountry *pCountry)
+{
+	if (nullptr == pCountry)
+	{
+		LOGError("nullptr == pCountry");
+		return false;
+	}
+
+	int nCountryIndexId = pCountry->GetIndexId();
+
+	if (FindCountry(nCountryIndexId))
+	{
+		pCountry->SetBattleGround(nullptr);
+
+		m_mapCountry.erase(nCountryIndexId);
+	}
+
+	return true;
+}
+
+bool IBattleGround::GObjectEnter(IGObject *pGObject)
+{
+	if (nullptr == pGObject)
+	{
+		LOGError("nullptr == pGObject");
+		return false;
+	}
+
+	int nGObjectIndexId = pGObject->GetIndexId();
+
+	if (FindGObject(nGObjectIndexId))
+	{
+		LOGError("场景中已经存在当前GObject[" + nGObjectIndexId + "]。");
+		return false;
+	}
+
+	m_mapGObject.insert(std::make_pair(pGObject->GetIndexId(), pGObject));
+
+	pGObject->SetBattleGround(this);
+
+	OnGObjectEnter(pGObject);
+
+	int nX = pGObject->GetX();
+	int nY = pGObject->GetY();
+
+	IGrid *pGrid = GetGrid(nX, nY);
+	if (nullptr == pGrid)
+	{
+		return false;
+	}
+
+	pGrid->AddGObject(pGObject);
+
+	return true;
+}
+
+bool IBattleGround::GObjectLeave(IGObject *pGObject)
+{
+	if (nullptr == pGObject)
+	{
+		LOGError("nullptr == pGObject");
+		return false;
+	}
+
+	int nGObjectIndexId = pGObject->GetIndexId();
+
+	if (!FindGObject(nGObjectIndexId))
+	{
+		LOGError("场景中不存在当前GObject[" + nGObjectIndexId + "]。");
+		return false;
+	}
+
+	OnGObjectLeave(pGObject);
+
+	m_mapGObject.erase(nGObjectIndexId);
+
+	pGObject->SetBattleGround(nullptr);
+
+	int nX = pGObject->GetX();
+	int nY = pGObject->GetY();
+
+	IGrid *pGrid = GetGrid(nX, nY);
+	if (nullptr == pGrid)
+	{
+		return false;
+	}
+
+	pGrid->DelGObject(pGObject);
+
+	return true;
+}
+
+IGObject * IBattleGround::FindGObject(int nIndexId)
+{
+	MapGObject::iterator itGObject = m_mapGObject.find(nIndexId);
+	if (itGObject != m_mapGObject.end())
+	{
+		return itGObject->second;
+	}
+
+	return nullptr;
+}
+
+IGObject * IBattleGround::FindGObject(int nIndexId) const
+{
+	MapGObject::const_iterator itGObject = m_mapGObject.find(nIndexId);
+	if (itGObject != m_mapGObject.end())
+	{
+		return itGObject->second;
+	}
+
+	return nullptr;
+}
+
+const int G_nDemoWidthCount = 20;
+const int G_nDemoHeigthCount = 30;
 
 CFrontBattleGround::CFrontBattleGround()
-	: m_pGround(nullptr)
 {
 }
 
 CFrontBattleGround::~CFrontBattleGround()
 {
-	delete m_pGround;
-	m_pGround = nullptr;
 }
 
 bool CFrontBattleGround::OnInit()
 {
-	// 如果已经存在格子数据，删除
-	if (m_pGround)
+	int nHGCount = G_nDemoHeigthCount;
+	int nWGCount = G_nDemoWidthCount;
+
+	// 初始化场景地图
+	InitGroundSize(nWGCount, nHGCount);
+
+	// 初始化地形数据
+	for (int nY=0; nY<nHGCount; ++nY)
 	{
-		delete m_pGround;
-		m_pGround = nullptr;
+		for (int nX=0; nX<nWGCount; ++nX)
+		{
+			IGrid *pNewGrid = new CGrid(nX, nY);
+			if (nullptr == pNewGrid)
+			{
+				LOGError("nullptr == pNewGrid");
+				continue;
+			}
+
+			int nSN = 1;
+
+			if (!pNewGrid->Init(nSN))
+			{
+				LOGError("初始化地图格子[SN:" + nSN + "]失败。");
+				continue;
+			}
+
+			SetGrid(nX, nY, pNewGrid);
+		}
 	}
 
-	IGround *pGround = new CDemoGround();
-	if (nullptr == pGround)
+	// 加载场景（固定）单位，如桥梁，树木，城墙，大炮
+
+	// 地图中心放入3个桥梁
 	{
-		LOGError("nullptr == pGround");
-		return false;
-	}
-
-	if (!pGround->Init())
-	{
-		LOGError("初始化场景格子失败！");
-		return false;
-	}
-
-	m_pGround = pGround;
-
-	return true;
-}
-
-bool CFrontBattleGround::InitTwoCountry(ICountry *pCountryA, ICountry *pCountryB)
-{
-	if (nullptr == pCountryA || nullptr == pCountryB)
-	{
-		LOGError("nullptr == pCountryA || nullptr == pCountryB");
-		return false;
-	}
-
-	// 测试，给双方添加部队
-	{
-		VtGObject vtGObject;
-		// 添加将领
-		CStillObject*pSirdar = new CStillObject();
-		if (pSirdar)
+		CStillObject *pNewGBridge = new CStillObject();
+		if (nullptr == pNewGBridge)
 		{
-			pSirdar->Init(4);
-
-			vtGObject.push_back(pSirdar);
+			LOGError("nullptr == pNewGBridge");
+			return false;
 		}
 
-		// 添加英雄
-		CWalkableObject *pHeroA = new CWalkableObject();
-		if (pHeroA)
-		{
-			pHeroA->Init(2);
+		pNewGBridge->Init(1);
+		pNewGBridge->SetCampId(0);
+		pNewGBridge->SetLevel(1);
 
-			vtGObject.push_back(pHeroA);
-		}
-
-		CWalkableObject *pHeroB = new CWalkableObject();
-		if (pHeroB)
-		{
-			pHeroB->Init(3);
-
-			vtGObject.push_back(pHeroB);
-		}
-
-		// 添加小兵
-		CWalkableObject *pDogFaceA = new CWalkableObject();
-		if (pDogFaceA)
-		{
-			pDogFaceA->Init(1);
-
-			vtGObject.push_back(pDogFaceA);
-		}
-
-		CWalkableObject *pDogFaceB = new CWalkableObject();
-		if (pDogFaceB)
-		{
-			pDogFaceB->Init(1);
-
-			vtGObject.push_back(pDogFaceB);
-		}
-
-		pCountryA->ClearFightGObject();
-		pCountryA->AddFightGObject(vtGObject);
+		pNewGBridge->EnterGround(10, 15, this);
 	}
 
 	{
-		VtGObject vtGObject;
-		// 添加将领
-		CStillObject*pSirdar = new CStillObject();
-		if (pSirdar)
+		CStillObject *pNewGBridge = new CStillObject();
+		if (nullptr == pNewGBridge)
 		{
-			pSirdar->Init(4);
-
-			vtGObject.push_back(pSirdar);
+			LOGError("nullptr == pNewGBridge");
+			return false;
 		}
 
-		// 添加英雄
-		CWalkableObject *pHeroA = new CWalkableObject();
-		if (pHeroA)
-		{
-			pHeroA->Init(2);
+		pNewGBridge->Init(2);
+		pNewGBridge->SetCampId(0);
+		pNewGBridge->SetLevel(1);
 
-			vtGObject.push_back(pHeroA);
-		}
-
-		CWalkableObject *pHeroB = new CWalkableObject();
-		if (pHeroB)
-		{
-			pHeroB->Init(3);
-
-			vtGObject.push_back(pHeroB);
-		}
-
-		// 添加小兵
-		CWalkableObject *pDogFaceA = new CWalkableObject();
-		if (pDogFaceA)
-		{
-			pDogFaceA->Init(1);
-
-			vtGObject.push_back(pDogFaceA);
-		}
-
-		CWalkableObject *pDogFaceB = new CWalkableObject();
-		if (pDogFaceB)
-		{
-			pDogFaceB->Init(1);
-
-			vtGObject.push_back(pDogFaceB);
-		}
-
-		pCountryB->ClearFightGObject();
-		pCountryB->AddFightGObject(vtGObject);
+		pNewGBridge->EnterGround(8, 15, this);
 	}
 
-	m_mapCountry.insert(std::make_pair(pCountryA->GetIndexId(), pCountryA));
-	m_mapCountry.insert(std::make_pair(pCountryB->GetIndexId(), pCountryB));
+	{
+		CStillObject *pNewGBridge = new CStillObject();
+		if (nullptr == pNewGBridge)
+		{
+			LOGError("nullptr == pNewGBridge");
+			return false;
+		}
+
+		pNewGBridge->Init(2);
+		pNewGBridge->SetCampId(0);
+		pNewGBridge->SetLevel(1);
+
+		pNewGBridge->EnterGround(12, 15, this);
+	}
+
+
+	// 加载场景（移动）中立单位
+	{
+		CWalkableObject *pNewDogFace = new CWalkableObject();
+		if (nullptr == pNewDogFace)
+		{
+			LOGError("nullptr == pNewDogFace");
+			return false;
+		}
+
+		pNewDogFace->Init(1);
+		pNewDogFace->SetCampId(0);
+		pNewDogFace->SetLevel(1);
+
+		pNewDogFace->EnterGround(1, 15, this);
+	}
+
+	{
+		CWalkableObject *pNewDogFace = new CWalkableObject();
+		if (nullptr == pNewDogFace)
+		{
+			LOGError("nullptr == pNewDogFace");
+			return false;
+		}
+
+		pNewDogFace->Init(1);
+		pNewDogFace->SetCampId(0);
+		pNewDogFace->SetLevel(1);
+
+		pNewDogFace->EnterGround(18, 15, this);
+	}
 
 	return true;
 }
 
 bool CFrontBattleGround::OnTick()
 {
-
 	//LOGDebug("阵地战DoTick");
 	return true;
-}
-
-void CFrontBattleGround::GetGroundInfo(ICountry *pCountry)
-{
-
 }
 
 
@@ -280,4 +411,26 @@ bool CBattleGroundManager::OnTimerEvent(int nTimerId)
 	}
 
 	return true;
+}
+
+IBattleGround * CBattleGroundManager::FindBattleGround(int nBattleGroundIndexId)
+{
+	MapBattleGround::iterator itBattleGround = m_mapBattleGround.find(nBattleGroundIndexId);
+	if (itBattleGround != m_mapBattleGround.end())
+	{
+		return itBattleGround->second;
+	}
+
+	return nullptr;
+}
+
+IBattleGround * CBattleGroundManager::FindBattleGround(int nBattleGroundIndexId) const
+{
+	MapBattleGround::const_iterator itBattleGround = m_mapBattleGround.find(nBattleGroundIndexId);
+	if (itBattleGround != m_mapBattleGround.end())
+	{
+		return itBattleGround->second;
+	}
+
+	return nullptr;
 }

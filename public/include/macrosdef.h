@@ -44,5 +44,16 @@ enum GObjectType
 // ’Ω∂∑∂‘œÛ
 class IGObject;
 typedef std::vector<IGObject *> VtGObject;
+typedef std::map<int, IGObject *> MapGObject;
+
+class IGrid;
+typedef std::vector<IGrid *> VtGrid;
+typedef std::map<int, IGrid *> MapGrid;
+
+class ICountry;
+typedef std::vector<ICountry *> VtCountry;
+typedef std::map<int, ICountry *> MapCountry;
+
+
 
 #endif

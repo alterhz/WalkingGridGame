@@ -7,7 +7,7 @@
 #include "xmldata.h"
 
 class IGrid;
-class IGround;
+class IBattleGround;
 
 class CStillObject;
 class CWalkableObject;
@@ -22,8 +22,10 @@ public:
 
 	int GetIndexId() const { return m_nIndexId; }
 
+	int GetSN() const { return m_nSN; }
 	int GetX() const { return m_nX; }
 	int GetY() const { return m_nY; }
+	void SetXY(int x, int y) { m_nX = x, m_nY = y; }
 
 	IGrid * GetGrid() const { return m_pGrid; }
 	void BindGrid(IGrid *pGrid) { m_pGrid = pGrid; }
@@ -32,12 +34,14 @@ public:
 	void SetCampId(int nCampId) { m_nCampId = nCampId; }
 	int GetCampId() const { return m_nCampId; }
 
+	void SetBattleGround(IBattleGround *pBattleGround) { m_pBattleGround = pBattleGround; }
+	IBattleGround * GetBattleGround() const { return m_pBattleGround; }
 
 public:
 	// 初始化函数
 	bool Init(int nSN);
 	// 进入场景
-	bool EnterGround(int x, int y, IGround *pGround);
+	bool EnterGround(int x, int y, IBattleGround *pBattleGround);
 
 protected:
 	virtual bool OnInit() { return true; }
@@ -55,9 +59,13 @@ public:
 	// 战斗相关
 	// 是否可以攻击
 	virtual bool IsCanAttack() const { return true; }
-	virtual int GetHP() const { return 0; }
-	virtual int GetSP() const { return 0; }
 	virtual int GetAtt() const { return 0; }
+	virtual int GetMaxHP() const = 0;
+
+	int GetHP() const { return m_nHP; }
+	int GetSP() const { return m_nSP; }
+	int GetLevel() const { return m_nLevel; }
+	void SetLevel(int nLevel) { m_nLevel = nLevel; }
 
 
 private:
@@ -69,12 +77,16 @@ protected:
 	int m_nX;
 	int m_nY;
 	// 场景对象
-	IGround *m_pGround;
+	IBattleGround *m_pBattleGround;
 
 	// 格子
 	IGrid *m_pGrid;
 	// 阵营Id
 	int m_nCampId;
+
+	int m_nHP;
+	int m_nSP;
+	int m_nLevel;
 };
 
 // 静止（不可以移动）的场景对象
@@ -95,6 +107,8 @@ protected:
 	virtual bool IsWalkable(EToWard eToWard) const;
 	//战斗相关
 	virtual bool IsCanAttack() const;
+	// 获取最大血量
+	virtual int GetMaxHP() const;
 
 public:
 	// 是否为旗帜类型（将领）
@@ -122,7 +136,8 @@ protected:
 	virtual bool IsWalkable(EToWard eToWard) const;
 	// 战斗相关
 	virtual bool IsCanAttack() const { return true; }
-	
+	// 获取最大血量
+	virtual int GetMaxHP() const { return 99; }
 
 public:
 	// 行走

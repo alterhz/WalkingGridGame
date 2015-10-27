@@ -19,9 +19,14 @@ public:
 private:
 	// 心跳
 	void OnHeartBeat(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
-
 	// 准备
 	void OnPrepare(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
+	// 进入场景
+	void OnEnterGround(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
+	// 离开场景
+	void OnLeaveGround(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
+	// 获取场景数据
+	void OnGetGroundInfo(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 };
 
 #endif

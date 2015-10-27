@@ -13,7 +13,7 @@
 #include "utilityinc.h"
 
 class CClient;
-
+class IBattleGround;
 
 class ICountry
 {
@@ -26,6 +26,18 @@ protected:
 public:
 	int GetIndexId() const { return m_nIndexId; }
 	CClient * GetClient() const { return m_pClient; }
+
+	void SetBattleGround(IBattleGround *pBattleGround) { m_pBattleGround = pBattleGround; }
+	IBattleGround * GetBattleGround() { return m_pBattleGround; }
+
+	void PrepareGround(int nBattleGroundIndexId);
+	void ClearPrepareGround() { m_nPrepareBattleGroundIndexId = 0; }
+
+public:
+	// 进入场景
+	void EnterGround();
+	// 离开场景
+	void LeaveGround();
 
 public:
 	// 添加战斗部队
@@ -42,7 +54,14 @@ public:
 	void OnDisconnect();
 
 public:	// 消息发送
-	//bool SendPrepare(bool bOk);
+	// 准备场景
+	bool SendPrepareGround();
+	// 场景信息获取
+	bool SendGetGroundInfo(int nWGCount, int nHGCount, const MapGrid &mapGrid, const MapGObject &mapGObject);
+	// 进入场景应答
+	bool SendEnterGround(bool bOk);
+	// 离开场景应答
+	bool SendLeaveGround(bool bOk);
 
 private:
 	bool SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage);
@@ -56,6 +75,12 @@ private:
 
 	// 部队
 	VtGObject m_vtFightGObject;
+
+	// 待进入场景
+	int m_nPrepareBattleGroundIndexId;
+	// 场景信息
+	IBattleGround *m_pBattleGround;
+	
 };
 
 class CCountry : public ICountry
