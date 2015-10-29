@@ -2,8 +2,14 @@
 #include "debug.h"
 
 CTestClient::CTestClient()
+	: m_nId(0)
+	, m_pNetConnector(nullptr)
+	, m_pNetSocket(nullptr)
+	, m_tBegin(0)
+	, m_nCountryIndexId(0)
 {
-
+	static int g_nID = 0;
+	m_nId = (++g_nID);
 }
 
 CTestClient::~CTestClient()
@@ -117,6 +123,17 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 		break;
 	case gproto::CSID_G2C_PrepareGround:
 		{
+			gproto::MSG_G2C_PrepareGround msg;
+			if (!msg.ParseFromArray(pMessage, nMessageLength))
+			{
+				LOGError("协议CSID_G2C_PrepareGround解码失败。");
+				return false;
+			}
+			
+			m_nCountryIndexId = msg.countryindexid();
+
+			LOGDebug("[" + m_nId + "]CountryIndexId[" + m_nCountryIndexId + "]匹配成功，准备场景。");
+
 			// 准备场景
 			SendEnterGround();
 		}
@@ -133,7 +150,7 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 			// 进入场景成功
 			if (gproto::MSG_G2C_EnterGround_EResult_ERR == msgEnterGround.ret())
 			{
-				LOGDebug("进入场景失败。");
+				LOGDebug("[" + m_nId + "]进入场景失败。");
 			}
 			else
 			{
@@ -150,14 +167,16 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 				return false;
 			}
 
-			LOGPrint("场景尺寸W:" + msgGetGroundInfo.wgcount() + ",H:" + msgGetGroundInfo.hgcount());
+			LOGPrint("[" + m_nId + "]场景尺寸W:" + msgGetGroundInfo.wgcount() + ",H:" + msgGetGroundInfo.hgcount());
 
+			/*
 			for (int i=0; i<msgGetGroundInfo.grids_size(); ++i)
 			{
 				const gproto::Info_Grid &infoGrid = msgGetGroundInfo.grids(i);
 
 				LOGPrint("SN:" + infoGrid.sn() + ",X:" + infoGrid.x() + ",Y:" + infoGrid.y());
 			}
+			*/
 
 			for (int i=0; i<msgGetGroundInfo.gobjects_size(); ++i)
 			{
@@ -165,13 +184,13 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 
 				if (gproto::Info_GObject_EType_Still == infoGObject.type())
 				{
-					LOGPrint("Still -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
+					LOGPrint("[" + m_nId + "]Still -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
 						+ ",Y:" + infoGObject.y() + ",HP:" + infoGObject.hp() + ",maxhp:" + infoGObject.maxhp() + ",SP:" + infoGObject.sp() 
 						+ ",level:" + infoGObject.level() + ",campid:" + infoGObject.campid());
 				}
 				else
 				{
-					LOGPrint("Walkable -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
+					LOGPrint("[" + m_nId + "]Walkable -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
 						+ ",Y:" + infoGObject.y() + ",HP:" + infoGObject.hp() + ",maxhp:" + infoGObject.maxhp() + ",SP:" + infoGObject.sp()
 						+ ",level:" + infoGObject.level() + ",campid:" + infoGObject.campid());
 				}
@@ -191,16 +210,74 @@ bool CTestClient::OnRecvPacket(const char *pPacket, unsigned short wLength)
 
 			if (gproto::Info_GObject_EType_Still == infoGObject.type())
 			{
-				LOGPrint("Still EnterGround -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
+				LOGPrint("[" + m_nId + "]Still EnterGround -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
 					+ ",Y:" + infoGObject.y() + ",HP:" + infoGObject.hp() + ",maxhp:" + infoGObject.maxhp() + ",SP:" + infoGObject.sp() 
 					+ ",level:" + infoGObject.level() + ",campid:" + infoGObject.campid());
 			}
 			else
 			{
-				LOGPrint("Walkable EnterGround -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
+				LOGPrint("[" + m_nId + "]Walkable EnterGround -- SN:" + infoGObject.sn() + ",IndexId:" + infoGObject.indexid() + ",X:" + infoGObject.x()
 					+ ",Y:" + infoGObject.y() + ",HP:" + infoGObject.hp() + ",maxhp:" + infoGObject.maxhp() + ",SP:" + infoGObject.sp()
 					+ ",level:" + infoGObject.level() + ",campid:" + infoGObject.campid());
-			}	
+			}
+		}
+		break;
+	case gproto::CSID_G2C_BattlePrepare:
+		{
+			// 准备
+			SendPrepareFinish();
+		}
+		break;
+	case gproto::CSID_G2C_BattleStart:
+		{
+			// 战斗开始
+			LOGPrint("[" + m_nId + "]战斗开始");
+		}
+		break;
+	case gproto::CSID_G2C_BattleReward:
+		{
+			// 奖励
+			gproto::MSG_G2C_BattleReward msg;
+			if (!msg.ParseFromArray(pMessage, nMessageLength))
+			{
+				LOGError("协议CSID_G2C_BattleReward解码失败。");
+				return false;
+			}
+
+			LOGDebug("[" + m_nId + "]胜利的Country：" + msg.wincountryindexid());
+		}
+		break;
+	case gproto::CSID_G2C_BattleFight:
+		{
+			// 战斗轮流
+			gproto::MSG_G2C_BattleFight msg;
+			if (!msg.ParseFromArray(pMessage, nMessageLength))
+			{
+				LOGError("协议CSID_G2C_BattleFight解码失败。");
+				return false;
+			}
+
+			if (msg.countryindexid() == m_nCountryIndexId)
+			{
+				// 轮到自己的回合
+				LOGDebug("[" + m_nId + "]Country[" + msg.countryindexid() + "]自己的回合，可以攻击。");
+
+				{
+					// 攻击逻辑
+				}
+
+				static int n = 0;
+				++n;
+				if (n < 10)
+				{
+					// 攻击完毕
+					SendBattleFightEnd();
+				}
+			}
+			else
+			{
+				LOGDebug("[" + m_nId + "]Country[" + msg.countryindexid() + "]其他人的回合，等待。");
+			}
 		}
 		break;
 	default:
@@ -233,6 +310,18 @@ bool CTestClient::SendGetGroundInfo()
 {
 	gproto::MSG_C2G_GetGroundInfo msg;
 	return SendMessage(gproto::CSID_C2G_GetGroundInfo, &msg);
+}
+
+bool CTestClient::SendPrepareFinish()
+{
+	gproto::MSG_C2G_PrepareFinish msg;
+	return SendMessage(gproto::CSID_C2G_PrepareFinish, &msg);
+}
+
+bool CTestClient::SendBattleFightEnd()
+{
+	gproto::MSG_C2G_BattleFightEnd msg;
+	return SendMessage(gproto::CSID_C2G_BattleFightEnd, &msg);
 }
 
 

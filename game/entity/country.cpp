@@ -46,6 +46,104 @@ bool ICountry::SendMessage(unsigned short wProtocolId, google::protobuf::Message
 //	return SendMessage(gproto::CSID_G2C_Prepare, &msg);
 //}
 
+void ICountry::OnConnected(CClient *pClient)
+{
+	m_pClient = pClient;
+}
+
+void ICountry::OnDisconnect()
+{
+	m_pClient = nullptr;
+
+}
+
+bool ICountry::AddPrepareGObject(IGObject *pFightGObject)
+{
+	if (nullptr == pFightGObject)
+	{
+		LOGError("nullptr == pFightGObject");
+		return false;
+	}
+
+	m_vtPrepareGObject.push_back(pFightGObject);
+
+	return true;
+}
+
+bool ICountry::AddPrepareGObject(const VtGObject &vtFightGObject)
+{
+	for (IGObject *pFightGObject : vtFightGObject)
+	{
+		m_vtPrepareGObject.push_back(pFightGObject);
+	}
+
+	return true;
+}
+
+void ICountry::PrepareGround(int nBattleGroundIndexId)
+{
+	m_nPrepareBattleGroundIndexId = nBattleGroundIndexId;
+
+	SendPrepareGround();
+}
+
+void ICountry::EnterGround()
+{
+	if (0 == m_nPrepareBattleGroundIndexId)
+	{
+		SendEnterGround(false);
+		return ;
+	}
+
+	if (nullptr != m_pBattleGround)
+	{
+		SendEnterGround(false);
+
+		LOGDebug("Country[CountryIndexId:" + GetIndexId() + "]在场景中[battleGroundIndexId:" + m_pBattleGround->GetIndexId() + "]。");
+		return ;
+	}
+
+	IBattleGround *pBattleGround = CBattleGroundManager::getMe().FindBattleGround(m_nPrepareBattleGroundIndexId);
+	if (nullptr == pBattleGround)
+	{
+		SendEnterGround(false);
+
+		LOGError("BattleGround[" + m_nPrepareBattleGroundIndexId + "]不存在。");
+		return ;
+	}
+
+	if (pBattleGround->Enter(this))
+	{
+		m_nPrepareBattleGroundIndexId = 0;
+
+		SendEnterGround(true);
+	}
+	else
+	{
+		SendEnterGround(false);
+	}
+}
+
+void ICountry::LeaveGround()
+{
+	if (m_pBattleGround)
+	{
+		if (m_pBattleGround->Leave(this))
+		{
+			SendLeaveGround(true);
+		}
+		else
+		{
+			SendLeaveGround(false);
+		}
+	}
+	else
+	{
+		SendLeaveGround(false);
+	}
+}
+
+// 消息发送(广播)
 bool ICountry::SendGetGroundInfo(int nWGCount, int nHGCount, const MapGrid &mapGrid, const MapGObject &mapGObject)
 {
 	gproto::MSG_G2C_GetGroundInfo msg;
@@ -138,6 +236,7 @@ bool ICountry::SendGObjectEnterGround(GObjectType gObjectType, int nIndexId, int
 bool ICountry::SendPrepareGround()
 {
 	gproto::MSG_G2C_PrepareGround msg;
+	msg.set_countryindexid(GetIndexId());
 	return SendMessage(gproto::CSID_G2C_PrepareGround, &msg);
 }
 
@@ -174,101 +273,32 @@ bool ICountry::SendLeaveGround(bool bOk)
 }
 
 
-void ICountry::OnConnected(CClient *pClient)
+bool ICountry::SendBattlePrepare()
 {
-	m_pClient = pClient;
+	gproto::MSG_G2C_BattlePrepare msg;
+	return SendMessage(gproto::CSID_G2C_BattlePrepare, &msg);
 }
 
-void ICountry::OnDisconnect()
+bool ICountry::SendBattleStart()
 {
-	m_pClient = nullptr;
-
+	gproto::MSG_G2C_BattleStart msg;
+	return SendMessage(gproto::CSID_G2C_BattleStart, &msg);
 }
 
-bool ICountry::AddFightGObject(IGObject *pFightGObject)
+bool ICountry::SendBattleReward(int nWinCountryIndexId)
 {
-	if (nullptr == pFightGObject)
-	{
-		LOGError("nullptr == pFightGObject");
-		return false;
-	}
+	gproto::MSG_G2C_BattleReward msg;
+	msg.set_wincountryindexid(nWinCountryIndexId);
 
-	m_vtFightGObject.push_back(pFightGObject);
-
-	return true;
+	return SendMessage(gproto::CSID_G2C_BattleReward, &msg);
 }
 
-bool ICountry::AddFightGObject(const VtGObject &vtFightGObject)
+bool ICountry::SendBattleFight(int nCountryIndexId)
 {
-	for (IGObject *pFightGObject : vtFightGObject)
-	{
-		m_vtFightGObject.push_back(pFightGObject);
-	}
+	gproto::MSG_G2C_BattleFight msg;
+	msg.set_countryindexid(nCountryIndexId);
 
-	return true;
-}
-
-void ICountry::PrepareGround(int nBattleGroundIndexId)
-{
-	m_nPrepareBattleGroundIndexId = nBattleGroundIndexId;
-
-	SendPrepareGround();
-}
-
-void ICountry::EnterGround()
-{
-	if (0 == m_nPrepareBattleGroundIndexId)
-	{
-		SendEnterGround(false);
-		return ;
-	}
-
-	if (nullptr != m_pBattleGround)
-	{
-		SendEnterGround(false);
-
-		LOGDebug("Country[CountryIndexId:" + GetIndexId() + "]在场景中[battleGroundIndexId:" + m_pBattleGround->GetIndexId() + "]。");
-		return ;
-	}
-
-	IBattleGround *pBattleGround = CBattleGroundManager::getMe().FindBattleGround(m_nPrepareBattleGroundIndexId);
-	if (nullptr == pBattleGround)
-	{
-		SendEnterGround(false);
-
-		LOGError("BattleGround[" + m_nPrepareBattleGroundIndexId + "]不存在。");
-		return ;
-	}
-
-	if (pBattleGround->Enter(this))
-	{
-		m_nPrepareBattleGroundIndexId = 0;
-
-		SendEnterGround(true);
-	}
-	else
-	{
-		SendEnterGround(false);
-	}
-}
-
-void ICountry::LeaveGround()
-{
-	if (m_pBattleGround)
-	{
-		if (m_pBattleGround->Leave(this))
-		{
-			SendLeaveGround(true);
-		}
-		else
-		{
-			SendLeaveGround(false);
-		}
-	}
-	else
-	{
-		SendLeaveGround(false);
-	}
+	return SendMessage(gproto::CSID_G2C_BattleFight, &msg);
 }
 
 
@@ -369,12 +399,16 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 
 	// 测试，给双方添加部队
 	{
+		int nCampId = pCountryA->GetIndexId();
+
 		VtGObject vtGObject;
 		// 添加将领
 		CStillObject*pSirdar = new CStillObject();
 		if (pSirdar)
 		{
 			pSirdar->Init(4);
+			pSirdar->SetLevel(1);
+			pSirdar->SetCampId(nCampId);
 
 			vtGObject.push_back(pSirdar);
 		}
@@ -384,6 +418,8 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 		if (pHeroA)
 		{
 			pHeroA->Init(2);
+			pHeroA->SetLevel(1);
+			pHeroA->SetCampId(nCampId);
 
 			vtGObject.push_back(pHeroA);
 		}
@@ -392,6 +428,8 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 		if (pHeroB)
 		{
 			pHeroB->Init(3);
+			pHeroB->SetLevel(1);
+			pHeroB->SetCampId(nCampId);
 
 			vtGObject.push_back(pHeroB);
 		}
@@ -401,6 +439,8 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 		if (pDogFaceA)
 		{
 			pDogFaceA->Init(1);
+			pDogFaceA->SetLevel(1);
+			pDogFaceA->SetCampId(nCampId);
 
 			vtGObject.push_back(pDogFaceA);
 		}
@@ -409,21 +449,27 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 		if (pDogFaceB)
 		{
 			pDogFaceB->Init(1);
+			pDogFaceB->SetLevel(1);
+			pDogFaceB->SetCampId(nCampId);
 
 			vtGObject.push_back(pDogFaceB);
 		}
 
 		pCountryA->ClearFightGObject();
-		pCountryA->AddFightGObject(vtGObject);
+		pCountryA->AddPrepareGObject(vtGObject);
 	}
 
 	{
+		int nCampId = pCountryB->GetIndexId();
+
 		VtGObject vtGObject;
 		// 添加将领
 		CStillObject*pSirdar = new CStillObject();
 		if (pSirdar)
 		{
 			pSirdar->Init(4);
+			pSirdar->SetLevel(1);
+			pSirdar->SetCampId(nCampId);
 
 			vtGObject.push_back(pSirdar);
 		}
@@ -433,6 +479,8 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 		if (pHeroA)
 		{
 			pHeroA->Init(2);
+			pHeroA->SetLevel(1);
+			pHeroA->SetCampId(nCampId);
 
 			vtGObject.push_back(pHeroA);
 		}
@@ -441,6 +489,8 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 		if (pHeroB)
 		{
 			pHeroB->Init(3);
+			pHeroB->SetLevel(1);
+			pHeroB->SetCampId(nCampId);
 
 			vtGObject.push_back(pHeroB);
 		}
@@ -450,6 +500,8 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 		if (pDogFaceA)
 		{
 			pDogFaceA->Init(1);
+			pDogFaceA->SetLevel(1);
+			pDogFaceA->SetCampId(nCampId);
 
 			vtGObject.push_back(pDogFaceA);
 		}
@@ -458,12 +510,14 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 		if (pDogFaceB)
 		{
 			pDogFaceB->Init(1);
+			pDogFaceB->SetLevel(1);
+			pDogFaceB->SetCampId(nCampId);
 
 			vtGObject.push_back(pDogFaceB);
 		}
 
 		pCountryB->ClearFightGObject();
-		pCountryB->AddFightGObject(vtGObject);
+		pCountryB->AddPrepareGObject(vtGObject);
 	}
 
 	// 准备场景

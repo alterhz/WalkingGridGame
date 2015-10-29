@@ -23,8 +23,6 @@ public:
 	int GetX() const { return m_nX; }
 	int GetY() const { return m_nY; }
 
-	EGroundType GetGroundType() const;
-
 	bool Init(int nSN);
 
 	// 添加场景绑定单位

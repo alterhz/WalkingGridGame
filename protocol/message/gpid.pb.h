@@ -46,11 +46,17 @@ enum PID {
   CSID_G2C_LeaveGround = 20104,
   CSID_C2G_GetGroundInfo = 20110,
   CSID_G2C_GetGroundInfo = 20111,
-  CSID_G2C_GObjectEnterGround = 20120
+  CSID_G2C_GObjectEnterGround = 20120,
+  CSID_G2C_BattlePrepare = 20121,
+  CSID_G2C_BattleStart = 20122,
+  CSID_G2C_BattleReward = 20123,
+  CSID_C2G_PrepareFinish = 20130,
+  CSID_G2C_BattleFight = 20140,
+  CSID_C2G_BattleFightEnd = 20141
 };
 bool PID_IsValid(int value);
 const PID PID_MIN = CSID_C2G_HeartBeat;
-const PID PID_MAX = CSID_G2C_GObjectEnterGround;
+const PID PID_MAX = CSID_C2G_BattleFightEnd;
 const int PID_ARRAYSIZE = PID_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* PID_descriptor();

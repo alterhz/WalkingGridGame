@@ -41,13 +41,12 @@ public:
 
 public:
 	// 添加战斗部队
-	bool AddFightGObject(IGObject *pFightGObject);
-	bool AddFightGObject(const VtGObject &vtFightGObject);
+	bool AddPrepareGObject(IGObject *pFightGObject);
+	bool AddPrepareGObject(const VtGObject &vtFightGObject);
 	// 清空战斗部队
-	void ClearFightGObject() { m_vtFightGObject.clear(); }
-
+	void ClearFightGObject() { m_vtPrepareGObject.clear(); }
 	// 获取战斗部队
-	const VtGObject & GetFightGObject() const { return m_vtFightGObject; }
+	const VtGObject & GetPrepareGObject() const { return m_vtPrepareGObject; }
 
 public:
 	void OnConnected(CClient *pClient);
@@ -65,6 +64,14 @@ public:	// 消息发送
 	// GObject进入场景
 	bool SendGObjectEnterGround(GObjectType gObjectType, int nIndexId, int nSN, int x, int y,
 		int nHP, int nMaxHP, int nSP, int nLevel, int nCampId);
+	// 战场准备阶段
+	bool SendBattlePrepare();
+	// 战场开始战斗
+	bool SendBattleStart();
+	// 战场结束奖励
+	bool SendBattleReward(int nWinCountryIndexId);
+	// 战斗回合
+	bool SendBattleFight(int nCountryIndexId);
 
 private:
 	bool SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage);
@@ -77,7 +84,7 @@ private:
 	time_t m_tDisconnect;
 
 	// 部队
-	VtGObject m_vtFightGObject;
+	VtGObject m_vtPrepareGObject;
 
 	// 待进入场景
 	int m_nPrepareBattleGroundIndexId;

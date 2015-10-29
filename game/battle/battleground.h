@@ -45,6 +45,10 @@ public:
 	// 进入
 	virtual bool GObjectEnter(IGObject *pGObject);
 	virtual bool GObjectLeave(IGObject *pGObject);
+	// 准备完毕
+	virtual void PrepareFinish(ICountry *pCountry);
+	// 当前回合战斗结束
+	virtual void BattleBoutFinish(ICountry *pCountry);
 
 
 protected:
@@ -53,12 +57,12 @@ protected:
 	virtual bool OnGoRun() { return true; }
 	virtual bool OnGoFinish() { return true; }
 
-	virtual bool OnEnter(ICountry *pCountry) { return true; }
+	virtual bool OnEnter(ICountry *pCountry);
 	virtual bool OnLeave(ICountry *pCountry) { return true; }
 	virtual bool OnGObjectEnter(IGObject *pGObject);
 	virtual bool OnGObjectLeave(IGObject *pGObject) { return true; }
 
-private:
+protected:
 	ICountry * FindCountry(int nIndexId);
 	ICountry * FindCountry(int nIndexId) const;
 	IGObject * FindGObject(int nIndexId);
@@ -78,17 +82,44 @@ private:
 // 战场(阵地战)
 class CFrontBattleGround : public IBattleGround
 {
+	enum EBattleStatus
+	{
+		EBattleStatus_Waiting = 1,	//等待角色进入
+		EBattleStatus_Prepare,	//准备
+		EBattleStatus_Battle,	//战斗
+		EBattleStatus_Reward,	//结束
+	};
+
 public:
 	CFrontBattleGround();
 	~CFrontBattleGround();
+
+	void ChangeBattleStatus(EBattleStatus eBattleStatus);
+	EBattleStatus GetCurrentBattleStatus() const { return m_eBattleStatus; }
 
 protected:
 	// 初始化
 	virtual bool OnInit();
 	virtual bool OnTick();
+	// 角色进入场景事件
+	virtual bool OnEnter(ICountry *pCountry);
+	virtual bool OnLeave(ICountry *pCountry);
+	// 准备完毕
+	virtual void PrepareFinish(ICountry *pCountry);
+	// 当前回合战斗结束
+	virtual void BattleBoutFinish(ICountry *pCountry);
+
+	void OnGoPrepare();
+	void OnGoBattle();
+	void OnGoReward();
 
 private:
-
+	EBattleStatus m_eBattleStatus;
+	VtInt m_vtPrepareFinishCountryIndexId;
+	int m_nBoutIndex;	//回合轮流顺序
+	int m_nBoutCountryIndexId;	//当前回合的CountryIndexId
+	// 胜利的CountryIndexId
+	int m_nWinCountryIndexId;
 };
 
 class CBattleGroundManager : public Singleton<CBattleGroundManager>, public NS_IO::ITimerEvent

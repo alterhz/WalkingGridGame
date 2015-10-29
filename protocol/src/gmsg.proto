@@ -13,7 +13,7 @@ message MSG_C2G_StartGame
 	required bytes rolename = 1;
 }
 
-// 准备
+// 准备，匹配进入场景的客户端(测试用)
 message MSG_C2G_Prepare
 {
 }
@@ -27,10 +27,13 @@ message MSG_G2C_Prepare
 	required EResult ret = 1;
 }
 
+// 通知客户端已经创建好，准备进入场景
 message MSG_G2C_PrepareGround
 {
+	required int32 countryindexid = 1;
 }
 
+// 客户端请求进入场景
 message MSG_C2G_EnterGround
 {
 }
@@ -43,6 +46,8 @@ message MSG_G2C_EnterGround
 	}
 	required EResult ret = 1;
 }
+
+// 客户端离开场景
 message MSG_C2G_LeaveGround
 {
 }
@@ -87,6 +92,7 @@ message Info_GObject
 	required int32 level = 9;
 	required int32 campid = 10;
 }
+// 获取地形信息和场景对象数据
 message MSG_G2C_GetGroundInfo
 {
 	required int32 wgcount = 1;
@@ -95,13 +101,43 @@ message MSG_G2C_GetGroundInfo
 	repeated Info_GObject gobjects = 4;
 }
 
+// 场景对象进入场景广播
 message MSG_G2C_GObjectEnterGround
 {
 	required Info_GObject gobject = 1;
 }
 
+// 战场准备阶段
+message MSG_G2C_BattlePrepare
+{
+}
 
+// 战场开始战斗
+message MSG_G2C_BattleStart
+{
+}
 
+// 战场结束，发放奖励
+message MSG_G2C_BattleReward
+{
+	required int32 wincountryindexid = 1;
+}
+
+// 战场准备完成
+message MSG_C2G_PrepareFinish
+{
+}
+
+// 战场战斗
+message MSG_G2C_BattleFight
+{
+	required int32 countryindexid = 1;
+}
+
+// 战场战斗结束
+message MSG_C2G_BattleFightEnd
+{
+}
 
 
 

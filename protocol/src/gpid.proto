@@ -21,5 +21,15 @@ enum PID
 	CSID_G2C_GetGroundInfo	= 20111;
 	
 	CSID_G2C_GObjectEnterGround	= 20120;
+	CSID_G2C_BattlePrepare	= 20121;
+	CSID_G2C_BattleStart	= 20122;
+	CSID_G2C_BattleReward	= 20123;
+	
+	CSID_C2G_PrepareFinish	= 20130;
+	
+	CSID_G2C_BattleFight	= 20140;
+	CSID_C2G_BattleFightEnd	= 20141;
+	
+	
 }
 

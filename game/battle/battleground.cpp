@@ -6,6 +6,7 @@
 #include "country.h"
 #include "gobject.h"
 #include "ground.h"
+#include "mymath.h"
 
 
 IBattleGround::IBattleGround()
@@ -22,7 +23,17 @@ IBattleGround::~IBattleGround()
 
 bool IBattleGround::Init()
 {
-	return OnInit();
+	if (OnInit())
+	{
+		ChangeStatus(EStatus_Run);
+	
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool IBattleGround::DoTick()
@@ -40,6 +51,8 @@ bool IBattleGround::ChangeStatus(EStatus eStatus)
 		{
 			if (EStatus_Run == eStatus)
 			{
+				OnGoRun();
+
 				m_eStatus = EStatus_Run;
 				return true;
 			}
@@ -49,6 +62,8 @@ bool IBattleGround::ChangeStatus(EStatus eStatus)
 		{
 			if (EStatus_Finish == eStatus)
 			{
+				OnGoFinish();
+
 				m_eStatus = EStatus_Finish;
 				return true;
 			}
@@ -106,17 +121,14 @@ bool IBattleGround::Enter(ICountry *pCountry)
 		return false;
 	}
 
-	if (FindCountry(pCountry->GetIndexId()))
+	if (!FindCountry(pCountry->GetIndexId()))
 	{
-		LOGError("Country[" + pCountry->GetIndexId() + "]重复进入战场。");
-		return false;
+		// 进入战场完毕
+		m_mapCountry.insert(std::make_pair(pCountry->GetIndexId(), pCountry));
+		pCountry->SetBattleGround(this);
 	}
 
-	// 进入战场完毕
-	m_mapCountry.insert(std::make_pair(pCountry->GetIndexId(), pCountry));
-	pCountry->SetBattleGround(this);
-
-	return true;
+	return OnEnter(pCountry);
 }
 
 bool IBattleGround::Leave(ICountry *pCountry)
@@ -134,6 +146,8 @@ bool IBattleGround::Leave(ICountry *pCountry)
 		pCountry->SetBattleGround(nullptr);
 
 		m_mapCountry.erase(nCountryIndexId);
+
+		OnLeave(pCountry);
 	}
 
 	return true;
@@ -155,18 +169,28 @@ bool IBattleGround::GObjectEnter(IGObject *pGObject)
 		return false;
 	}
 
-	m_mapGObject.insert(std::make_pair(pGObject->GetIndexId(), pGObject));
-
-	pGObject->SetBattleGround(this);
-
 	int nX = pGObject->GetX();
 	int nY = pGObject->GetY();
 
 	IGrid *pGrid = GetGrid(nX, nY);
-	if (pGrid)
+	if (nullptr == pGrid)
 	{
-		pGrid->AddGObject(pGObject);
+		LOGError("nullptr == pGrid");
+		return false;
 	}
+
+	if (!pGrid->IsWalkable(EToWard_Both))
+	{
+		LOGDebug("不能行走，所以不能直接添加到场景中。");
+		return false;
+	}
+
+	// 格子绑定GObject
+	pGrid->AddGObject(pGObject);
+
+	pGObject->SetBattleGround(this);
+
+	m_mapGObject.insert(std::make_pair(pGObject->GetIndexId(), pGObject));
 
 	OnGObjectEnter(pGObject);
 
@@ -199,14 +223,17 @@ bool IBattleGround::GObjectLeave(IGObject *pGObject)
 	int nY = pGObject->GetY();
 
 	IGrid *pGrid = GetGrid(nX, nY);
-	if (nullptr == pGrid)
+	if (pGrid)
 	{
-		return false;
+		pGrid->DelGObject(pGObject);
 	}
 
-	pGrid->DelGObject(pGObject);
-
 	return true;
+}
+
+void IBattleGround::PrepareFinish(ICountry *pCountry)
+{
+	LOGDebug("准备完毕");
 }
 
 IGObject * IBattleGround::FindGObject(int nIndexId)
@@ -229,6 +256,19 @@ IGObject * IBattleGround::FindGObject(int nIndexId) const
 	}
 
 	return nullptr;
+}
+
+bool IBattleGround::OnEnter(ICountry *pCountry)
+{
+	if (nullptr == pCountry)
+	{
+		LOGError("nullptr == pCountry");
+		return false;
+	}
+
+	pCountry->SendGetGroundInfo(m_nWGCount, m_nHGCount, m_mapGrid, m_mapGObject);
+
+	return true;
 }
 
 bool IBattleGround::OnGObjectEnter(IGObject *pGObject)
@@ -256,10 +296,19 @@ bool IBattleGround::OnGObjectEnter(IGObject *pGObject)
 	return true;
 }
 
+void IBattleGround::BattleBoutFinish(ICountry *pCountry)
+{
+	LOGDebug("[" + pCountry->GetIndexId() + "]战斗回合结束。");
+}
+
 const int G_nDemoWidthCount = 20;
 const int G_nDemoHeigthCount = 30;
 
 CFrontBattleGround::CFrontBattleGround()
+	: m_eBattleStatus(EBattleStatus_Waiting)
+	, m_nBoutIndex(0)
+	, m_nBoutCountryIndexId(0)
+	, m_nWinCountryIndexId(0)
 {
 }
 
@@ -276,9 +325,9 @@ bool CFrontBattleGround::OnInit()
 	InitGroundSize(nWGCount, nHGCount);
 
 	// 初始化地形数据
-	for (int nY=0; nY<nHGCount; ++nY)
+	for (int nY=1; nY<=nHGCount; ++nY)
 	{
-		for (int nX=0; nX<nWGCount; ++nX)
+		for (int nX=1; nX<=nWGCount; ++nX)
 		{
 			IGrid *pNewGrid = new CGrid(nX, nY);
 			if (nullptr == pNewGrid)
@@ -387,6 +436,317 @@ bool CFrontBattleGround::OnTick()
 	//LOGDebug("阵地战DoTick");
 	return true;
 }
+
+bool CFrontBattleGround::OnEnter(ICountry *pCountry)
+{
+	IBattleGround::OnEnter(pCountry);
+
+	// 场景中有两个国家，则开始
+	if (m_mapCountry.size() >= 2)
+	{
+		// 切换场景状态
+		ChangeBattleStatus(EBattleStatus_Prepare);
+	}
+
+	return true;
+}
+
+bool CFrontBattleGround::OnLeave(ICountry *pCountry)
+{
+	// 一个角色离开场景，另外一个角色获得胜利
+	EBattleStatus eBattleStatus = GetCurrentBattleStatus();
+	if (EBattleStatus_Prepare == eBattleStatus
+		|| EBattleStatus_Battle == eBattleStatus)
+	{
+		if (m_mapCountry.size() == 1)
+		{
+			auto itCountry = m_mapCountry.begin();
+
+			if (itCountry->second)
+			{
+				// 获胜的CountryIndexId
+				m_nWinCountryIndexId = itCountry->second->GetIndexId();
+
+				ChangeBattleStatus(EBattleStatus_Reward);
+			}
+		}
+	}
+
+	return false;
+}
+
+void CFrontBattleGround::ChangeBattleStatus(EBattleStatus eBattleStatus)
+{
+	switch (m_eBattleStatus)
+	{
+	case CFrontBattleGround::EBattleStatus_Waiting:
+		{
+			if (EBattleStatus_Prepare == eBattleStatus)
+			{
+				OnGoPrepare();
+
+				m_eBattleStatus = eBattleStatus;
+			}
+		}
+		break;
+	case CFrontBattleGround::EBattleStatus_Prepare:
+		{
+			if (EBattleStatus_Battle == eBattleStatus)
+			{
+				OnGoBattle();
+
+				m_eBattleStatus = eBattleStatus;
+			}
+			else if (EBattleStatus_Reward == eBattleStatus)
+			{
+				OnGoReward();
+
+				m_eBattleStatus = eBattleStatus;
+			}
+		}
+		break;
+	case CFrontBattleGround::EBattleStatus_Battle:
+		{
+			if (EBattleStatus_Reward == eBattleStatus)
+			{
+				OnGoReward();
+
+				m_eBattleStatus = eBattleStatus;
+			}
+		}
+		break;
+	case CFrontBattleGround::EBattleStatus_Reward:
+		break;
+	default:
+		break;
+	}
+}
+
+// 战场准备
+void CFrontBattleGround::OnGoPrepare()
+{
+	// 测试阶段，客户端的排兵布阵，直接由服务器自动排兵，然后客户端发送准备完成即可。
+	{
+		if (m_mapCountry.size() == 2)
+		{
+			auto itCountry = m_mapCountry.begin();
+
+			ICountry *pCountryA = itCountry->second;
+			if (pCountryA)
+			{
+				const VtGObject &vtGObject = pCountryA->GetPrepareGObject();
+
+				int nSetX = 10 - vtGObject.size() / 2;
+				for (IGObject *pGObject : vtGObject)
+				{
+					if (pGObject)
+					{
+						if (GObjectType_Still == pGObject->GetType())
+						{
+							CStillObject *pStillObject = pGObject->GetStillObject();
+							if (nullptr == pStillObject)
+							{
+								LOGError("nullptr == pStillObject");
+								continue;
+							}
+
+							if (pStillObject->IsFlag())
+							{
+								// 将领
+								pStillObject->EnterGround(10, 1, this);
+								continue;
+							}
+						}
+
+						if (!pGObject->EnterGround(nSetX++, 2, this))
+						{
+							LOGError("GObject[" + pGObject->GetIndexId() + "]进入场景失败。");
+						}
+					}
+				}
+			}
+
+			++itCountry;
+			ICountry *pCountryB = itCountry->second;
+			if (pCountryB)
+			{
+				const VtGObject &vtGObject = pCountryB->GetPrepareGObject();
+
+				int nSetX = 10 - vtGObject.size() / 2;
+				for (IGObject *pGObject : vtGObject)
+				{
+					if (pGObject)
+					{
+						if (GObjectType_Still == pGObject->GetType())
+						{
+							CStillObject *pStillObject = pGObject->GetStillObject();
+							if (nullptr == pStillObject)
+							{
+								LOGError("nullptr == pStillObject");
+								continue;
+							}
+
+							if (pStillObject->IsFlag())
+							{
+								// 将领
+								pStillObject->EnterGround(10, 30, this);
+								continue;
+							}
+						}
+
+						if (!pGObject->EnterGround(nSetX++, 29, this))
+						{
+							LOGError("GObject[" + pGObject->GetIndexId() + "]进入场景失败。");
+						}
+					}
+				}
+			}
+
+		}
+	}
+
+	// 通知客户端准备
+	auto itCountry = m_mapCountry.begin();
+	for (; itCountry!= m_mapCountry.end(); ++itCountry)
+	{
+		ICountry *pCountry = itCountry->second;
+
+		if (pCountry)
+		{
+			pCountry->SendBattlePrepare();
+		}
+	}
+}
+
+// 开始战斗
+void CFrontBattleGround::OnGoBattle()
+{
+	auto itCountry = m_mapCountry.begin();
+	for (; itCountry!= m_mapCountry.end(); ++itCountry)
+	{
+		ICountry *pCountry = itCountry->second;
+
+		if (pCountry)
+		{
+			pCountry->SendBattleStart();
+		}
+	}
+
+	// 随机分配先开始回合(bout)的角色
+	int nRandInt = NS_IO::Random();
+
+	if (m_vtPrepareFinishCountryIndexId.size() >= 2)
+	{
+		m_nBoutIndex = nRandInt % m_vtPrepareFinishCountryIndexId.size();
+
+		m_nBoutCountryIndexId = m_vtPrepareFinishCountryIndexId[m_nBoutIndex];
+	}
+	else
+	{
+		LOGError("战斗开始，场景中角色不足。");
+		return ;
+	}
+
+	// 通知客户端，当前战斗回合的Country
+	auto itCountrySend = m_mapCountry.begin();
+	for (; itCountrySend!= m_mapCountry.end(); ++itCountrySend)
+	{
+		ICountry *pCountry = itCountrySend->second;
+
+		if (pCountry)
+		{
+			pCountry->SendBattleFight(m_nBoutCountryIndexId);
+		}
+	}
+}
+
+// 战场结束，奖励
+void CFrontBattleGround::OnGoReward()
+{
+	auto itCountry = m_mapCountry.begin();
+	for (; itCountry!= m_mapCountry.end(); ++itCountry)
+	{
+		ICountry *pCountry = itCountry->second;
+
+		if (pCountry)
+		{
+			pCountry->SendBattleReward(m_nWinCountryIndexId);
+		}
+	}	
+}
+
+void CFrontBattleGround::PrepareFinish(ICountry *pCountry)
+{
+	if (nullptr == pCountry)
+	{
+		LOGError("nullptr == pCountry");
+		return ;
+	}
+
+	if (!FindCountry(pCountry->GetIndexId()))
+	{
+		LOGError("不是当前场景的Country，不能准备。");
+		return ;
+	}
+
+	for (int nCountryId : m_vtPrepareFinishCountryIndexId)
+	{
+		if (pCountry->GetIndexId() == nCountryId)
+		{
+			return ;
+		}
+	}
+
+	m_vtPrepareFinishCountryIndexId.push_back(pCountry->GetIndexId());
+
+	if (m_vtPrepareFinishCountryIndexId.size() == m_mapCountry.size())
+	{
+		// 准备人数与场景人数相等，则代表都准备完成，开始战斗
+		ChangeBattleStatus(EBattleStatus_Battle);
+	}
+}
+
+void CFrontBattleGround::BattleBoutFinish(ICountry *pCountry)
+{
+	if (nullptr == pCountry)
+	{
+		LOGError("nullptr == pCountry");
+		return ;
+	}
+
+	if (pCountry->GetIndexId() != m_nBoutCountryIndexId)
+	{
+		LOGDebug("不是自己[" + pCountry->GetIndexId() + "]的回合[" + m_nBoutCountryIndexId + "]，不能结束。");
+		return ;
+	}
+
+	++m_nBoutIndex;
+
+	if (m_vtPrepareFinishCountryIndexId.size() > 0)
+	{
+		m_nBoutIndex = m_nBoutIndex % m_vtPrepareFinishCountryIndexId.size();
+
+		m_nBoutCountryIndexId = m_vtPrepareFinishCountryIndexId[m_nBoutIndex];
+	}
+	else
+	{
+		LOGError("场景中country[" + m_vtPrepareFinishCountryIndexId.size() + "]数量有误！");
+		return ;
+	}
+
+	// 通知客户端，当前战斗回合的Country
+	auto itCountry = m_mapCountry.begin();
+	for (; itCountry!= m_mapCountry.end(); ++itCountry)
+	{
+		ICountry *pCountry = itCountry->second;
+
+		if (pCountry)
+		{
+			pCountry->SendBattleFight(m_nBoutCountryIndexId);
+		}
+	}
+}
+
 
 
 CBattleGroundManager::CBattleGroundManager()

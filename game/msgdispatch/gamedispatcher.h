@@ -27,6 +27,10 @@ private:
 	void OnLeaveGround(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 	// 获取场景数据
 	void OnGetGroundInfo(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
+	// 准备完成
+	void OnPrepareFinish(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
+	// 战斗完成
+	void OnBattleFightEnd(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 };
 
 #endif

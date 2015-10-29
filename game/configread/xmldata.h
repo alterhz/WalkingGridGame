@@ -78,7 +78,6 @@ public:
 	// 单条记录载入
 	virtual void OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord);
 
-
 	std::string strName;
 	std::string strSrc;
 	EGroundType eGroundType;

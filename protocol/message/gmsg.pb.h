@@ -49,6 +49,12 @@ class Info_Grid;
 class Info_GObject;
 class MSG_G2C_GetGroundInfo;
 class MSG_G2C_GObjectEnterGround;
+class MSG_G2C_BattlePrepare;
+class MSG_G2C_BattleStart;
+class MSG_G2C_BattleReward;
+class MSG_C2G_PrepareFinish;
+class MSG_G2C_BattleFight;
+class MSG_C2G_BattleFightEnd;
 
 enum MSG_G2C_Prepare_EResult {
   MSG_G2C_Prepare_EResult_OK = 1,
@@ -592,14 +598,24 @@ class MSG_G2C_PrepareGround : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
+  // required int32 countryindexid = 1;
+  inline bool has_countryindexid() const;
+  inline void clear_countryindexid();
+  static const int kCountryindexidFieldNumber = 1;
+  inline ::google::protobuf::int32 countryindexid() const;
+  inline void set_countryindexid(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_PrepareGround)
  private:
+  inline void set_has_countryindexid();
+  inline void clear_has_countryindexid();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
+  ::google::protobuf::int32 countryindexid_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[1];
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
 
   friend void  protobuf_AddDesc_gmsg_2eproto();
   friend void protobuf_AssignDesc_gmsg_2eproto();
@@ -1537,6 +1553,458 @@ class MSG_G2C_GObjectEnterGround : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static MSG_G2C_GObjectEnterGround* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class MSG_G2C_BattlePrepare : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_BattlePrepare();
+  virtual ~MSG_G2C_BattlePrepare();
+
+  MSG_G2C_BattlePrepare(const MSG_G2C_BattlePrepare& from);
+
+  inline MSG_G2C_BattlePrepare& operator=(const MSG_G2C_BattlePrepare& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_BattlePrepare& default_instance();
+
+  void Swap(MSG_G2C_BattlePrepare* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_BattlePrepare* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_BattlePrepare& from);
+  void MergeFrom(const MSG_G2C_BattlePrepare& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_BattlePrepare)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_BattlePrepare* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_BattleStart : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_BattleStart();
+  virtual ~MSG_G2C_BattleStart();
+
+  MSG_G2C_BattleStart(const MSG_G2C_BattleStart& from);
+
+  inline MSG_G2C_BattleStart& operator=(const MSG_G2C_BattleStart& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_BattleStart& default_instance();
+
+  void Swap(MSG_G2C_BattleStart* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_BattleStart* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_BattleStart& from);
+  void MergeFrom(const MSG_G2C_BattleStart& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_BattleStart)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_BattleStart* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_BattleReward : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_BattleReward();
+  virtual ~MSG_G2C_BattleReward();
+
+  MSG_G2C_BattleReward(const MSG_G2C_BattleReward& from);
+
+  inline MSG_G2C_BattleReward& operator=(const MSG_G2C_BattleReward& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_BattleReward& default_instance();
+
+  void Swap(MSG_G2C_BattleReward* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_BattleReward* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_BattleReward& from);
+  void MergeFrom(const MSG_G2C_BattleReward& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 wincountryindexid = 1;
+  inline bool has_wincountryindexid() const;
+  inline void clear_wincountryindexid();
+  static const int kWincountryindexidFieldNumber = 1;
+  inline ::google::protobuf::int32 wincountryindexid() const;
+  inline void set_wincountryindexid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_BattleReward)
+ private:
+  inline void set_has_wincountryindexid();
+  inline void clear_has_wincountryindexid();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 wincountryindexid_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_BattleReward* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_C2G_PrepareFinish : public ::google::protobuf::Message {
+ public:
+  MSG_C2G_PrepareFinish();
+  virtual ~MSG_C2G_PrepareFinish();
+
+  MSG_C2G_PrepareFinish(const MSG_C2G_PrepareFinish& from);
+
+  inline MSG_C2G_PrepareFinish& operator=(const MSG_C2G_PrepareFinish& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_C2G_PrepareFinish& default_instance();
+
+  void Swap(MSG_C2G_PrepareFinish* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_C2G_PrepareFinish* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_C2G_PrepareFinish& from);
+  void MergeFrom(const MSG_C2G_PrepareFinish& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_PrepareFinish)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_C2G_PrepareFinish* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_BattleFight : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_BattleFight();
+  virtual ~MSG_G2C_BattleFight();
+
+  MSG_G2C_BattleFight(const MSG_G2C_BattleFight& from);
+
+  inline MSG_G2C_BattleFight& operator=(const MSG_G2C_BattleFight& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_BattleFight& default_instance();
+
+  void Swap(MSG_G2C_BattleFight* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_BattleFight* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_BattleFight& from);
+  void MergeFrom(const MSG_G2C_BattleFight& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 countryindexid = 1;
+  inline bool has_countryindexid() const;
+  inline void clear_countryindexid();
+  static const int kCountryindexidFieldNumber = 1;
+  inline ::google::protobuf::int32 countryindexid() const;
+  inline void set_countryindexid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_BattleFight)
+ private:
+  inline void set_has_countryindexid();
+  inline void clear_has_countryindexid();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 countryindexid_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_BattleFight* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_C2G_BattleFightEnd : public ::google::protobuf::Message {
+ public:
+  MSG_C2G_BattleFightEnd();
+  virtual ~MSG_C2G_BattleFightEnd();
+
+  MSG_C2G_BattleFightEnd(const MSG_C2G_BattleFightEnd& from);
+
+  inline MSG_C2G_BattleFightEnd& operator=(const MSG_C2G_BattleFightEnd& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_C2G_BattleFightEnd& default_instance();
+
+  void Swap(MSG_C2G_BattleFightEnd* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_C2G_BattleFightEnd* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_C2G_BattleFightEnd& from);
+  void MergeFrom(const MSG_C2G_BattleFightEnd& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_BattleFightEnd)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_C2G_BattleFightEnd* default_instance_;
+};
 // ===================================================================
 
 
@@ -1656,6 +2124,28 @@ inline void MSG_G2C_Prepare::set_ret(::gproto::MSG_G2C_Prepare_EResult value) {
 // -------------------------------------------------------------------
 
 // MSG_G2C_PrepareGround
+
+// required int32 countryindexid = 1;
+inline bool MSG_G2C_PrepareGround::has_countryindexid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_PrepareGround::set_has_countryindexid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_PrepareGround::clear_has_countryindexid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_PrepareGround::clear_countryindexid() {
+  countryindexid_ = 0;
+  clear_has_countryindexid();
+}
+inline ::google::protobuf::int32 MSG_G2C_PrepareGround::countryindexid() const {
+  return countryindexid_;
+}
+inline void MSG_G2C_PrepareGround::set_countryindexid(::google::protobuf::int32 value) {
+  set_has_countryindexid();
+  countryindexid_ = value;
+}
 
 // -------------------------------------------------------------------
 
@@ -2157,6 +2647,74 @@ inline void MSG_G2C_GObjectEnterGround::set_allocated_gobject(::gproto::Info_GOb
     clear_has_gobject();
   }
 }
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_BattlePrepare
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_BattleStart
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_BattleReward
+
+// required int32 wincountryindexid = 1;
+inline bool MSG_G2C_BattleReward::has_wincountryindexid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_BattleReward::set_has_wincountryindexid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_BattleReward::clear_has_wincountryindexid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_BattleReward::clear_wincountryindexid() {
+  wincountryindexid_ = 0;
+  clear_has_wincountryindexid();
+}
+inline ::google::protobuf::int32 MSG_G2C_BattleReward::wincountryindexid() const {
+  return wincountryindexid_;
+}
+inline void MSG_G2C_BattleReward::set_wincountryindexid(::google::protobuf::int32 value) {
+  set_has_wincountryindexid();
+  wincountryindexid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_C2G_PrepareFinish
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_BattleFight
+
+// required int32 countryindexid = 1;
+inline bool MSG_G2C_BattleFight::has_countryindexid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_BattleFight::set_has_countryindexid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_BattleFight::clear_has_countryindexid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_BattleFight::clear_countryindexid() {
+  countryindexid_ = 0;
+  clear_has_countryindexid();
+}
+inline ::google::protobuf::int32 MSG_G2C_BattleFight::countryindexid() const {
+  return countryindexid_;
+}
+inline void MSG_G2C_BattleFight::set_countryindexid(::google::protobuf::int32 value) {
+  set_has_countryindexid();
+  countryindexid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_C2G_BattleFightEnd
 
 
 // @@protoc_insertion_point(namespace_scope)

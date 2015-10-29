@@ -13,7 +13,9 @@ void CGameDispatcher::OnInit()
 	RegMessage(gproto::CSID_C2G_Prepare, &CGameDispatcher::OnPrepare, this);
 	RegMessage(gproto::CSID_C2G_EnterGround, &CGameDispatcher::OnEnterGround, this);
 	RegMessage(gproto::CSID_C2G_LeaveGround, &CGameDispatcher::OnLeaveGround, this);
-	RegMessage(gproto::CSID_C2G_GetGroundInfo, &CGameDispatcher::OnGetGroundInfo, this);
+	//RegMessage(gproto::CSID_C2G_GetGroundInfo, &CGameDispatcher::OnGetGroundInfo, this);
+	RegMessage(gproto::CSID_C2G_PrepareFinish, &CGameDispatcher::OnPrepareFinish, this);
+	RegMessage(gproto::CSID_C2G_BattleFightEnd, &CGameDispatcher::OnBattleFightEnd, this);
 }
 
 void CGameDispatcher::OnHeartBeat(int nProtoId, const char *pMessage, int nLength, CClient *pClient)
@@ -45,6 +47,7 @@ void CGameDispatcher::OnPrepare(int nProtoId, const char *pMessage, int nLength,
 		// 添加到准备队列
 		if (CCountryManager::getMe().PushPrepareList(pClient->GetCountry()))
 		{
+			int nCountryIndexId = pClient->GetCountry()->GetIndexId();
 			// 准备成功
 			pClient->SendPrepare(true);
 		}
@@ -124,4 +127,56 @@ void CGameDispatcher::OnGetGroundInfo(int nProtoId, const char *pMessage, int nL
 	}
 
 	pBattleGround->GetGroundInfo(pCountry);
+}
+
+void CGameDispatcher::OnPrepareFinish(int nProtoId, const char *pMessage, int nLength, CClient *pClient)
+{
+	// 准备完毕
+	if (nullptr == pClient)
+	{
+		LOGError("nullptr == pClient");
+		return ;
+	}
+
+	ICountry *pCountry = pClient->GetCountry();
+	if (nullptr == pCountry)
+	{
+		LOGError("nullptr == pCountry");
+		return ;
+	}
+
+	IBattleGround *pBattleGround = pCountry->GetBattleGround();
+	if (nullptr == pBattleGround)
+	{
+		LOGError("nullptr == pBattleGround");
+		return ;
+	}	
+
+	pBattleGround->PrepareFinish(pCountry);
+}
+
+void CGameDispatcher::OnBattleFightEnd(int nProtoId, const char *pMessage, int nLength, CClient *pClient)
+{
+	// 准备完毕
+	if (nullptr == pClient)
+	{
+		LOGError("nullptr == pClient");
+		return ;
+	}
+
+	ICountry *pCountry = pClient->GetCountry();
+	if (nullptr == pCountry)
+	{
+		LOGError("nullptr == pCountry");
+		return ;
+	}
+
+	IBattleGround *pBattleGround = pCountry->GetBattleGround();
+	if (nullptr == pBattleGround)
+	{
+		LOGError("nullptr == pBattleGround");
+		return ;
+	}	
+
+	pBattleGround->BattleBoutFinish(pCountry);
 }

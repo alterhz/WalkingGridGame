@@ -12,6 +12,9 @@ class IBattleGround;
 class CStillObject;
 class CWalkableObject;
 
+#define CAMP_NEUTRAL	0	//中立阵营
+#define CAMP_EAST		1	//东方
+#define CAMP_WEST		2	//西方
 
 // 场景对象
 class IGObject

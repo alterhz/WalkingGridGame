@@ -32,6 +32,10 @@ public:
 	bool SendEnterGround();
 	// 获取场景数据
 	bool SendGetGroundInfo();
+	// 准备完毕
+	bool SendPrepareFinish();
+	// 攻击完毕
+	bool SendBattleFightEnd();
 
 protected:
 	// 网络连接事件
@@ -45,10 +49,13 @@ protected:
 
 
 private:
+	int m_nId;
 	INetConnector *m_pNetConnector;
 	INetSocket *m_pNetSocket;
 
 	std::clock_t m_tBegin;
+
+	int m_nCountryIndexId;
 };
 
 class CTestClientManager : public Singleton<CTestClientManager>

@@ -120,7 +120,7 @@ bool CStillObject::IsFlag() const
 
 int CStillObject::GetMaxHP() const
 {
-	if (nullptr == m_pXmlData_Still)
+	if (m_pXmlData_Still)
 	{
 		return m_pXmlData_Still->nHP;
 	}

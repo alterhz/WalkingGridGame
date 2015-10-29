@@ -30,17 +30,6 @@ bool IGrid::Init(int nSN)
 	return true;
 }
 
-EGroundType IGrid::GetGroundType() const
-{
-	if (nullptr == m_pXmlData_Ground)
-	{
-		LOGError("nullptr == m_pXmlData_Ground");
-		return EGroundType_None;
-	}
-
-	return m_pXmlData_Ground->eGroundType;
-}
-
 bool IGrid::IsWalkable(EToWard eToWard) const
 {
 	if (nullptr == m_pXmlData_Ground)
@@ -49,54 +38,47 @@ bool IGrid::IsWalkable(EToWard eToWard) const
 		return false;
 	}
 
-	switch (m_pXmlData_Ground->eToWard)
+	if (EToWard_None == m_pXmlData_Ground->eToWard)
 	{
-	case EGroundType_Land:
-	case EGroundType_Sand:
-	case EGroundType_Lawn:
-	case EGroundType_Snow:
+		// 阻挡，不可以通过
+		return false;
+	}
+	
+	if (EToWard_Both == m_pXmlData_Ground->eToWard)
+	{
+		// 判断是否有角色影响阻挡
+		auto itGObject = m_mapGObject.begin();
+		for (; itGObject!=m_mapGObject.end(); ++itGObject)
 		{
-			auto itGObject = m_mapGObject.begin();
-			for (; itGObject!=m_mapGObject.end(); ++itGObject)
+			if (!itGObject->second->IsWalkable(eToWard))
 			{
-				if (!itGObject->second->IsWalkable(eToWard))
-				{
-					// 场景中存在阻挡不能过去
-					return false;
-				}
+				// 场景中存在阻挡不能过去
+				return false;
 			}
+		}
 
-			return true;	//可以通过
-		}
-		break;
-	case EGroundType_River:
+		return true;	//可以通过
+	}
+	
+	if (m_pXmlData_Ground->eToWard == eToWard)
+	{
+		// 判断是否有角色影响阻挡
+		auto itGObject = m_mapGObject.begin();
+		for (; itGObject!=m_mapGObject.end(); ++itGObject)
 		{
-			if (m_mapGObject.size() > 0)
+			if (!itGObject->second->IsWalkable(eToWard))
 			{
-				auto itGObject = m_mapGObject.begin();
-				for (; itGObject!=m_mapGObject.end(); ++itGObject)
-				{
-					if (!itGObject->second->IsWalkable(eToWard))
-					{
-						// 场景中存在阻挡不能过去
-						return false;
-					}
-				}
+				// 场景中存在阻挡不能过去
+				return false;
+			}
+		}
 
-				return true;	//可以通过
-			}
-			else
-			{
-				return false;	//不能通过
-			}
-		}
-		break;
-	default:
-		{
-			LOGError("格子类型[" + static_cast<int>(m_pXmlData_Ground->eToWard) + "]错误。");
-			return false;
-		}
-		break;
+		return true;
+	}
+	else
+	{
+		// 不能通过
+		return false;
 	}
 }
 
@@ -216,9 +198,9 @@ bool IGround::InitGroundSize( int nWGCount, int nHGCount )
 
 	m_mapGrid.clear();
 
-	for (int y=0; y<m_nHGCount; ++y)
+	for (int y=1; y<=m_nHGCount; ++y)
 	{
-		for (int x=0; x<m_nWGCount; ++x)
+		for (int x=1; x<=m_nWGCount; ++x)
 		{
 			int n = XY2N(x, y);
 
@@ -231,7 +213,7 @@ bool IGround::InitGroundSize( int nWGCount, int nHGCount )
 
 int IGround::XY2N( int x, int y ) const
 {
-	int n = m_nWGCount * y + x;
+	int n = m_nWGCount * (y - 1) + x;
 	return n;
 }
 
