@@ -161,9 +161,6 @@ void CXmlData_Walkable::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
 	ReadString(pEleRecord, "Resource", strResource);
 	ReadString(pEleRecord, "DestroyResource", strDeadDesource);
 
-	ReadInt(pEleRecord, "TakeUpGridX", nTakeUpGridX);
-	ReadInt(pEleRecord, "TakeUpGridY", nTakeUpGridY);
-
 	int nToWard = 0;
 	ReadInt(pEleRecord, "ToWard", nToWard);
 	eToWard = static_cast<EToWard>(nToWard);
@@ -174,4 +171,6 @@ void CXmlData_Walkable::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
 	std::string strSuperGround;
 	ReadString(pEleRecord, "SuperGround", strSuperGround);
 
+	ReadInt(pEleRecord, "HP", nHP);
+	ReadInt(pEleRecord, "Att", nAtt);
 }

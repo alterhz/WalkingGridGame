@@ -232,6 +232,11 @@ void CGameDispatcher::OnMoveFight(int nProtoId, const char *pMessage, int nLengt
 		return ;
 	}
 
+	if (GObjectType_Walkable != pMoveGObject->GetType())
+	{
+		return ;
+	}
+
 	CWalkableObject *pWalkableObject = pMoveGObject->GetWalkableObject();
 	if (nullptr == pWalkableObject)
 	{

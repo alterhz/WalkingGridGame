@@ -90,8 +90,12 @@ class CXmlData_Still : public IXmlData
 {
 public:
 	CXmlData_Still()
-	{
-	}
+		: nTakeUpGridX(0)
+		, nTakeUpGridY(0)
+		, bCanDestroy(false)
+		, nHP(0)
+		, bFlag(false)
+	{}
 	~CXmlData_Still() {}
 
 	// 单条记录载入
@@ -113,8 +117,10 @@ class CXmlData_Walkable : public IXmlData
 {
 public:
 	CXmlData_Walkable()
-	{
-	}
+		: nWalkLength(0)
+		, nHP(0)
+		, nAtt(0)
+	{}
 	~CXmlData_Walkable() {}
 
 	// 单条记录载入
@@ -123,11 +129,11 @@ public:
 	std::string strName;
 	std::string strResource;
 	std::string strDeadDesource;
-	int nTakeUpGridX;
-	int nTakeUpGridY;
 	EToWard eToWard;
 	int nWalkLength;
 	VtInt vtSuperGrounds;
+	int nHP;
+	int nAtt;
 };
 
 
