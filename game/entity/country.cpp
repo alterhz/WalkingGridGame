@@ -301,6 +301,40 @@ bool ICountry::SendBattleFight(int nCountryIndexId)
 	return SendMessage(gproto::CSID_G2C_BattleFight, &msg);
 }
 
+bool ICountry::SendMoveFight(bool bOK, int nGObjectIndexId)
+{
+	gproto::MSG_G2C_MoveFight msg;
+	if (bOK)
+	{
+		msg.set_ret(gproto::MSG_G2C_MoveFight_EResult_OK);
+	}
+	else
+	{
+		msg.set_ret(gproto::MSG_G2C_MoveFight_EResult_ERR);
+	}
+	msg.set_gobjectindexid(nGObjectIndexId);
+
+	return SendMessage(gproto::CSID_G2C_MoveFight, &msg);
+}
+
+bool ICountry::SendMove(int nGObjectIndexId, const VtCoor2 &vtCoor2)
+{
+	gproto::MSG_G2C_Move msg;
+	msg.set_gobjectindexid(nGObjectIndexId);
+
+	for (const COOR2 &coor2 : vtCoor2)
+	{
+		gproto::INFO_Position *pInfoPosition = msg.add_path();
+		if (pInfoPosition)
+		{
+			pInfoPosition->set_x(coor2.x);
+			pInfoPosition->set_y(coor2.y);
+		}
+	}
+
+	return SendMessage(gproto::CSID_G2C_Move, &msg);
+}
+
 
 
 

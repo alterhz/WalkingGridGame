@@ -139,6 +139,44 @@ message MSG_C2G_BattleFightEnd
 {
 }
 
+message INFO_Position
+{
+	required int32 x = 1;
+	required int32 y = 2;
+}
 
+// 移动战斗
+message MSG_C2G_MoveFight
+{
+	required int32 gobjectindexid = 1;
+	repeated INFO_Position path = 2;
+	required int32 targetgobjectindexid = 3;
+}
+message MSG_G2C_MoveFight
+{
+	enum EResult
+	{
+		OK = 1;
+		ERR = 2;
+	}
+	required EResult ret = 1;
+	required int32 gobjectindexid = 2;
+}
 
+// 移动广播
+message MSG_G2C_Move
+{
+	required int32 gobjectindexid = 1;
+	repeated INFO_Position path = 2;
+}
+
+// 战斗广播
+message MSG_G2C_Fight
+{
+	required int32 skillsn = 1;
+	required int32 attackgobjectindexid = 2;
+	required int32 defensegobjectindexid = 3;
+	required int32 losthp = 4;
+	required int32 remainhp = 5;
+}
 

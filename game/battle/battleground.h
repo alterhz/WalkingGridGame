@@ -43,13 +43,14 @@ public:
 	// 离开战场
 	virtual bool Leave(ICountry *pCountry);
 	// 进入
-	virtual bool GObjectEnter(IGObject *pGObject);
+	virtual bool GObjectEnter(IGObject *pGObject, int x, int y);
 	virtual bool GObjectLeave(IGObject *pGObject);
 	// 准备完毕
 	virtual void PrepareFinish(ICountry *pCountry);
 	// 当前回合战斗结束
 	virtual void BattleBoutFinish(ICountry *pCountry);
-
+	// GObject移动
+	virtual bool GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2);
 
 protected:
 	virtual bool OnInit() { return true; }
@@ -62,11 +63,15 @@ protected:
 	virtual bool OnGObjectEnter(IGObject *pGObject);
 	virtual bool OnGObjectLeave(IGObject *pGObject) { return true; }
 
-protected:
+public:
 	ICountry * FindCountry(int nIndexId);
 	ICountry * FindCountry(int nIndexId) const;
 	IGObject * FindGObject(int nIndexId);
 	IGObject * FindGObject(int nIndexId) const;
+
+protected:
+	// 路径是否畅通
+	bool PathIsOK(const VtCoor2 &vtCoor2);
 
 protected:
 	EStatus m_eStatus;
@@ -108,16 +113,22 @@ protected:
 	virtual void PrepareFinish(ICountry *pCountry);
 	// 当前回合战斗结束
 	virtual void BattleBoutFinish(ICountry *pCountry);
+	// GObject移动
+	virtual bool GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2);
 
 	void OnGoPrepare();
 	void OnGoBattle();
 	void OnGoReward();
 
 private:
+	bool IsMoveFight(int nGObjectIndexId) const;
+
+private:
 	EBattleStatus m_eBattleStatus;
 	VtInt m_vtPrepareFinishCountryIndexId;
 	int m_nBoutIndex;	//回合轮流顺序
 	int m_nBoutCountryIndexId;	//当前回合的CountryIndexId
+	VtInt m_vtBoutMoveFightGObjectIndexId;	//当前回合移动战斗的GObjectIndexId`
 	// 胜利的CountryIndexId
 	int m_nWinCountryIndexId;
 };

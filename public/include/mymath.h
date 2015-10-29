@@ -26,6 +26,8 @@ std::string Double2String(double d);
 
 unsigned int Random();
 
+int ABS(int n);
+
 NS_IO_Footer
 
 #endif

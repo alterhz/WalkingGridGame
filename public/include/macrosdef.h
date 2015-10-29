@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 #include <list>
+#include "mymath.h"
 
 #define SAFE_DELETE(p) { delete p; p = nullptr; }
 
@@ -40,6 +41,40 @@ enum GObjectType
 	GObjectType_Still,
 	GObjectType_Walkable,
 };
+
+struct COOR2
+{
+	COOR2()
+		: x(0)
+		, y(0) { }
+	COOR2(int _x, int _y)
+		: x(_x)
+		, y(_y) { }
+
+	static int Length(COOR2 a, COOR2 b)
+	{
+		int nLength = NS_IO::ABS(a.x - b.x) + NS_IO::ABS(a.y - b.y);
+
+		return nLength;
+	}
+
+	const bool operator == (const COOR2& v) const
+	{
+		if (v.x == this->x && v.y == this->y)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	int x;
+	int y;
+};
+
+typedef std::vector<COOR2> VtCoor2;
 
 // ’Ω∂∑∂‘œÛ
 class IGObject;

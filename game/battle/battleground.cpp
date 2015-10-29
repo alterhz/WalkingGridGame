@@ -153,7 +153,7 @@ bool IBattleGround::Leave(ICountry *pCountry)
 	return true;
 }
 
-bool IBattleGround::GObjectEnter(IGObject *pGObject)
+bool IBattleGround::GObjectEnter(IGObject *pGObject, int x, int y)
 {
 	if (nullptr == pGObject)
 	{
@@ -169,10 +169,7 @@ bool IBattleGround::GObjectEnter(IGObject *pGObject)
 		return false;
 	}
 
-	int nX = pGObject->GetX();
-	int nY = pGObject->GetY();
-
-	IGrid *pGrid = GetGrid(nX, nY);
+	IGrid *pGrid = GetGrid(x, y);
 	if (nullptr == pGrid)
 	{
 		LOGError("nullptr == pGrid");
@@ -189,6 +186,7 @@ bool IBattleGround::GObjectEnter(IGObject *pGObject)
 	pGrid->AddGObject(pGObject);
 
 	pGObject->SetBattleGround(this);
+	pGObject->SetXY(x, y);
 
 	m_mapGObject.insert(std::make_pair(pGObject->GetIndexId(), pGObject));
 
@@ -299,6 +297,53 @@ bool IBattleGround::OnGObjectEnter(IGObject *pGObject)
 void IBattleGround::BattleBoutFinish(ICountry *pCountry)
 {
 	LOGDebug("[" + pCountry->GetIndexId() + "]战斗回合结束。");
+}
+
+bool IBattleGround::PathIsOK(const VtCoor2 &vtCoor2)
+{
+	// 验证路径点是否都是相邻格子
+	if (vtCoor2.size() < 2)
+	{
+		// 只有一个点无法行走
+		return false;
+	}
+
+	COOR2 coor2Prev = vtCoor2[0];
+
+	for (int i=1; i<vtCoor2.size(); ++i)
+	{
+		COOR2 coor2 = vtCoor2[i];
+
+		// 路径点是否都可以移动
+		IGrid *pGrid = GetGrid(coor2.x, coor2.y);
+		if (nullptr == pGrid)
+		{
+			LOGError("nullptr == pGrid");
+			return false;
+		}
+
+		if (!pGrid->IsWalkable(EToWard_Both))
+		{
+			// 路径点，存在不可以行走点
+			return false;
+		}
+
+		if (COOR2::Length(coor2, coor2Prev) != 1)
+		{
+			// 相邻路径点距离有误
+			return false;
+		}
+
+		coor2Prev = coor2;
+	}
+
+	return true;
+}
+
+bool IBattleGround::GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2)
+{
+	LOGDebug("GObjectMove");
+	return true;
 }
 
 const int G_nDemoWidthCount = 20;
@@ -734,6 +779,9 @@ void CFrontBattleGround::BattleBoutFinish(ICountry *pCountry)
 		return ;
 	}
 
+	// 清理移动战斗列表
+	m_vtBoutMoveFightGObjectIndexId.clear();
+
 	// 通知客户端，当前战斗回合的Country
 	auto itCountry = m_mapCountry.begin();
 	for (; itCountry!= m_mapCountry.end(); ++itCountry)
@@ -745,6 +793,78 @@ void CFrontBattleGround::BattleBoutFinish(ICountry *pCountry)
 			pCountry->SendBattleFight(m_nBoutCountryIndexId);
 		}
 	}
+}
+
+bool CFrontBattleGround::GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2)
+{
+	if (nullptr == pGObject)
+	{
+		LOGError("nullptr == pGObject");
+		return false;
+	}
+
+	// 是否已经移动战斗过
+	if (IsMoveFight(pGObject->GetIndexId()))
+	{
+		return false;
+	}
+
+	// 验证路径通畅
+	if (!PathIsOK(vtCoor2))
+	{
+		return false;
+	}
+
+	IGrid *pOldGrid = pGObject->GetGrid();
+	if (pOldGrid)
+	{
+		pOldGrid->DelGObject(pGObject);
+	}
+
+	if (vtCoor2.size() <= 2)
+	{
+		LOGError("路径点数量[" + vtCoor2.size() + "]不足两个。");
+		return false;
+	}
+
+	COOR2 coor2MoveTo = vtCoor2[vtCoor2.size() - 1];
+	// 新坐标点绑定
+	IGrid *pNewGrid = GetGrid(coor2MoveTo.x, coor2MoveTo.y);
+	if (pNewGrid)
+	{
+		pNewGrid->AddGObject(pGObject);
+	}
+
+	// 更新位置数据
+	pGObject->SetXY(coor2MoveTo.x, coor2MoveTo.y);
+
+	// 行走广播
+	auto itCountry = m_mapCountry.begin();
+	for (; itCountry!= m_mapCountry.end(); ++itCountry)
+	{
+		ICountry *pCountry = itCountry->second;
+		if (pCountry)
+		{
+			pCountry->SendMove(pGObject->GetIndexId(), vtCoor2);
+		}
+	}
+
+	m_vtBoutMoveFightGObjectIndexId.push_back(pGObject->GetIndexId());
+
+	return true;
+}
+
+bool CFrontBattleGround::IsMoveFight(int nGObjectIndexId) const
+{
+	for (const int nHaveMoveFightGObjectIndexId : m_vtBoutMoveFightGObjectIndexId)
+	{
+		if (nHaveMoveFightGObjectIndexId == nGObjectIndexId)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 

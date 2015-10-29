@@ -65,4 +65,9 @@ unsigned int Random()
 	return rng_t::getMe().rng();
 }
 
+int ABS(int n)
+{
+	return abs(n);
+}
+
 NS_IO_Footer

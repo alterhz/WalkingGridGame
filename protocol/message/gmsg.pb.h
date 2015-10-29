@@ -55,6 +55,11 @@ class MSG_G2C_BattleReward;
 class MSG_C2G_PrepareFinish;
 class MSG_G2C_BattleFight;
 class MSG_C2G_BattleFightEnd;
+class INFO_Position;
+class MSG_C2G_MoveFight;
+class MSG_G2C_MoveFight;
+class MSG_G2C_Move;
+class MSG_G2C_Fight;
 
 enum MSG_G2C_Prepare_EResult {
   MSG_G2C_Prepare_EResult_OK = 1,
@@ -132,6 +137,25 @@ inline bool Info_GObject_EType_Parse(
     const ::std::string& name, Info_GObject_EType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<Info_GObject_EType>(
     Info_GObject_EType_descriptor(), name, value);
+}
+enum MSG_G2C_MoveFight_EResult {
+  MSG_G2C_MoveFight_EResult_OK = 1,
+  MSG_G2C_MoveFight_EResult_ERR = 2
+};
+bool MSG_G2C_MoveFight_EResult_IsValid(int value);
+const MSG_G2C_MoveFight_EResult MSG_G2C_MoveFight_EResult_EResult_MIN = MSG_G2C_MoveFight_EResult_OK;
+const MSG_G2C_MoveFight_EResult MSG_G2C_MoveFight_EResult_EResult_MAX = MSG_G2C_MoveFight_EResult_ERR;
+const int MSG_G2C_MoveFight_EResult_EResult_ARRAYSIZE = MSG_G2C_MoveFight_EResult_EResult_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* MSG_G2C_MoveFight_EResult_descriptor();
+inline const ::std::string& MSG_G2C_MoveFight_EResult_Name(MSG_G2C_MoveFight_EResult value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    MSG_G2C_MoveFight_EResult_descriptor(), value);
+}
+inline bool MSG_G2C_MoveFight_EResult_Parse(
+    const ::std::string& name, MSG_G2C_MoveFight_EResult* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<MSG_G2C_MoveFight_EResult>(
+    MSG_G2C_MoveFight_EResult_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -2005,6 +2029,536 @@ class MSG_C2G_BattleFightEnd : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static MSG_C2G_BattleFightEnd* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class INFO_Position : public ::google::protobuf::Message {
+ public:
+  INFO_Position();
+  virtual ~INFO_Position();
+
+  INFO_Position(const INFO_Position& from);
+
+  inline INFO_Position& operator=(const INFO_Position& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const INFO_Position& default_instance();
+
+  void Swap(INFO_Position* other);
+
+  // implements Message ----------------------------------------------
+
+  INFO_Position* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const INFO_Position& from);
+  void MergeFrom(const INFO_Position& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 x = 1;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 1;
+  inline ::google::protobuf::int32 x() const;
+  inline void set_x(::google::protobuf::int32 value);
+
+  // required int32 y = 2;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 2;
+  inline ::google::protobuf::int32 y() const;
+  inline void set_y(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:gproto.INFO_Position)
+ private:
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 x_;
+  ::google::protobuf::int32 y_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static INFO_Position* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_C2G_MoveFight : public ::google::protobuf::Message {
+ public:
+  MSG_C2G_MoveFight();
+  virtual ~MSG_C2G_MoveFight();
+
+  MSG_C2G_MoveFight(const MSG_C2G_MoveFight& from);
+
+  inline MSG_C2G_MoveFight& operator=(const MSG_C2G_MoveFight& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_C2G_MoveFight& default_instance();
+
+  void Swap(MSG_C2G_MoveFight* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_C2G_MoveFight* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_C2G_MoveFight& from);
+  void MergeFrom(const MSG_C2G_MoveFight& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 gobjectindexid = 1;
+  inline bool has_gobjectindexid() const;
+  inline void clear_gobjectindexid();
+  static const int kGobjectindexidFieldNumber = 1;
+  inline ::google::protobuf::int32 gobjectindexid() const;
+  inline void set_gobjectindexid(::google::protobuf::int32 value);
+
+  // repeated .gproto.INFO_Position path = 2;
+  inline int path_size() const;
+  inline void clear_path();
+  static const int kPathFieldNumber = 2;
+  inline const ::gproto::INFO_Position& path(int index) const;
+  inline ::gproto::INFO_Position* mutable_path(int index);
+  inline ::gproto::INFO_Position* add_path();
+  inline const ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position >&
+      path() const;
+  inline ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position >*
+      mutable_path();
+
+  // required int32 targetgobjectindexid = 3;
+  inline bool has_targetgobjectindexid() const;
+  inline void clear_targetgobjectindexid();
+  static const int kTargetgobjectindexidFieldNumber = 3;
+  inline ::google::protobuf::int32 targetgobjectindexid() const;
+  inline void set_targetgobjectindexid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_C2G_MoveFight)
+ private:
+  inline void set_has_gobjectindexid();
+  inline void clear_has_gobjectindexid();
+  inline void set_has_targetgobjectindexid();
+  inline void clear_has_targetgobjectindexid();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position > path_;
+  ::google::protobuf::int32 gobjectindexid_;
+  ::google::protobuf::int32 targetgobjectindexid_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_C2G_MoveFight* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_MoveFight : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_MoveFight();
+  virtual ~MSG_G2C_MoveFight();
+
+  MSG_G2C_MoveFight(const MSG_G2C_MoveFight& from);
+
+  inline MSG_G2C_MoveFight& operator=(const MSG_G2C_MoveFight& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_MoveFight& default_instance();
+
+  void Swap(MSG_G2C_MoveFight* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_MoveFight* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_MoveFight& from);
+  void MergeFrom(const MSG_G2C_MoveFight& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  typedef MSG_G2C_MoveFight_EResult EResult;
+  static const EResult OK = MSG_G2C_MoveFight_EResult_OK;
+  static const EResult ERR = MSG_G2C_MoveFight_EResult_ERR;
+  static inline bool EResult_IsValid(int value) {
+    return MSG_G2C_MoveFight_EResult_IsValid(value);
+  }
+  static const EResult EResult_MIN =
+    MSG_G2C_MoveFight_EResult_EResult_MIN;
+  static const EResult EResult_MAX =
+    MSG_G2C_MoveFight_EResult_EResult_MAX;
+  static const int EResult_ARRAYSIZE =
+    MSG_G2C_MoveFight_EResult_EResult_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  EResult_descriptor() {
+    return MSG_G2C_MoveFight_EResult_descriptor();
+  }
+  static inline const ::std::string& EResult_Name(EResult value) {
+    return MSG_G2C_MoveFight_EResult_Name(value);
+  }
+  static inline bool EResult_Parse(const ::std::string& name,
+      EResult* value) {
+    return MSG_G2C_MoveFight_EResult_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // required .gproto.MSG_G2C_MoveFight.EResult ret = 1;
+  inline bool has_ret() const;
+  inline void clear_ret();
+  static const int kRetFieldNumber = 1;
+  inline ::gproto::MSG_G2C_MoveFight_EResult ret() const;
+  inline void set_ret(::gproto::MSG_G2C_MoveFight_EResult value);
+
+  // required int32 gobjectindexid = 2;
+  inline bool has_gobjectindexid() const;
+  inline void clear_gobjectindexid();
+  static const int kGobjectindexidFieldNumber = 2;
+  inline ::google::protobuf::int32 gobjectindexid() const;
+  inline void set_gobjectindexid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_MoveFight)
+ private:
+  inline void set_has_ret();
+  inline void clear_has_ret();
+  inline void set_has_gobjectindexid();
+  inline void clear_has_gobjectindexid();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  int ret_;
+  ::google::protobuf::int32 gobjectindexid_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_MoveFight* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_Move : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_Move();
+  virtual ~MSG_G2C_Move();
+
+  MSG_G2C_Move(const MSG_G2C_Move& from);
+
+  inline MSG_G2C_Move& operator=(const MSG_G2C_Move& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_Move& default_instance();
+
+  void Swap(MSG_G2C_Move* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_Move* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_Move& from);
+  void MergeFrom(const MSG_G2C_Move& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 gobjectindexid = 1;
+  inline bool has_gobjectindexid() const;
+  inline void clear_gobjectindexid();
+  static const int kGobjectindexidFieldNumber = 1;
+  inline ::google::protobuf::int32 gobjectindexid() const;
+  inline void set_gobjectindexid(::google::protobuf::int32 value);
+
+  // repeated .gproto.INFO_Position path = 2;
+  inline int path_size() const;
+  inline void clear_path();
+  static const int kPathFieldNumber = 2;
+  inline const ::gproto::INFO_Position& path(int index) const;
+  inline ::gproto::INFO_Position* mutable_path(int index);
+  inline ::gproto::INFO_Position* add_path();
+  inline const ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position >&
+      path() const;
+  inline ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position >*
+      mutable_path();
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_Move)
+ private:
+  inline void set_has_gobjectindexid();
+  inline void clear_has_gobjectindexid();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position > path_;
+  ::google::protobuf::int32 gobjectindexid_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_Move* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MSG_G2C_Fight : public ::google::protobuf::Message {
+ public:
+  MSG_G2C_Fight();
+  virtual ~MSG_G2C_Fight();
+
+  MSG_G2C_Fight(const MSG_G2C_Fight& from);
+
+  inline MSG_G2C_Fight& operator=(const MSG_G2C_Fight& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MSG_G2C_Fight& default_instance();
+
+  void Swap(MSG_G2C_Fight* other);
+
+  // implements Message ----------------------------------------------
+
+  MSG_G2C_Fight* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MSG_G2C_Fight& from);
+  void MergeFrom(const MSG_G2C_Fight& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 skillsn = 1;
+  inline bool has_skillsn() const;
+  inline void clear_skillsn();
+  static const int kSkillsnFieldNumber = 1;
+  inline ::google::protobuf::int32 skillsn() const;
+  inline void set_skillsn(::google::protobuf::int32 value);
+
+  // required int32 attackgobjectindexid = 2;
+  inline bool has_attackgobjectindexid() const;
+  inline void clear_attackgobjectindexid();
+  static const int kAttackgobjectindexidFieldNumber = 2;
+  inline ::google::protobuf::int32 attackgobjectindexid() const;
+  inline void set_attackgobjectindexid(::google::protobuf::int32 value);
+
+  // required int32 defensegobjectindexid = 3;
+  inline bool has_defensegobjectindexid() const;
+  inline void clear_defensegobjectindexid();
+  static const int kDefensegobjectindexidFieldNumber = 3;
+  inline ::google::protobuf::int32 defensegobjectindexid() const;
+  inline void set_defensegobjectindexid(::google::protobuf::int32 value);
+
+  // required int32 losthp = 4;
+  inline bool has_losthp() const;
+  inline void clear_losthp();
+  static const int kLosthpFieldNumber = 4;
+  inline ::google::protobuf::int32 losthp() const;
+  inline void set_losthp(::google::protobuf::int32 value);
+
+  // required int32 remainhp = 5;
+  inline bool has_remainhp() const;
+  inline void clear_remainhp();
+  static const int kRemainhpFieldNumber = 5;
+  inline ::google::protobuf::int32 remainhp() const;
+  inline void set_remainhp(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:gproto.MSG_G2C_Fight)
+ private:
+  inline void set_has_skillsn();
+  inline void clear_has_skillsn();
+  inline void set_has_attackgobjectindexid();
+  inline void clear_has_attackgobjectindexid();
+  inline void set_has_defensegobjectindexid();
+  inline void clear_has_defensegobjectindexid();
+  inline void set_has_losthp();
+  inline void clear_has_losthp();
+  inline void set_has_remainhp();
+  inline void clear_has_remainhp();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 skillsn_;
+  ::google::protobuf::int32 attackgobjectindexid_;
+  ::google::protobuf::int32 defensegobjectindexid_;
+  ::google::protobuf::int32 losthp_;
+  ::google::protobuf::int32 remainhp_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+
+  friend void  protobuf_AddDesc_gmsg_2eproto();
+  friend void protobuf_AssignDesc_gmsg_2eproto();
+  friend void protobuf_ShutdownFile_gmsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static MSG_G2C_Fight* default_instance_;
+};
 // ===================================================================
 
 
@@ -2716,6 +3270,341 @@ inline void MSG_G2C_BattleFight::set_countryindexid(::google::protobuf::int32 va
 
 // MSG_C2G_BattleFightEnd
 
+// -------------------------------------------------------------------
+
+// INFO_Position
+
+// required int32 x = 1;
+inline bool INFO_Position::has_x() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void INFO_Position::set_has_x() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void INFO_Position::clear_has_x() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void INFO_Position::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline ::google::protobuf::int32 INFO_Position::x() const {
+  return x_;
+}
+inline void INFO_Position::set_x(::google::protobuf::int32 value) {
+  set_has_x();
+  x_ = value;
+}
+
+// required int32 y = 2;
+inline bool INFO_Position::has_y() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void INFO_Position::set_has_y() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void INFO_Position::clear_has_y() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void INFO_Position::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline ::google::protobuf::int32 INFO_Position::y() const {
+  return y_;
+}
+inline void INFO_Position::set_y(::google::protobuf::int32 value) {
+  set_has_y();
+  y_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_C2G_MoveFight
+
+// required int32 gobjectindexid = 1;
+inline bool MSG_C2G_MoveFight::has_gobjectindexid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_C2G_MoveFight::set_has_gobjectindexid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_C2G_MoveFight::clear_has_gobjectindexid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_C2G_MoveFight::clear_gobjectindexid() {
+  gobjectindexid_ = 0;
+  clear_has_gobjectindexid();
+}
+inline ::google::protobuf::int32 MSG_C2G_MoveFight::gobjectindexid() const {
+  return gobjectindexid_;
+}
+inline void MSG_C2G_MoveFight::set_gobjectindexid(::google::protobuf::int32 value) {
+  set_has_gobjectindexid();
+  gobjectindexid_ = value;
+}
+
+// repeated .gproto.INFO_Position path = 2;
+inline int MSG_C2G_MoveFight::path_size() const {
+  return path_.size();
+}
+inline void MSG_C2G_MoveFight::clear_path() {
+  path_.Clear();
+}
+inline const ::gproto::INFO_Position& MSG_C2G_MoveFight::path(int index) const {
+  return path_.Get(index);
+}
+inline ::gproto::INFO_Position* MSG_C2G_MoveFight::mutable_path(int index) {
+  return path_.Mutable(index);
+}
+inline ::gproto::INFO_Position* MSG_C2G_MoveFight::add_path() {
+  return path_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position >&
+MSG_C2G_MoveFight::path() const {
+  return path_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position >*
+MSG_C2G_MoveFight::mutable_path() {
+  return &path_;
+}
+
+// required int32 targetgobjectindexid = 3;
+inline bool MSG_C2G_MoveFight::has_targetgobjectindexid() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void MSG_C2G_MoveFight::set_has_targetgobjectindexid() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void MSG_C2G_MoveFight::clear_has_targetgobjectindexid() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void MSG_C2G_MoveFight::clear_targetgobjectindexid() {
+  targetgobjectindexid_ = 0;
+  clear_has_targetgobjectindexid();
+}
+inline ::google::protobuf::int32 MSG_C2G_MoveFight::targetgobjectindexid() const {
+  return targetgobjectindexid_;
+}
+inline void MSG_C2G_MoveFight::set_targetgobjectindexid(::google::protobuf::int32 value) {
+  set_has_targetgobjectindexid();
+  targetgobjectindexid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_MoveFight
+
+// required .gproto.MSG_G2C_MoveFight.EResult ret = 1;
+inline bool MSG_G2C_MoveFight::has_ret() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_MoveFight::set_has_ret() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_MoveFight::clear_has_ret() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_MoveFight::clear_ret() {
+  ret_ = 1;
+  clear_has_ret();
+}
+inline ::gproto::MSG_G2C_MoveFight_EResult MSG_G2C_MoveFight::ret() const {
+  return static_cast< ::gproto::MSG_G2C_MoveFight_EResult >(ret_);
+}
+inline void MSG_G2C_MoveFight::set_ret(::gproto::MSG_G2C_MoveFight_EResult value) {
+  assert(::gproto::MSG_G2C_MoveFight_EResult_IsValid(value));
+  set_has_ret();
+  ret_ = value;
+}
+
+// required int32 gobjectindexid = 2;
+inline bool MSG_G2C_MoveFight::has_gobjectindexid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void MSG_G2C_MoveFight::set_has_gobjectindexid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void MSG_G2C_MoveFight::clear_has_gobjectindexid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void MSG_G2C_MoveFight::clear_gobjectindexid() {
+  gobjectindexid_ = 0;
+  clear_has_gobjectindexid();
+}
+inline ::google::protobuf::int32 MSG_G2C_MoveFight::gobjectindexid() const {
+  return gobjectindexid_;
+}
+inline void MSG_G2C_MoveFight::set_gobjectindexid(::google::protobuf::int32 value) {
+  set_has_gobjectindexid();
+  gobjectindexid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_Move
+
+// required int32 gobjectindexid = 1;
+inline bool MSG_G2C_Move::has_gobjectindexid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_Move::set_has_gobjectindexid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_Move::clear_has_gobjectindexid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_Move::clear_gobjectindexid() {
+  gobjectindexid_ = 0;
+  clear_has_gobjectindexid();
+}
+inline ::google::protobuf::int32 MSG_G2C_Move::gobjectindexid() const {
+  return gobjectindexid_;
+}
+inline void MSG_G2C_Move::set_gobjectindexid(::google::protobuf::int32 value) {
+  set_has_gobjectindexid();
+  gobjectindexid_ = value;
+}
+
+// repeated .gproto.INFO_Position path = 2;
+inline int MSG_G2C_Move::path_size() const {
+  return path_.size();
+}
+inline void MSG_G2C_Move::clear_path() {
+  path_.Clear();
+}
+inline const ::gproto::INFO_Position& MSG_G2C_Move::path(int index) const {
+  return path_.Get(index);
+}
+inline ::gproto::INFO_Position* MSG_G2C_Move::mutable_path(int index) {
+  return path_.Mutable(index);
+}
+inline ::gproto::INFO_Position* MSG_G2C_Move::add_path() {
+  return path_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position >&
+MSG_G2C_Move::path() const {
+  return path_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::gproto::INFO_Position >*
+MSG_G2C_Move::mutable_path() {
+  return &path_;
+}
+
+// -------------------------------------------------------------------
+
+// MSG_G2C_Fight
+
+// required int32 skillsn = 1;
+inline bool MSG_G2C_Fight::has_skillsn() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MSG_G2C_Fight::set_has_skillsn() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MSG_G2C_Fight::clear_has_skillsn() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MSG_G2C_Fight::clear_skillsn() {
+  skillsn_ = 0;
+  clear_has_skillsn();
+}
+inline ::google::protobuf::int32 MSG_G2C_Fight::skillsn() const {
+  return skillsn_;
+}
+inline void MSG_G2C_Fight::set_skillsn(::google::protobuf::int32 value) {
+  set_has_skillsn();
+  skillsn_ = value;
+}
+
+// required int32 attackgobjectindexid = 2;
+inline bool MSG_G2C_Fight::has_attackgobjectindexid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void MSG_G2C_Fight::set_has_attackgobjectindexid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void MSG_G2C_Fight::clear_has_attackgobjectindexid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void MSG_G2C_Fight::clear_attackgobjectindexid() {
+  attackgobjectindexid_ = 0;
+  clear_has_attackgobjectindexid();
+}
+inline ::google::protobuf::int32 MSG_G2C_Fight::attackgobjectindexid() const {
+  return attackgobjectindexid_;
+}
+inline void MSG_G2C_Fight::set_attackgobjectindexid(::google::protobuf::int32 value) {
+  set_has_attackgobjectindexid();
+  attackgobjectindexid_ = value;
+}
+
+// required int32 defensegobjectindexid = 3;
+inline bool MSG_G2C_Fight::has_defensegobjectindexid() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void MSG_G2C_Fight::set_has_defensegobjectindexid() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void MSG_G2C_Fight::clear_has_defensegobjectindexid() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void MSG_G2C_Fight::clear_defensegobjectindexid() {
+  defensegobjectindexid_ = 0;
+  clear_has_defensegobjectindexid();
+}
+inline ::google::protobuf::int32 MSG_G2C_Fight::defensegobjectindexid() const {
+  return defensegobjectindexid_;
+}
+inline void MSG_G2C_Fight::set_defensegobjectindexid(::google::protobuf::int32 value) {
+  set_has_defensegobjectindexid();
+  defensegobjectindexid_ = value;
+}
+
+// required int32 losthp = 4;
+inline bool MSG_G2C_Fight::has_losthp() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void MSG_G2C_Fight::set_has_losthp() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void MSG_G2C_Fight::clear_has_losthp() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void MSG_G2C_Fight::clear_losthp() {
+  losthp_ = 0;
+  clear_has_losthp();
+}
+inline ::google::protobuf::int32 MSG_G2C_Fight::losthp() const {
+  return losthp_;
+}
+inline void MSG_G2C_Fight::set_losthp(::google::protobuf::int32 value) {
+  set_has_losthp();
+  losthp_ = value;
+}
+
+// required int32 remainhp = 5;
+inline bool MSG_G2C_Fight::has_remainhp() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void MSG_G2C_Fight::set_has_remainhp() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void MSG_G2C_Fight::clear_has_remainhp() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void MSG_G2C_Fight::clear_remainhp() {
+  remainhp_ = 0;
+  clear_has_remainhp();
+}
+inline ::google::protobuf::int32 MSG_G2C_Fight::remainhp() const {
+  return remainhp_;
+}
+inline void MSG_G2C_Fight::set_remainhp(::google::protobuf::int32 value) {
+  set_has_remainhp();
+  remainhp_ = value;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -2740,6 +3629,10 @@ inline const EnumDescriptor* GetEnumDescriptor< ::gproto::MSG_G2C_LeaveGround_ER
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::gproto::Info_GObject_EType>() {
   return ::gproto::Info_GObject_EType_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::gproto::MSG_G2C_MoveFight_EResult>() {
+  return ::gproto::MSG_G2C_MoveFight_EResult_descriptor();
 }
 
 }  // namespace google

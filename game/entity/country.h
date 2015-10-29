@@ -72,6 +72,10 @@ public:	// 消息发送
 	bool SendBattleReward(int nWinCountryIndexId);
 	// 战斗回合
 	bool SendBattleFight(int nCountryIndexId);
+	// 行走失败
+	bool SendMoveFight(bool bOK, int nGObjectIndexId);
+	// 行走广播
+	bool SendMove(int nGObjectIndexId, const VtCoor2 &vtCoor2);
 
 private:
 	bool SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage);

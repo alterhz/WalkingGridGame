@@ -31,6 +31,8 @@ private:
 	void OnPrepareFinish(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 	// 战斗完成
 	void OnBattleFightEnd(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
+	// 移动战斗
+	void OnMoveFight(int nProtoId, const char *pMessage, int nLength, CClient *pClient);
 };
 
 #endif

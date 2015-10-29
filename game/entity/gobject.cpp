@@ -32,10 +32,8 @@ bool IGObject::EnterGround(int x, int y, IBattleGround *pBattleGround)
 		return false;
 	}
 
-	SetXY(x, y);
-
 	// 进入场景
-	pBattleGround->GObjectEnter(this);
+	pBattleGround->GObjectEnter(this, x, y);
 
 	return true;
 }
@@ -190,6 +188,42 @@ bool CWalkableObject::Move(int x, int y)
 	pGrid->AddGObject(this);
 
 	return true;
+}
+
+bool CWalkableObject::Move(const VtCoor2 &vtCoor2)
+{
+	if (nullptr == m_pBattleGround)
+	{
+		LOGError("nullptr == m_pGround");
+		return false;
+	}
+
+	// 验证路径点起始位置和最远距离
+	if (vtCoor2.size() < 2)
+	{
+		return false;
+	}
+
+	const COOR2 &coor2Begin = vtCoor2[0];
+	const COOR2 &coor2End = vtCoor2[vtCoor2.size() - 1];
+
+	COOR2 coor2 = GetCoor2();
+
+	if (!(coor2Begin == coor2))
+	{
+		// 起始点有误
+		return false;
+	}
+
+	int nLength = COOR2::Length(coor2Begin, coor2End);
+
+	if (nLength > GetWalkLength())
+	{
+		// 超过最远行走距离
+		return false;
+	}
+
+	return m_pBattleGround->GObjectMove(this, vtCoor2);
 }
 
 bool CWalkableObject::IsWalkable(EToWard eToWard) const

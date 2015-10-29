@@ -30,6 +30,10 @@ enum PID
 	CSID_G2C_BattleFight	= 20140;
 	CSID_C2G_BattleFightEnd	= 20141;
 	
+	CSID_C2G_MoveFight		= 20150;
+	CSID_G2C_MoveFight		= 20151;
+	CSID_G2C_Move			= 20152;
+	CSID_G2C_Fight			= 20153;
 	
 }
 

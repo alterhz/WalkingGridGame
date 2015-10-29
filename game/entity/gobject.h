@@ -30,6 +30,8 @@ public:
 	int GetY() const { return m_nY; }
 	void SetXY(int x, int y) { m_nX = x, m_nY = y; }
 
+	COOR2 GetCoor2() const { return COOR2(m_nX, m_nY); }
+
 	IGrid * GetGrid() const { return m_pGrid; }
 	void BindGrid(IGrid *pGrid) { m_pGrid = pGrid; }
 
@@ -145,6 +147,7 @@ protected:
 public:
 	// 行走
 	bool Move(int x, int y);
+	bool Move(const VtCoor2 &vtCoor2);
 	// 获取移动步长
 	int GetWalkLength() const;
 

@@ -58,7 +58,7 @@ void protobuf_AddDesc_gpid_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\ngpid.proto\022\006gproto*\233\004\n\003PID\022\027\n\022CSID_C2G"
+    "\n\ngpid.proto\022\006gproto*\372\004\n\003PID\022\027\n\022CSID_C2G"
     "_HeartBeat\020\220N\022\027\n\022CSID_G2C_HeartBeat\020\221N\022\027"
     "\n\022CSID_C2G_StartGame\020\364N\022\025\n\020CSID_C2G_Prep"
     "are\020\330O\022\025\n\020CSID_G2C_Prepare\020\331O\022\034\n\026CSID_G2"
@@ -72,7 +72,9 @@ void protobuf_AddDesc_gpid_2eproto() {
     "\020\232\235\001\022\033\n\025CSID_G2C_BattleReward\020\233\235\001\022\034\n\026CSI"
     "D_C2G_PrepareFinish\020\242\235\001\022\032\n\024CSID_G2C_Batt"
     "leFight\020\254\235\001\022\035\n\027CSID_C2G_BattleFightEnd\020\255"
-    "\235\001", 562);
+    "\235\001\022\030\n\022CSID_C2G_MoveFight\020\266\235\001\022\030\n\022CSID_G2C"
+    "_MoveFight\020\267\235\001\022\023\n\rCSID_G2C_Move\020\270\235\001\022\024\n\016C"
+    "SID_G2C_Fight\020\271\235\001", 657);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gpid.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_gpid_2eproto);
@@ -109,6 +111,10 @@ bool PID_IsValid(int value) {
     case 20130:
     case 20140:
     case 20141:
+    case 20150:
+    case 20151:
+    case 20152:
+    case 20153:
       return true;
     default:
       return false;
