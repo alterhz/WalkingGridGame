@@ -74,6 +74,7 @@ public:
 	CConfigRead<CXmlData_Ground> xdGround;
 	CConfigRead<CXmlData_Still> xdStill;
 	CConfigRead<CXmlData_Walkable> xdWalkable;
+	CConfigRead<CXmlData_Skill> xdSkill;
 };
 
 

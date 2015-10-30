@@ -7,6 +7,8 @@
 #define _TOOL_H_
 
 #include <string>
+#include <list>
+#include <vector>
 
 #ifndef NS_IO
 
@@ -18,11 +20,8 @@
 
 NS_IO_Header
 
-	int string2int(std::string strI);
-	std::string int2string(int n);
-
-	double string2double(std::string strF);
-	std::string double2string(double f);
+	// ²ð·Ö×Ö·û´®
+	std::vector<std::string> Split(std::string str, std::string c);
 
 NS_IO_Footer
 

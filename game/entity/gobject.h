@@ -62,13 +62,23 @@ public:
 	virtual bool IsWalkable(EToWard eToWard) const = 0;
 	
 	// 战斗相关
+	// 是否参与战斗
+	virtual bool IsCanFight() const { return true; }
 	// 是否可以攻击
 	virtual bool IsCanAttack() const { return true; }
-	virtual int GetAtt() const { return 0; }
-	virtual int GetMaxHP() const = 0;
 
+	// 属性相关
+	virtual int GetAtt() const { return 1; }
 	int GetHP() const { return m_nHP; }
+	virtual int GetMaxHP() const = 0;
+	// 掉血
+	int LostHP(int nHP);
+	virtual int OnLostHP(int nHP) { return nHP; }
+
 	int GetSP() const { return m_nSP; }
+	void AddSP(int nSP);
+	virtual void OnAddSP(int nSP) {}
+
 	int GetLevel() const { return m_nLevel; }
 	void SetLevel(int nLevel) { m_nLevel = nLevel; }
 
@@ -111,7 +121,10 @@ protected:
 	// 是否可以通过
 	virtual bool IsWalkable(EToWard eToWard) const;
 	//战斗相关
-	virtual bool IsCanAttack() const;
+	// 是否参与战斗
+	virtual bool IsCanFight() const;
+	// 是否可以攻击
+	virtual bool IsCanAttack() const { return false; }
 	// 获取最大血量
 	virtual int GetMaxHP() const;
 
@@ -130,6 +143,10 @@ public:
 	CWalkableObject();
 	virtual ~CWalkableObject();
 
+public:
+	// 释放技能
+	virtual bool UseSkill(int nTargetGObjectIndexId);
+
 protected:
 	// 对象类型
 	virtual GObjectType GetType() const { return GObjectType_Walkable; }
@@ -140,9 +157,14 @@ protected:
 	// 对象不可以通过(一个格子不能存在两个角色单位)
 	virtual bool IsWalkable(EToWard eToWard) const;
 	// 战斗相关
-	virtual bool IsCanAttack() const { return true; }
+	virtual int GetAtt() const;
 	// 获取最大血量
-	virtual int GetMaxHP() const { return 99; }
+	virtual int GetMaxHP() const;
+
+private:
+	int GetCommonSkillSN() const;
+	int GetSkillSN1() const;
+	int GetSkillSN2() const;
 
 public:
 	// 行走

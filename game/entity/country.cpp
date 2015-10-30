@@ -335,7 +335,17 @@ bool ICountry::SendMove(int nGObjectIndexId, const VtCoor2 &vtCoor2)
 	return SendMessage(gproto::CSID_G2C_Move, &msg);
 }
 
+bool ICountry::SendFight(int nSkillSN, int nAttackGObjectIndexId, int nDefenseGObjectIndexId, int nLostHP, int nRemainHP)
+{
+	gproto::MSG_G2C_Fight msg;
+	msg.set_skillsn(nSkillSN);
+	msg.set_attackgobjectindexid(nAttackGObjectIndexId);
+	msg.set_defensegobjectindexid(nDefenseGObjectIndexId);
+	msg.set_losthp(nLostHP);
+	msg.set_remainhp(nRemainHP);
 
+	return SendMessage(gproto::CSID_G2C_Fight, &msg);
+}
 
 
 

@@ -38,6 +38,45 @@ bool IGObject::EnterGround(int x, int y, IBattleGround *pBattleGround)
 	return true;
 }
 
+void IGObject::AddSP(int nSP)
+{
+	if (nSP <= 0)
+	{
+		return ;
+	}
+
+	m_nSP += nSP;
+
+	OnAddSP(nSP);
+}
+
+int IGObject::LostHP(int nHP)
+{
+	if (nHP <= 0)
+	{
+		LOGError("nHP[" + nHP + "] <= 0");
+		return false;
+	}
+
+	int nLostHP = OnLostHP(nHP);
+
+	if (nLostHP <= 0)
+	{
+		LOGError("nLostHP[" + nLostHP + "] <= 0");
+		return false;
+	}
+
+	if (nLostHP > m_nHP)
+	{
+		nLostHP = m_nHP;
+	}
+
+	m_nHP -= nLostHP;
+
+	return m_nHP;
+}
+
+
 // 静止场景对象
 CStillObject::CStillObject()
 	: m_pXmlData_Still(nullptr)
@@ -94,17 +133,6 @@ bool CStillObject::IsWalkable(EToWard eToWard) const
 	}
 }
 
-bool CStillObject::IsCanAttack() const
-{
-	if (nullptr == m_pXmlData_Still)
-	{
-		LOGError("nullptr == m_pXmlData_Object");
-		return false;
-	}
-
-	return m_pXmlData_Still->bCanDestroy;
-}
-
 bool CStillObject::IsFlag() const
 {
 	if (nullptr == m_pXmlData_Still)
@@ -124,6 +152,17 @@ int CStillObject::GetMaxHP() const
 	}
 
 	return 1;
+}
+
+bool CStillObject::IsCanFight() const
+{
+	if (nullptr == m_pXmlData_Still)
+	{
+		LOGError("nullptr == m_pXmlData_Object");
+		return false;
+	}
+
+	return m_pXmlData_Still->bCanDestroy;
 }
 
 // 场景角色
@@ -149,7 +188,7 @@ bool CWalkableObject::OnInit()
 	m_pXmlData_Walkable = pXmlData_Walkable;
 
 	// 初始化当前血量
-	m_nHP = 99;
+	m_nHP = m_pXmlData_Walkable->nHP;
 
 	return true;
 }
@@ -259,6 +298,80 @@ int CWalkableObject::GetWalkLength() const
 	if (m_pXmlData_Walkable)
 	{
 		return m_pXmlData_Walkable->nWalkLength;
+	}
+
+	return 0;
+}
+
+int CWalkableObject::GetMaxHP() const
+{
+	if (m_pXmlData_Walkable)
+	{
+		return m_pXmlData_Walkable->nHP;
+	}
+
+	return 1;
+}
+
+int CWalkableObject::GetAtt() const
+{
+	if (m_pXmlData_Walkable)
+	{
+		return m_pXmlData_Walkable->nAtt;
+	}
+
+	return 1;
+}
+
+bool CWalkableObject::UseSkill(int nTargetGObjectIndexId)
+{
+	if (m_pBattleGround)
+	{
+		if (m_nSP >= 3)
+		{
+			// 技能
+			int nSkillSN = GetSkillSN1();
+			if (m_pBattleGround->GObjectUseSkill(this, nSkillSN, nTargetGObjectIndexId))
+			{
+				m_nSP = 0;
+			}
+		}
+		else
+		{
+			// 普攻
+			int nSkillSN = GetCommonSkillSN();
+			m_pBattleGround->GObjectUseSkill(this, nSkillSN, nTargetGObjectIndexId);
+		}
+	}
+
+	return true;
+}
+
+int CWalkableObject::GetCommonSkillSN() const
+{
+	if (m_pXmlData_Walkable)
+	{
+		return m_pXmlData_Walkable->nCommonSkillSN;
+	}
+
+	return 0;
+}
+
+int CWalkableObject::GetSkillSN1() const
+{
+	if (m_pXmlData_Walkable)
+	{
+		return m_pXmlData_Walkable->nSkillSN1;
+	}
+
+	return 0;
+}
+
+int CWalkableObject::GetSkillSN2() const
+{
+	if (m_pXmlData_Walkable)
+	{
+		return m_pXmlData_Walkable->nSkillSN2;
 	}
 
 	return 0;

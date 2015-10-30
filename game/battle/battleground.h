@@ -51,6 +51,8 @@ public:
 	virtual void BattleBoutFinish(ICountry *pCountry);
 	// GObject移动
 	virtual bool GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2);
+	// GObject释放技能
+	virtual bool GObjectUseSkill(IGObject *pGObject, int nSkillSN, int nTargetGObjectIndexId);
 
 protected:
 	virtual bool OnInit() { return true; }
@@ -115,6 +117,8 @@ protected:
 	virtual void BattleBoutFinish(ICountry *pCountry);
 	// GObject移动
 	virtual bool GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2);
+	// GObject释放技能
+	virtual bool GObjectUseSkill(IGObject *pGObject, int nSkillSN, int nTargetGObjectIndexId);
 
 	void OnGoPrepare();
 	void OnGoBattle();

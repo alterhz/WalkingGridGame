@@ -310,7 +310,7 @@ bool IBattleGround::PathIsOK(const VtCoor2 &vtCoor2)
 
 	COOR2 coor2Prev = vtCoor2[0];
 
-	for (int i=1; i<vtCoor2.size(); ++i)
+	for (int i=1; i<static_cast<int>(vtCoor2.size()); ++i)
 	{
 		COOR2 coor2 = vtCoor2[i];
 
@@ -343,6 +343,12 @@ bool IBattleGround::PathIsOK(const VtCoor2 &vtCoor2)
 bool IBattleGround::GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2)
 {
 	LOGDebug("GObjectMove");
+	return true;
+}
+
+bool IBattleGround::GObjectUseSkill(IGObject *pGObject, int nSkillSN, int nTargetGObjectIndexId)
+{
+	LOGDebug("目标释放技能");
 	return true;
 }
 
@@ -865,6 +871,118 @@ bool CFrontBattleGround::IsMoveFight(int nGObjectIndexId) const
 	}
 
 	return false;
+}
+
+bool CFrontBattleGround::GObjectUseSkill(IGObject *pGObject, int nSkillSN, int nTargetGObjectIndexId)
+{
+	if (nullptr == pGObject)
+	{
+		LOGError("nullptr == pGObject");
+		return false;
+	}
+
+	const CXmlData_Skill *pXmlData_Skill = CConfigReadManager::getMe().xdSkill.GetRecord(nSkillSN);
+	if (nullptr == pXmlData_Skill)
+	{
+		LOGError("nullptr == pXmlData_Skill");
+		return false;
+	}
+
+	if (CXmlData_Skill::ERange_Single == pXmlData_Skill->eRange)
+	{
+		if (CXmlData_Skill::ETarget_Enemy == pXmlData_Skill->eTarget)
+		{
+			IGObject *pTargetGObject = FindGObject(nTargetGObjectIndexId);
+			if (nullptr == pTargetGObject)
+			{
+				LOGError("没有找到技能[" + nSkillSN + "]释放目标[" + nTargetGObjectIndexId + "]。");
+				return false;
+			}
+
+			// 被攻击目标是否参与战斗
+			if (!pTargetGObject->IsCanFight())
+			{
+				LOGDebug("被攻击者不参与战斗，不能释放技能。");
+				return false;
+			}
+
+			if (pTargetGObject->GetCampId() == pGObject->GetCampId())
+			{
+				LOGDebug("目标[" + nTargetGObjectIndexId + "]是友方单位或者自己，不能攻击。");
+				return false;
+			}
+
+			// 计算攻击距离
+			const COOR2 &coor2Target = pTargetGObject->GetCoor2();
+			const COOR2 &coor2Self = pGObject->GetCoor2();
+
+			int nLength = COOR2::Length(coor2Self, coor2Target);
+
+			if (nLength < pXmlData_Skill->nMinAttackLength
+				|| nLength > pXmlData_Skill->nMaxAttackLength)
+			{
+				LOGDebug("超过攻击范围[nLength:" + nLength + ", minLength:" + pXmlData_Skill->nMinAttackLength 
+					+ ", nMaxLength:" + pXmlData_Skill->nMaxAttackLength + "]。");
+				return false;
+			}
+
+			// 伤害计算
+			int nAtt = pGObject->GetAtt();
+
+			int nRand = NS_IO::Random() % 21;
+
+			int nDamageValue = static_cast<int>(nAtt * (90 + nRand) / 100.0f) + pXmlData_Skill->nAddDamage;
+
+			int nLostHP = pTargetGObject->LostHP(nDamageValue);
+			int nRemainHP = pTargetGObject->GetHP();
+
+			// 技能伤害广播
+			auto itCountry = m_mapCountry.begin();
+			for (; itCountry!= m_mapCountry.end(); ++itCountry)
+			{
+				ICountry *pCountry = itCountry->second;
+				if (pCountry)
+				{
+					pCountry->SendFight(nSkillSN, pGObject->GetIndexId(), pTargetGObject->GetIndexId(), nLostHP, nRemainHP);
+				}
+			}
+		}
+		else if (CXmlData_Skill::ETarget_Self == pXmlData_Skill->eTarget)
+		{
+
+		}
+		else if (CXmlData_Skill::ETarget_Friend == pXmlData_Skill->eTarget)
+		{
+
+		}
+	}
+	else if (CXmlData_Skill::ERange_Multi == pXmlData_Skill->eRange)
+	{
+		if (CXmlData_Skill::ETarget_Self == pXmlData_Skill->eTarget)
+		{
+			// 以自身为中心释放技能
+
+		}
+		else if (CXmlData_Skill::ETarget_Friend == pXmlData_Skill->eTarget)
+		{
+
+		}
+		else if (CXmlData_Skill::ETarget_Enemy == pXmlData_Skill->eTarget)
+		{
+
+		}
+	}
+	else if (CXmlData_Skill::ERange_All == pXmlData_Skill->eRange)
+	{
+
+	}
+	else
+	{
+		LOGError("技能范围类型[" + pXmlData_Skill->eRange + "]异常。");
+	}
+
+
+	return true;
 }
 
 

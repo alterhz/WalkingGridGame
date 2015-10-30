@@ -10,6 +10,9 @@
 <SuperGround>4</SuperGround>
 <HP>50</HP>
 <Att>10</Att>
+<CommonSkillSN>1</CommonSkillSN>
+<SkillSN1>0</SkillSN1>
+<SkillSN2>0</SkillSN2>
 </RECORD>
 <RECORD>
 <SN>2</SN>
@@ -21,6 +24,9 @@
 <SuperGround>1,2</SuperGround>
 <HP>200</HP>
 <Att>20</Att>
+<CommonSkillSN>1</CommonSkillSN>
+<SkillSN1>2</SkillSN1>
+<SkillSN2>0</SkillSN2>
 </RECORD>
 <RECORD>
 <SN>3</SN>
@@ -32,5 +38,8 @@
 <SuperGround>2,4</SuperGround>
 <HP>200</HP>
 <Att>20</Att>
+<CommonSkillSN>1</CommonSkillSN>
+<SkillSN1>3</SkillSN1>
+<SkillSN2>0</SkillSN2>
 </RECORD>
 </RECORDS>

@@ -76,6 +76,8 @@ public:	// 消息发送
 	bool SendMoveFight(bool bOK, int nGObjectIndexId);
 	// 行走广播
 	bool SendMove(int nGObjectIndexId, const VtCoor2 &vtCoor2);
+	// 战斗广播
+	bool SendFight(int SkillSN, int nAttackGObjectIndexId, int nDefenseGObjectIndexId, int nLostHP, int nRemainHP);
 
 private:
 	bool SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage);

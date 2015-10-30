@@ -54,7 +54,7 @@ bool CConfigRead<T>::LoadConfigData(std::string strFileName)
 			continue;
 		}
 
-		int nSN = NS_IO::string2int(pEleId->GetText());
+		int nSN = NS_IO::String2Int(pEleId->GetText());
 
 		T *pXmlData = new T();
 		if (nullptr == pXmlData)
@@ -102,6 +102,11 @@ bool CConfigReadManager::LoadConfigData()
 	}
 
 	if (!xdWalkable.LoadConfigData(strRootPath + "//..//config//walkable.xml"))
+	{
+		return false;
+	}
+
+	if (!xdSkill.LoadConfigData(strRootPath + "//..//config//skill.xml"))
 	{
 		return false;
 	}

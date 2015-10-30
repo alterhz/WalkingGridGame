@@ -259,5 +259,5 @@ void CGameDispatcher::OnMoveFight(int nProtoId, const char *pMessage, int nLengt
 	}
 
 	// ¹¥»÷´¦Àí
-	
+	pWalkableObject->UseSkill(nTargetGObjectIndexId);
 }

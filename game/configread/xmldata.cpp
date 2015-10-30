@@ -22,7 +22,7 @@ bool IXmlData::ReadInt(const tinyxml2::XMLElement *pEleRecord, std::string strCo
 		return false;
 	}
 
-	n = NS_IO::string2int(pText);
+	n = NS_IO::String2Int(pText);
 
 	return true;
 }
@@ -46,7 +46,7 @@ bool IXmlData::ReadFloat(const tinyxml2::XMLElement *pEleRecord, std::string str
 		return false;
 	}
 
-	dValue = NS_IO::string2double(pText);
+	dValue = NS_IO::String2Double(pText);
 
 	return true;
 }
@@ -94,7 +94,7 @@ bool IXmlData::ReadBool(const tinyxml2::XMLElement *pEleRecord, std::string strC
 		return false;
 	}
 
-	int n = NS_IO::string2int(pText);
+	int n = NS_IO::String2Int(pText);
 
 	if (0 == n)
 	{
@@ -171,6 +171,57 @@ void CXmlData_Walkable::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
 	std::string strSuperGround;
 	ReadString(pEleRecord, "SuperGround", strSuperGround);
 
+	std::vector<std::string> vtString = NS_IO::Split(strSuperGround, ",");
+	for (std::string strValue : vtString)
+	{
+		int nGroundType = NS_IO::String2Int(strValue);
+		vtSuperGrounds.push_back(nGroundType);
+	}
+
 	ReadInt(pEleRecord, "HP", nHP);
 	ReadInt(pEleRecord, "Att", nAtt);
+
+	ReadInt(pEleRecord, "CommonSkillSN", nCommonSkillSN);
+	ReadInt(pEleRecord, "SkillSN1", nSkillSN1);
+	ReadInt(pEleRecord, "SkillSN2", nSkillSN2);
+}
+
+void CXmlData_Skill::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
+{
+	ReadString(pEleRecord, "Name", strName);
+	ReadString(pEleRecord, "Description", strDescription);
+	ReadString(pEleRecord, "Resource", strResource);
+	ReadString(pEleRecord, "DestroyResource", strDeadDesource);
+
+	int nType = 0;
+	ReadInt(pEleRecord, "Type", nType);
+	eType = static_cast<EType>(nType);
+
+	int nRange = 0;
+	ReadInt(pEleRecord, "Range", nRange);
+	eRange = static_cast<ERange>(nRange);
+
+	int nTarget = 0;
+	ReadInt(pEleRecord, "Target", nTarget);
+	eTarget = static_cast<ETarget>(nTarget);
+
+	std::string strGrids;
+	ReadString(pEleRecord, "Grids", strGrids);
+
+	std::vector<std::string> vtString = NS_IO::Split(strGrids, "|");
+	for (std::string strValue : vtString)
+	{
+		std::vector<std::string> vtString = NS_IO::Split(strValue, ",");
+		if (vtString.size() == 2)
+		{
+			int x = NS_IO::String2Int(vtString[0]);
+			int y = NS_IO::String2Int(vtString[1]);
+
+			vtCoor2.push_back(COOR2(x, y));
+		}
+	}
+
+	ReadInt(pEleRecord, "AddDamage", nAddDamage);
+	ReadInt(pEleRecord, "MinAttackLength", nMinAttackLength);
+	ReadInt(pEleRecord, "MaxAttackLength", nMaxAttackLength);
 }

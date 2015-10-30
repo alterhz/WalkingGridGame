@@ -120,6 +120,9 @@ public:
 		: nWalkLength(0)
 		, nHP(0)
 		, nAtt(0)
+		, nCommonSkillSN(0)
+		, nSkillSN1(0)
+		, nSkillSN2(0)
 	{}
 	~CXmlData_Walkable() {}
 
@@ -134,6 +137,57 @@ public:
 	VtInt vtSuperGrounds;
 	int nHP;
 	int nAtt;
+	int nCommonSkillSN;
+	int nSkillSN1;
+	int nSkillSN2;
+};
+
+// Skill
+class CXmlData_Skill : public IXmlData
+{
+public:
+	enum EType
+	{
+		EType_Sirdar = 1,	//将领
+		EType_Hero = 2,		//英雄
+	};
+
+	enum ERange
+	{
+		ERange_Single	= 1,	//单体
+		ERange_Multi	= 2,	//范围
+		ERange_All		= 3,	//全屏
+	};
+
+	enum ETarget
+	{
+		ETarget_Self	= 1,	//自身
+		ETarget_Friend	= 2,	//友方
+		ETarget_Enemy	= 3,	//敌方
+	};
+
+public:
+	CXmlData_Skill()
+		: nAddDamage(0)
+		, nMinAttackLength(0)
+		, nMaxAttackLength(0)
+	{}
+	~CXmlData_Skill() {}
+
+	// 单条记录载入
+	virtual void OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord);
+
+	std::string strName;
+	std::string strDescription;
+	std::string strResource;
+	std::string strDeadDesource;
+	EType eType;
+	ERange eRange;
+	ETarget eTarget;
+	VtCoor2 vtCoor2;
+	int nAddDamage;	//技能附加伤害
+	int nMinAttackLength;	//最小攻击距离
+	int nMaxAttackLength;	//最大攻击距离
 };
 
 
