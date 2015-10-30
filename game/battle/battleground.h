@@ -53,6 +53,8 @@ public:
 	virtual bool GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2);
 	// GObject释放技能
 	virtual bool GObjectUseSkill(IGObject *pGObject, int nSkillSN, int nTargetGObjectIndexId);
+	// 战场结束(将领死亡)参数是失败的阵营ID
+	virtual void BattleFinish(int nCampId);
 
 protected:
 	virtual bool OnInit() { return true; }
@@ -119,22 +121,27 @@ protected:
 	virtual bool GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2);
 	// GObject释放技能
 	virtual bool GObjectUseSkill(IGObject *pGObject, int nSkillSN, int nTargetGObjectIndexId);
+	// 战场结束(将领死亡)参数是失败的阵营ID
+	virtual void BattleFinish(int nCampId);
 
 	void OnGoPrepare();
 	void OnGoBattle();
 	void OnGoReward();
 
 private:
-	bool IsMoveFight(int nGObjectIndexId) const;
+	bool HaveMoveOrFight(int nGObjectIndexId) const;
+	bool HaveFight(int nGObjectIndexId) const;
 
 private:
 	EBattleStatus m_eBattleStatus;
 	VtInt m_vtPrepareFinishCountryIndexId;
+	VtInt m_vtSurviveCampId;
 	int m_nBoutIndex;	//回合轮流顺序
 	int m_nBoutCountryIndexId;	//当前回合的CountryIndexId
-	VtInt m_vtBoutMoveFightGObjectIndexId;	//当前回合移动战斗的GObjectIndexId`
-	// 胜利的CountryIndexId
-	int m_nWinCountryIndexId;
+	VtInt m_vtBoutMoveGObjectIndexId;	//当前回合移动过的GObjectIndexId[可能存在重复]
+	VtInt m_vtBoutFightGObjectIndexId;	//当前回合战斗过的GObjectIndexId[可能存在重复]
+	// 胜利的阵营
+	int m_nWinCampId;
 };
 
 class CBattleGroundManager : public Singleton<CBattleGroundManager>, public NS_IO::ITimerEvent

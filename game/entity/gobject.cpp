@@ -66,12 +66,21 @@ int IGObject::LostHP(int nHP)
 		return false;
 	}
 
-	if (nLostHP > m_nHP)
+	if (m_nHP > 0)
 	{
-		nLostHP = m_nHP;
-	}
+		if (nLostHP > m_nHP)
+		{
+			nLostHP = m_nHP;
+		}
 
-	m_nHP -= nLostHP;
+		m_nHP -= nLostHP;
+
+		OnDead();
+	}
+	else
+	{
+		nLostHP = 0;
+	}
 
 	return m_nHP;
 }
@@ -163,6 +172,19 @@ bool CStillObject::IsCanFight() const
 	}
 
 	return m_pXmlData_Still->bCanDestroy;
+}
+
+void CStillObject::OnDead()
+{
+	if (IsFlag())
+	{
+		// 将领死亡，触发场景结束事件
+		if (m_pBattleGround)
+		{
+			int nCampId = GetCampId();
+			m_pBattleGround->BattleFinish(nCampId);
+		}
+	}
 }
 
 // 场景角色
@@ -317,6 +339,22 @@ int CWalkableObject::GetAtt() const
 {
 	if (m_pXmlData_Walkable)
 	{
+		// 处于优势地形，增加攻击力
+		if (m_pGrid)
+		{
+			int nGroundType = m_pGrid->GetGroundType();
+
+			for (const int nSuperGroundType : m_pXmlData_Walkable->vtSuperGrounds)
+			{
+				if (nSuperGroundType == nGroundType)
+				{
+					// 优势地形，提升20%攻击力
+					int nAtt = static_cast<int>(m_pXmlData_Walkable->nAtt * 1.2f);
+					return nAtt;
+				}
+			}
+		}
+
 		return m_pXmlData_Walkable->nAtt;
 	}
 

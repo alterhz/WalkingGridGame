@@ -124,9 +124,7 @@ void CXmlData_Ground::OnRead(int nSN, const tinyxml2::XMLElement *pEleRecord)
 	ReadString(pEleRecord, "Name", strName);
 	ReadString(pEleRecord, "Src", strSrc);
 
-	int nGroundType = 0;
 	ReadInt(pEleRecord, "Type", nGroundType);
-	eGroundType = static_cast<EGroundType>(nGroundType);
 
 	ReadString(pEleRecord, "Effects", strEffects);
 

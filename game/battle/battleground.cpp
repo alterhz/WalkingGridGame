@@ -352,6 +352,11 @@ bool IBattleGround::GObjectUseSkill(IGObject *pGObject, int nSkillSN, int nTarge
 	return true;
 }
 
+void IBattleGround::BattleFinish(int nCampId)
+{
+	LOGDebug("阵营[" + nCampId + "]失败。")
+}
+
 const int G_nDemoWidthCount = 20;
 const int G_nDemoHeigthCount = 30;
 
@@ -359,7 +364,7 @@ CFrontBattleGround::CFrontBattleGround()
 	: m_eBattleStatus(EBattleStatus_Waiting)
 	, m_nBoutIndex(0)
 	, m_nBoutCountryIndexId(0)
-	, m_nWinCountryIndexId(0)
+	, m_nWinCampId(0)
 {
 }
 
@@ -516,7 +521,7 @@ bool CFrontBattleGround::OnLeave(ICountry *pCountry)
 			if (itCountry->second)
 			{
 				// 获胜的CountryIndexId
-				m_nWinCountryIndexId = itCountry->second->GetIndexId();
+				m_nWinCampId = itCountry->second->GetIndexId();
 
 				ChangeBattleStatus(EBattleStatus_Reward);
 			}
@@ -681,6 +686,9 @@ void CFrontBattleGround::OnGoBattle()
 		{
 			pCountry->SendBattleStart();
 		}
+
+		// 设置存活的阵营
+		m_vtSurviveCampId.push_back(pCountry->GetIndexId());
 	}
 
 	// 随机分配先开始回合(bout)的角色
@@ -721,7 +729,7 @@ void CFrontBattleGround::OnGoReward()
 
 		if (pCountry)
 		{
-			pCountry->SendBattleReward(m_nWinCountryIndexId);
+			pCountry->SendBattleReward(m_nWinCampId);
 		}
 	}	
 }
@@ -785,8 +793,9 @@ void CFrontBattleGround::BattleBoutFinish(ICountry *pCountry)
 		return ;
 	}
 
-	// 清理移动战斗列表
-	m_vtBoutMoveFightGObjectIndexId.clear();
+	// 清理移动和战斗列表
+	m_vtBoutMoveGObjectIndexId.clear();
+	m_vtBoutFightGObjectIndexId.clear();
 
 	// 通知客户端，当前战斗回合的Country
 	auto itCountry = m_mapCountry.begin();
@@ -801,6 +810,65 @@ void CFrontBattleGround::BattleBoutFinish(ICountry *pCountry)
 	}
 }
 
+void CFrontBattleGround::BattleFinish(int nCampId)
+{
+	EBattleStatus eBattleStatus = GetCurrentBattleStatus();
+	if (EBattleStatus_Battle == eBattleStatus)
+	{
+		auto itCampId = m_vtSurviveCampId.begin();
+		for (; itCampId != m_vtSurviveCampId.end(); )
+		{
+			if ((*itCampId) == nCampId)
+			{
+				m_vtSurviveCampId.erase(itCampId);
+				break;
+			}
+		}
+
+		if (m_vtSurviveCampId.size() == 1)
+		{
+			// 最后剩下的阵营胜利
+			m_nWinCampId =  m_vtSurviveCampId[0];
+
+			ChangeBattleStatus(EBattleStatus_Reward);
+		}
+	}
+}
+
+bool CFrontBattleGround::HaveMoveOrFight(int nGObjectIndexId) const
+{
+	for (const int nHaveMoveGObjectIndexId : m_vtBoutMoveGObjectIndexId)
+	{
+		if (nHaveMoveGObjectIndexId == nGObjectIndexId)
+		{
+			return true;
+		}
+	}
+
+	for (const int nHaveFightGObjectIndexId : m_vtBoutFightGObjectIndexId)
+	{
+		if (nHaveFightGObjectIndexId == nGObjectIndexId)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CFrontBattleGround::HaveFight(int nGObjectIndexId) const
+{
+	for (const int nHaveFightGObjectIndexId : m_vtBoutFightGObjectIndexId)
+	{
+		if (nHaveFightGObjectIndexId == nGObjectIndexId)
+		{
+			return true;
+		}
+	}
+
+	return true;
+}
+
 bool CFrontBattleGround::GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2)
 {
 	if (nullptr == pGObject)
@@ -810,7 +878,7 @@ bool CFrontBattleGround::GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2)
 	}
 
 	// 是否已经移动战斗过
-	if (IsMoveFight(pGObject->GetIndexId()))
+	if (HaveMoveOrFight(pGObject->GetIndexId()))
 	{
 		return false;
 	}
@@ -855,29 +923,24 @@ bool CFrontBattleGround::GObjectMove(IGObject *pGObject, const VtCoor2 &vtCoor2)
 		}
 	}
 
-	m_vtBoutMoveFightGObjectIndexId.push_back(pGObject->GetIndexId());
+	m_vtBoutMoveGObjectIndexId.push_back(pGObject->GetIndexId());
 
 	return true;
 }
 
-bool CFrontBattleGround::IsMoveFight(int nGObjectIndexId) const
-{
-	for (const int nHaveMoveFightGObjectIndexId : m_vtBoutMoveFightGObjectIndexId)
-	{
-		if (nHaveMoveFightGObjectIndexId == nGObjectIndexId)
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
 
 bool CFrontBattleGround::GObjectUseSkill(IGObject *pGObject, int nSkillSN, int nTargetGObjectIndexId)
 {
 	if (nullptr == pGObject)
 	{
 		LOGError("nullptr == pGObject");
+		return false;
+	}
+
+	// 是否已经攻击过
+	if (HaveFight(pGObject->GetIndexId()))
+	{
+		LOGDebug("GObject[" + pGObject->GetIndexId() + "]已经攻击过。");
 		return false;
 	}
 
@@ -981,9 +1044,14 @@ bool CFrontBattleGround::GObjectUseSkill(IGObject *pGObject, int nSkillSN, int n
 		LOGError("技能范围类型[" + pXmlData_Skill->eRange + "]异常。");
 	}
 
+	// 已经攻击过
+	m_vtBoutFightGObjectIndexId.push_back(pGObject->GetIndexId());
+
 
 	return true;
 }
+
+
 
 
 

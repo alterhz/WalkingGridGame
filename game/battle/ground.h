@@ -23,6 +23,9 @@ public:
 	int GetX() const { return m_nX; }
 	int GetY() const { return m_nY; }
 
+	// 获取地形类型
+	int GetGroundType() const;
+
 	bool Init(int nSN);
 
 	// 添加场景绑定单位

@@ -11,6 +11,7 @@
 
 ICountry::ICountry()
 	: m_nIndexId(0)
+	, m_nCampId(0)
 	, m_pClient(nullptr)
 	, m_tDisconnect(0)
 	, m_nPrepareBattleGroundIndexId(0)
@@ -18,6 +19,8 @@ ICountry::ICountry()
 {
 	static int g_nIndexId = 0;
 	m_nIndexId = (++g_nIndexId);
+
+	m_nCampId = m_nIndexId;
 }
 
 bool ICountry::SendMessage(unsigned short wProtocolId, google::protobuf::Message *pMessage)
@@ -443,7 +446,7 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 
 	// 测试，给双方添加部队
 	{
-		int nCampId = pCountryA->GetIndexId();
+		int nCampId = pCountryA->GetCampId();
 
 		VtGObject vtGObject;
 		// 添加将领
@@ -504,7 +507,7 @@ void CCountryManager::OnMatched(ICountry *pCountryA, ICountry *pCountryB)
 	}
 
 	{
-		int nCampId = pCountryB->GetIndexId();
+		int nCampId = pCountryB->GetCampId();
 
 		VtGObject vtGObject;
 		// 添加将领

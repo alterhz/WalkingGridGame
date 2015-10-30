@@ -30,6 +30,16 @@ bool IGrid::Init(int nSN)
 	return true;
 }
 
+int IGrid::GetGroundType() const
+{
+	if (m_pXmlData_Ground)
+	{
+		return m_pXmlData_Ground->nGroundType;
+	}
+
+	return 0;
+}
+
 bool IGrid::IsWalkable(EToWard eToWard) const
 {
 	if (nullptr == m_pXmlData_Ground)
@@ -161,6 +171,8 @@ void IGrid::OnDelGObject(IGObject *pGObject)
 {
 
 }
+
+
 
 // ÆÕÍ¨¸ñ×Ó
 CGrid::CGrid(int x, int y)

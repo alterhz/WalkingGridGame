@@ -69,8 +69,7 @@ class CXmlData_Ground : public IXmlData
 {
 public:
 	CXmlData_Ground()
-		: eGroundType(EGroundType_None)
-		, eToWard(EToWard_None)
+		: eToWard(EToWard_None)
 	{
 	}
 	~CXmlData_Ground() {}
@@ -80,7 +79,7 @@ public:
 
 	std::string strName;
 	std::string strSrc;
-	EGroundType eGroundType;
+	int nGroundType;
 	std::string strEffects;
 	EToWard eToWard;
 };

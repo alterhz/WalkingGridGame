@@ -27,6 +27,9 @@ public:
 	int GetIndexId() const { return m_nIndexId; }
 	CClient * GetClient() const { return m_pClient; }
 
+	int GetCampId() const { return m_nCampId; }
+	void SetCampId(int nCampId) { m_nCampId = nCampId; }
+
 	void SetBattleGround(IBattleGround *pBattleGround) { m_pBattleGround = pBattleGround; }
 	IBattleGround * GetBattleGround() { return m_pBattleGround; }
 
@@ -84,6 +87,8 @@ private:
 
 private:
 	int m_nIndexId;
+	// 阵营ID
+	int m_nCampId;
 	// 通信对象
 	CClient *m_pClient;
 	// 断开时间

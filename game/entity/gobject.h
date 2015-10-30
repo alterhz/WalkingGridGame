@@ -74,6 +74,7 @@ public:
 	// 掉血
 	int LostHP(int nHP);
 	virtual int OnLostHP(int nHP) { return nHP; }
+	virtual void OnDead() { }
 
 	int GetSP() const { return m_nSP; }
 	void AddSP(int nSP);
@@ -127,6 +128,8 @@ protected:
 	virtual bool IsCanAttack() const { return false; }
 	// 获取最大血量
 	virtual int GetMaxHP() const;
+	// 死亡事件
+	virtual void OnDead();
 
 public:
 	// 是否为旗帜类型（将领）
